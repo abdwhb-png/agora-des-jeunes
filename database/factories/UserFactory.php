@@ -84,18 +84,23 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user) {
             $commune = Commune::whereNotNull('quartiers')->inRandomOrder()->first();
 
-            UserInfo::updateOrCreate(
+            $info = UserInfo::updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'nom' => fake()->lastName(),
                     'prenom' => fake()->firstName(),
                     'sexe' => fake()->randomElement(['M', 'F']),
                     'date_naissance' => fake()->date(),
-                    'ville' => $commune->name,
-                    'arrondissement' => $commune->arrondissements()->inRandomOrder()->first()->name,
-                    'quartier' => count($commune->quartiers) > 0 ? $commune->quartiers[random_int(0, count($commune->quartiers) - 1)] : (rand(0, 1) ? null : 'Par défaut'),
                 ]
             );
+
+            if ($commune) {
+                $info->update([
+                    'ville' => $commune->name,
+                    'arrondissement' => $commune->arrondissements()->inRandomOrder()->first()->name ?? null,
+                    'quartier' => count($commune->quartiers) > 0 ? $commune->quartiers[random_int(0, count($commune->quartiers) - 1)] : (rand(0, 1) ? null : 'Par défaut'),
+                ]);
+            }
         });
     }
 }
