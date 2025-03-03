@@ -1,4 +1,4 @@
-<p align="center"><a href="https://agora-jeuenes.com" target="_blank"><img src="https://agora-jeunes.com/logo.png" width="400" alt="Logo Agora des Jeunes"></a></p>
+<p align="center"><a href="https://agora-jeuenes.com" target="_blank"><img src="https://agora-jeunes.com/medias/logo.png" width="400" alt="Logo Agora des Jeunes"></a></p>
 
 ## 📌 Introduction
 
@@ -48,7 +48,7 @@
 ### Intelligence Artificielle
 
 - **LLM open-source (Mistral-7B, LLaMA 3, etc)**
-- **Base de données vectorielles (Qdrant)**
+- **Base de données vectorielles** : (Qdrant)
 - **Hébergement via Hugging Face ou Groq API**
 - **Intégration d’agents IA avec n8n**
 
