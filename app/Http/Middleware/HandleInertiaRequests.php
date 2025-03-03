@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
+use App\Helpers\ConfigHelper;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,7 +38,31 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            'app' => config('app'),
+            'config' => ConfigHelper::getConfig(),
+            'routePrefix' => route_prefix(),
+            'socialAuth' => ['facebook', 'google'],
+
+            'dev' => [
+                'name' => 'Your DevLab',
+                'site_url' => '#',
+            ],
+
+            'auth' => [
+                'user' => fn() => $request->user()
+                    ? new UserResource($request->user())
+                    : null,
+                'unreadNotifications' => fn() => $request->user() ? $request->user()->unreadNotifications : null,
+                'api_token' => session()->get('api_token'),
+            ],
+
+            'filters' => fn() => $request->session()->get('filters', []),
+
+            'flash' => [
+                'status' => fn() => $request->session()->get('status'),
+                'success' => fn() => $request->session()->get('success'),
+                'fail' => fn() => $request->session()->get('fail'),
+            ],
         ]);
     }
 }

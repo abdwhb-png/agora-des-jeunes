@@ -1,61 +1,71 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { useForm } from "@inertiajs/vue3";
 
 defineProps({
     status: String,
 });
 
 const form = useForm({
-    email: '',
+    email: "",
 });
 
 const submit = () => {
-    form.post(route('password.email'));
+    form.post(route("password.email"));
 };
 </script>
 
 <template>
-    <Head title="Forgot Password" />
+    <Head title="Mot de passe oublié" />
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
-        </div>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
+    <AuthLayout>
+        <div class="card max-w-[370px] w-full">
+            <div class="card-header gap-1 border-0">
+                <Link href="/" class="btn btn-sm btn-icon btn-light">
+                    <i class="ki-filled ki-arrow-left"> </i>
+                </Link>
+                <h3
+                    class="text-lg font-medium text-gray-900 capitalize flex-grow text-center"
+                >
+                    Mot de passe oublié
+                </h3>
+            </div>
+            <form
+                @submit.prevent="submit"
+                class="card-body flex flex-col gap-5 p-10 pt-2"
+                id="reset_password_enter_email_form"
+            >
+                <div class="text-center">
+                    <span class="text-2sm text-gray-700">
+                        Tu as oublié ton mot de passe ?
+                        <br />
+                        Pas de soucis. Entre ton email et nous allons t'envoyer
+                        un lien de reinitialisation.
+                    </span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label font-normal text-gray-900">
+                        Email du compte
+                    </label>
+                    <input
+                        class="input"
+                        placeholder="Ecris ton email"
+                        type="email"
+                        v-model="form.email"
+                    />
+                    <InputError class="mt-1" :message="form.errors.email" />
+                </div>
+                <Message v-if="status" closable severity="success">
+                    {{ status }}
+                </Message>
+                <Button
+                    label="Continuer"
+                    :loading="form.processing"
+                    icon="ki-filled ki-black-right"
+                    type="submit"
+                    unstyled
+                    class="btn btn-primary flex justify-center grow"
                 />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+            </form>
+        </div>
+    </AuthLayout>
 </template>

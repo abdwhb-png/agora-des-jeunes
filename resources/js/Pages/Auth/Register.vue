@@ -1,112 +1,199 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { ref, onMounted } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import SocialAuth from "@/Components/Base/SocialAuth.vue";
+
+const props = defineProps({
+    invitationError: String,
+    invitation: Object,
+});
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    email: props.invitation?.email || null,
+    phone: null,
+    password: "",
+    password_confirmation: "",
     terms: false,
+    invitation_id: props.invitation?.id || null,
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route("register"), {
+        onStart: () => form.clearErrors(),
+        onFinish: () => form.reset("password", "password_confirmation"),
     });
 };
 </script>
 
 <template>
-    <Head title="Register" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-                <InputLabel for="terms">
-                    <div class="flex items-center">
-                        <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
-
-                        <div class="ms-2">
-                            I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Privacy Policy</a>
-                        </div>
+    <Head title="Inscription" />
+    <AuthLayout :branded="true">
+        <template #form>
+            <div class="card max-w-[370px] w-full">
+                <form
+                    @submit.prevent="submit"
+                    class="card-body flex flex-col gap-5 p-10"
+                    id="sign_up_form"
+                >
+                    <div class="text-center mb-2.5">
+                        <h3
+                            class="text-lg font-medium text-gray-900 leading-none"
+                        >
+                            Inscription
+                        </h3>
                     </div>
-                    <InputError class="mt-2" :message="form.errors.terms" />
-                </InputLabel>
-            </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Already registered?
-                </Link>
+                    <SocialAuth v-if="$page.props.socialAuth?.length" />
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label text-gray-900"> Email </label>
+                        <input
+                            class="input"
+                            name="user_email"
+                            placeholder="Ecris ton email"
+                            type="email"
+                            autofocus
+                            v-model="form.email"
+                        />
+                        <InputError class="mt-1" :message="form.errors.email" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label text-gray-900">
+                            Numéro de téléphone
+                        </label>
+                        <input
+                            class="input"
+                            name="user_phone"
+                            placeholder="Ecris ton numéro de téléphone"
+                            type="text"
+                            v-model="form.phone"
+                        />
+                        <InputError class="mt-1" :message="form.errors.phone" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label font-normal text-gray-900">
+                            Mot de passe
+                        </label>
+                        <div
+                            class="input"
+                            data-toggle-password="true"
+                            data-toggle-password-permanent="true"
+                        >
+                            <input
+                                name="user_password"
+                                placeholder="Crée ton mot de passe"
+                                type="password"
+                                v-model="form.password"
+                            />
+                            <button
+                                class="btn btn-icon"
+                                data-toggle-password-trigger="true"
+                                type="button"
+                            >
+                                <i
+                                    class="ki-filled ki-eye text-gray-500 toggle-password-active:hidden"
+                                >
+                                </i>
+                                <i
+                                    class="ki-filled ki-eye-slash text-gray-500 hidden toggle-password-active:block"
+                                >
+                                </i>
+                            </button>
+                        </div>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.password"
+                        />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label font-normal text-gray-900">
+                            Confirmation de mot de passe
+                        </label>
+                        <div
+                            class="input"
+                            data-toggle-password="true"
+                            data-toggle-password-permanent="true"
+                        >
+                            <input
+                                name="user_password"
+                                placeholder="Ecris à nouveau le mot de passe"
+                                type="password"
+                                v-model="form.password_confirmation"
+                            />
+                            <button
+                                class="btn btn-icon"
+                                data-toggle-password-trigger="true"
+                                type="button"
+                            >
+                                <i
+                                    class="ki-filled ki-eye text-gray-500 toggle-password-active:hidden"
+                                >
+                                </i>
+                                <i
+                                    class="ki-filled ki-eye-slash text-gray-500 hidden toggle-password-active:block"
+                                >
+                                </i>
+                            </button>
+                        </div>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.password_confirmation"
+                        />
+                    </div>
+                    <label
+                        v-if="
+                            $page.props.jetstream
+                                .hasTermsAndPrivacyPolicyFeature
+                        "
+                        class="checkbox-group"
+                    >
+                        <input
+                            class="checkbox checkbox-sm"
+                            name="terms"
+                            type="checkbox"
+                            v-model="form.terms"
+                            required
+                        />
+                        <span class="checkbox-label">
+                            J'accepte les
+                            <Link
+                                class="text-2sm link"
+                                target="_blank"
+                                :href="route('terms.show')"
+                            >
+                                conditions d'utilisation
+                            </Link>
+                            et
+                            <Link
+                                class="text-2sm link"
+                                target="_blank"
+                                :href="route('policy.show')"
+                            >
+                                politique de confidentialité
+                            </Link>
+                        </span>
+                    </label>
+                    <Button
+                        type="submit"
+                        label="S'inscrire"
+                        :loading="form.processing"
+                        unstyled
+                        class="btn btn-primary flex justify-center grow"
+                    />
+
+                    <div class="flex items-center justify-center">
+                        <span class="text-2sm text-gray-700 me-1.5">
+                            Déjà inscrit ?
+                        </span>
+                        <Link
+                            class="text-2sm link underline"
+                            :href="route('login')"
+                        >
+                            Connecte-toi
+                        </Link>
+                    </div>
+                </form>
             </div>
-        </form>
-    </AuthenticationCard>
+        </template>
+    </AuthLayout>
 </template>

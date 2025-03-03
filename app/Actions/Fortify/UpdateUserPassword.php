@@ -3,7 +3,9 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Enums\AccountActivityEnum;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AccountActivityLogger;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 
@@ -28,5 +30,7 @@ class UpdateUserPassword implements UpdatesUserPasswords
         $user->forceFill([
             'password' => Hash::make($input['password']),
         ])->save();
+
+        AccountActivityLogger::log(AccountActivityEnum::PASSWORD_UPDATED, ['email' => $user->email]);
     }
 }

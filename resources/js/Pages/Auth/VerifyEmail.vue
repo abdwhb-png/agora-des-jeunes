@@ -1,62 +1,100 @@
 <script setup>
-import { computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { computed, ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import EmailForm from "../Account/Partials/EmailForm.vue";
+import { dialogBreakpoints } from "@/utils/helpers";
 
 const props = defineProps({
     status: String,
 });
 
+const editEmail = ref(false);
 const form = useForm({});
 
 const submit = () => {
-    form.post(route('verification.send'));
+    form.post(route("verification.send"));
 };
 
-const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
+const verificationLinkSent = computed(
+    () => props.status === "verification-link-sent",
+);
 </script>
 
 <template>
-    <Head title="Email Verification" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div class="mb-4 text-sm text-gray-600">
-            Before continuing, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.
-        </div>
-
-        <div v-if="verificationLinkSent" class="mb-4 font-medium text-sm text-green-600">
-            A new verification link has been sent to the email address you provided in your profile settings.
-        </div>
-
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Resend Verification Email
-                </PrimaryButton>
-
-                <div>
-                    <Link
-                        :href="route('profile.show')"
-                        class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    <Head title="Verification d'email" />
+    <AuthLayout>
+        <Dialog
+            v-model:visible="editEmail"
+            :style="{ width: '50rem' }"
+            modal
+            :breakpoints="dialogBreakpoints"
+        >
+            <EmailForm
+                :user="$page.props.auth.user"
+                @updated="editEmail = false"
+            />
+        </Dialog>
+        <div class="card max-w-[440px] w-full">
+            <div
+                action="#"
+                class="card-body p-10"
+                id="check_email_form"
+                method="post"
+            >
+                <div class="flex justify-center py-10">
+                    <img
+                        alt="image"
+                        class="dark:hidden max-h-[130px]"
+                        src="/static/media/illustrations/30.svg"
+                    />
+                    <img
+                        alt="image"
+                        class="light:hidden max-h-[130px]"
+                        src="/static/media/illustrations/30-dark.svg"
+                    />
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 text-center mb-3">
+                    Vérifie ta boîte mail
+                </h3>
+                <div class="text-2sm text-center text-gray-700 mb-7.5">
+                    Clique sur le lien envoyer à
+                    <a
+                        class="text-2sm text-gray-900 font-medium hover:text-primary-active"
+                        href="#"
                     >
-                        Edit Profile</Link>
-
-                    <Link
-                        :href="route('logout')"
-                        method="post"
-                        as="button"
-                        class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ms-2"
+                        {{ $page.props.auth.user.email }}
+                    </a>
+                    <br />
+                    pour activer ton compte. Merci !
+                </div>
+                <div class="flex justify-center mb-5">
+                    <button
+                        class="btn btn-primary btn-sm"
+                        @click="editEmail = true"
                     >
-                        Log Out
-                    </Link>
+                        Utiliser un autre email
+                    </button>
+                </div>
+                <div class="flex items-center justify-center gap-1">
+                    <span class="text-lg text-gray-700">
+                        Tu n'as pas reçu d'email ?
+                    </span>
+                    <Button
+                        unstyled
+                        label="Renvoyer"
+                        :loading="form.processing"
+                        class="text-lg font-medium link underline"
+                        @click="submit"
+                    />
+                </div>
+                <div
+                    v-if="verificationLinkSent"
+                    class="mt-4 font-medium text-sm text-green-600 text-center"
+                >
+                    Un nouveau lien de verification a été envoyé à ton adresse
+                    email.
                 </div>
             </div>
-        </form>
-    </AuthenticationCard>
+        </div>
+    </AuthLayout>
 </template>

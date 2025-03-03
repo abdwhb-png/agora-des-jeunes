@@ -1,90 +1,143 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { useForm } from "@inertiajs/vue3";
+import SocialAuth from "@/Components/Base/SocialAuth.vue";
 
-defineProps({
+const props = defineProps({
     canResetPassword: Boolean,
+    defaultEmail: String,
     status: String,
 });
 
 const form = useForm({
-    email: '',
-    password: '',
+    email: props.defaultEmail || "",
+    password: props.defaultEmail ? "password" : "",
     remember: false,
 });
 
 const submit = () => {
-    form.transform(data => ({
+    form.transform((data) => ({
         ...data,
-        remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
-        onFinish: () => form.reset('password'),
+        remember: form.remember ? "on" : "",
+    })).post(route("login"), {
+        onStart: () => form.clearErrors(),
+        onSuccess: () => {
+            // axios.get("/sanctum/csrf-cookie");
+        },
+        onFinish: () => form.reset("password"),
     });
 };
 </script>
 
 <template>
-    <Head title="Log in" />
+    <Head title="Connexion" />
+    <AuthLayout :branded="true">
+        <template #form>
+            <div class="card max-w-[370px] w-full">
+                <form
+                    @submit.prevent="submit"
+                    class="card-body flex flex-col gap-5 p-10"
+                    id="sign_in_form"
+                >
+                    <div class="text-center mb-2.5">
+                        <h3
+                            class="text-lg font-medium text-gray-900 leading-none"
+                        >
+                            Connexion
+                        </h3>
+                    </div>
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
+                    <SocialAuth v-if="$page.props.socialAuth?.length" />
+
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label font-normal text-gray-900">
+                            Email
+                        </label>
+                        <input
+                            class="input"
+                            placeholder="Entre ton email"
+                            type="text"
+                            v-model="form.email"
+                        />
+                        <InputError class="mt-1" :message="form.errors.email" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center justify-between gap-1">
+                            <label class="form-label font-normal text-gray-900">
+                                Mot de Passe
+                            </label>
+                            <Link
+                                class="text-2sm link shrink-0"
+                                v-if="canResetPassword"
+                                :href="route('password.request')"
+                            >
+                                Mot de Passe oublié?
+                            </Link>
+                        </div>
+                        <div
+                            class="input"
+                            data-toggle-password="true"
+                            data-toggle-password-permanent="true"
+                        >
+                            <input
+                                name="user_password"
+                                placeholder="Entre ton mot de passe"
+                                type="password"
+                                v-model="form.password"
+                            />
+                            <button
+                                class="btn btn-icon"
+                                data-toggle-password-trigger="true"
+                                type="button"
+                            >
+                                <i
+                                    class="ki-filled ki-eye text-gray-500 toggle-password-active:hidden"
+                                >
+                                </i>
+                                <i
+                                    class="ki-filled ki-eye-slash text-gray-500 hidden toggle-password-active:block"
+                                >
+                                </i>
+                            </button>
+                        </div>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.password"
+                        />
+                    </div>
+                    <label class="checkbox-group">
+                        <input
+                            class="checkbox checkbox-sm"
+                            name="remember"
+                            type="checkbox"
+                            v-model="form.remember"
+                            y
+                        />
+                        <span class="checkbox-label"> Se souvenir de moi </span>
+                    </label>
+                    <Button
+                        type="submit"
+                        label="Se connecter"
+                        :loading="form.processing"
+                        unstyled
+                        class="btn btn-primary flex justify-center grow"
+                    />
+
+                    <div
+                        v-if="route().has('register')"
+                        class="flex items-center justify-center font-medium"
+                    >
+                        <span class="text-2sm text-gray-700 me-1.5">
+                            Besoin d'un compte?
+                        </span>
+                        <Link
+                            class="text-2sm link underline"
+                            :href="route('register')"
+                        >
+                            Inscris-toi
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </template>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+    </AuthLayout>
 </template>

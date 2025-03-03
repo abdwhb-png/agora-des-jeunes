@@ -1,24 +1,26 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Enums\ConfigEnum;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\HomeController;
+use App\Http\Middleware\CheckRouteMiddleware;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+// Route::fallback(function () {
+//     return redirect()->route('home');
+// });
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+    Route::get('/faqs', 'faqs')->name('faqs');
+    Route::post('contact', 'contact')->name('contact.perform');
 });
+Route::inertia('/contact', 'Contact')->name('contact');
+Route::inertia('/a-propos', 'About')->name('about');
+Route::inertia('/blog', 'Blog')->name('blog');
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+Route::withoutMiddleware(CheckRouteMiddleware::class)->group(function () {
+    $param = ConfigEnum::ENFORCE_DOMAIN_KEY->value . "=" . ConfigEnum::APP_PREFIX->value;
+    // $redirectParams = [ConfigEnum::ENFORCE_DOMAIN_KEY->value => ConfigEnum::APP_PREFIX->value];
+    Route::permanentRedirect('/connexion', '/login?' . $param)->name('connexion');
+    Route::permanentRedirect('/inscription', '/register?' . $param)->name('inscription');
 });

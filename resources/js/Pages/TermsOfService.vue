@@ -1,24 +1,19 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+import TermsLayout from "@/Layouts/TermsLayout.vue";
 
 defineProps({
     terms: String,
 });
+const description = `Bienvenue sur **site_name**, une plateforme conçue pour accompagner les jeunes dans leur développement personnel, professionnel et citoyen.
+<br>
+En utilisant notre site, tu acceptes les présentes **Conditions Générales d’Utilisation (CGU)**.`;
 </script>
 
 <template>
-    <Head title="Terms of Service" />
-
-    <div class="font-sans text-gray-900 antialiased">
-        <div class="pt-4 bg-gray-100">
-            <div class="min-h-screen flex flex-col items-center pt-6 sm:pt-0">
-                <div>
-                    <AuthenticationCardLogo />
-                </div>
-
-                <div class="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose" v-html="terms" />
-            </div>
-        </div>
-    </div>
+    <TermsLayout
+        title="Conditions générales d'utilisation"
+        :description="description"
+        :content="terms"
+    >
+    </TermsLayout>
 </template>

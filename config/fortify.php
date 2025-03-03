@@ -2,6 +2,8 @@
 
 use Laravel\Fortify\Features;
 
+$prefix = 'application';
+
 return [
 
     /*
@@ -73,7 +75,7 @@ return [
     |
     */
 
-    'home' => '/dashboard',
+    'home' => '/' . $prefix . '/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +88,7 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => $prefix,
 
     'domain' => null,
 
