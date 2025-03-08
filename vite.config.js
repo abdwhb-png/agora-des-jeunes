@@ -33,12 +33,12 @@ export default defineConfig({
         Components({
             resolvers: [PrimeVueResolver()],
         }),
-        Imagemin({
-            gifsicle: { optimizationLevel: 3 },
-            mozjpeg: { quality: 80 },
-            optipng: { optimizationLevel: 3 },
-            svgo: { plugins: [{ removeViewBox: false }] },
-        }),
+        // Imagemin({
+        //     gifsicle: { optimizationLevel: 7 },
+        //     optipng: { optimizationLevel: 7 },
+        //     mozjpeg: { quality: 80 },
+        //     svgo: { plugins: [{ removeViewBox: false }] },
+        // }),
         sentryVitePlugin({
             org: "your-devlab",
             project: "agora-jeunes-vue",

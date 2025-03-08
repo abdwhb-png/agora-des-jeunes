@@ -14,7 +14,6 @@ declare module 'vue' {
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     Chart: typeof import('primevue/chart')['default']
-    Checkbox: typeof import('primevue/checkbox')['default']
     Column: typeof import('primevue/column')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     DataTable: typeof import('primevue/datatable')['default']
@@ -43,7 +42,6 @@ declare module 'vue' {
     Tag: typeof import('primevue/tag')['default']
     Textarea: typeof import('primevue/textarea')['default']
     Toast: typeof import('primevue/toast')['default']
-    VirtualScroller: typeof import('primevue/virtualscroller')['default']
   }
   export interface ComponentCustomProperties {
     FocusTrap: typeof import('primevue/focustrap')['default']
