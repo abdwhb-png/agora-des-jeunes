@@ -40,9 +40,14 @@ class UserInfo extends Model
         );
     }
 
-    public function hasCompletedInfo(): bool
+    public function hasCompletedPersonalInfo(): bool
     {
-        return $this->nom && $this->prenom && $this->sexe && $this->date_naissance &&  $this->quartier;
+        return $this->nom && $this->prenom && $this->sexe && $this->date_naissance;
+    }
+
+    public function hasCompletedAddress(): bool
+    {
+        return $this->quartier !== null;
     }
 
     public function avatar(): string

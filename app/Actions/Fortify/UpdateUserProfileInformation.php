@@ -41,7 +41,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 ])->save();
             }
 
-            AccountActivityLogger::log(AccountActivityEnum::EMAIL_UPDATED, ['email' => $user->email]);
+            AccountActivityLogger::log(AccountActivityEnum::EMAIL_UPDATED, $user, ['email' => $user->email]);
         }
     }
 

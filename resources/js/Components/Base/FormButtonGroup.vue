@@ -20,6 +20,8 @@
                 type="submit"
                 :label="submitLabel"
                 icon="pi pi-check"
+                size="small"
+                severity="info"
                 :loading="form.processing"
             />
         </div>

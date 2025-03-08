@@ -44,11 +44,11 @@ const submit = () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label class="form-label font-normal text-gray-900">
-                        Email du compte
+                        Email
                     </label>
                     <input
                         class="input"
-                        placeholder="Ecris ton email"
+                        placeholder="Entre l'email de ton compte"
                         type="email"
                         v-model="form.email"
                     />
@@ -58,12 +58,12 @@ const submit = () => {
                     {{ status }}
                 </Message>
                 <Button
-                    label="Continuer"
+                    :label="form.processing ? 'Envoi en cours' : 'Continuer'"
                     :loading="form.processing"
                     icon="ki-filled ki-black-right"
+                    iconPos="right"
                     type="submit"
-                    unstyled
-                    class="btn btn-primary flex justify-center grow"
+                    class="btn btn-primary"
                 />
             </form>
         </div>

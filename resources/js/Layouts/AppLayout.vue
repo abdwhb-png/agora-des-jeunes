@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { Head, router } from "@inertiajs/vue3";
 import { useBodyClasses } from "@/composables/useBodyClasses";
 
+import Toaster from "@/Components/ui/toast/Toaster.vue";
 import Sidebar from "@/Components/App/Sidebar.vue";
 import Header from "@/Components/App/Header.vue";
 import Footer from "@/Components/Base/Footer.vue";
@@ -26,6 +27,8 @@ useBodyClasses(`
 
 <template>
     <Head :title="title + ' (App)'" />
+    <Toaster />
+
     <!-- Sidebar -->
     <Sidebar />
     <!-- End of Sidebar -->

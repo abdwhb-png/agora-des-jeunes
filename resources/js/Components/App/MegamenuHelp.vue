@@ -36,21 +36,18 @@
                 </a>
             </div>
             <div class="menu-item">
-                <a class="menu-link" href="#" tabindex="0">
+                <Link class="menu-link" :href="route('faqs')" tabindex="0">
                     <span class="menu-icon">
                         <i class="ki-filled ki-message-question"> </i>
                     </span>
                     <span class="menu-title grow-0"> Foire aux questions </span>
-                </a>
+                </Link>
             </div>
             <div class="menu-separator"></div>
             <div class="menu-item">
-                <a
+                <Link
                     class="menu-link"
-                    :href="
-                        $page.props.config.contact_url ||
-                        'mailto:' + $page.props.config.site_email
-                    "
+                    :href="route('contact')"
                     target="_blank"
                     tabindex="0"
                 >
@@ -58,7 +55,7 @@
                         <i class="ki-filled ki-message-text-2"> </i>
                     </span>
                     <span class="menu-title grow-0"> Nous Contacter </span>
-                </a>
+                </Link>
             </div>
         </div>
     </div>

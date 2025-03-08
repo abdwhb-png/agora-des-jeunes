@@ -11,8 +11,8 @@ export const useMainStore = defineStore("main", {
         mainSearch: "",
         menuItems: [
             { label: "Accueil", route: "home", cache: "10s" },
-            { label: "Contact", route: "contact" },
             { label: "A Propos", route: "about" },
+            { label: "Contact", route: "contact" },
             { label: "Blog", route: "blog" },
         ],
         resourceItems: [

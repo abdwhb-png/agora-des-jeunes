@@ -10,7 +10,8 @@ enum ConfigEnum: string
     case ADMIN_PAGE_DIR = 'Gestion';
     case APP_PAGE_DIR = 'App';
 
-    case ENFORCE_DOMAIN_KEY = 'redirect_to';
+    case ENFORCE_DOMAIN_KEY = 'enforce_domain';
+    case REDIRECT_TO_KEY = 'redirect_to';
 
     case IMG_MAX_FILE_SIZE = '5120';
 }

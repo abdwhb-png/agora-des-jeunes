@@ -65,11 +65,11 @@ const submit = () => {
                         <span
                             class="flex items-center gap-1.5 leading-none font-medium text-sm text-gray-900"
                         >
-                            Activer la vérification à deux étapes
+                            Vérification à 2 étapes
                         </span>
                         <span class="text-2sm text-gray-700">
-                            Ajoutes une couche supplémentaire de sécurité avec
-                            la verification à deux étapes.
+                            En l'activant tu ajoutes unecouche supplémentaire de
+                            sécurité à ton compte.
                         </span>
                     </div>
                 </div>

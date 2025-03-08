@@ -185,7 +185,7 @@
                                 </p>
                             </div>
                             <div class="hero-image-wrapper">
-                                <img
+                                <v-lazy-image
                                     src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774d7c902256cce1040b646_Hero%20Shape.svg"
                                     loading="lazy"
                                     style="
@@ -199,9 +199,9 @@
                                     data-w-id="048a1132-65f4-8eec-9331-04ea2a4dff62"
                                     alt="Hero Shape One"
                                     class="hero-shape-one"
-                                /><img
+                                /><v-lazy-image
                                     class="hero-image"
-                                    src="/images/ninthgrid-GOItLaf-gxY-unsplash.jpg"
+                                    src="/images/783shots_so.png"
                                     width="Auto"
                                     height="Auto"
                                     alt="Image d'accueil"

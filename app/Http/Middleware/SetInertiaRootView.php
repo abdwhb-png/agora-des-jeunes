@@ -15,9 +15,10 @@ class SetInertiaRootView
     {
         $view = 'home';
 
-        $checkOnDomain = is_admin_domain() || is_app_domain() ;
-        if (str_starts_with($request->path(), config('fortify.prefix'))) {
+        $checkOnDomain = is_admin_domain() || is_app_domain();
+        if (is_on_app()) {
             $view = 'app';
+            Inertia::version($view . '-' . Inertia::getVersion());
         }
 
         Inertia::setRootView($view);

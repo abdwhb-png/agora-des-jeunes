@@ -116,7 +116,7 @@ const submit = () => {
                     </label>
                     <Button
                         type="submit"
-                        label="Se connecter"
+                        :label="form.processing ? 'Connexion' : 'Se connecter'"
                         :loading="form.processing"
                         unstyled
                         class="btn btn-primary flex justify-center grow"

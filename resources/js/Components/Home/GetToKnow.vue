@@ -190,8 +190,8 @@ const list = [
                                         data-w-id="c037766c-cd0d-2a8e-c4da-370e0062da15"
                                         class="about-left-thumb-wrap"
                                     >
-                                        <img
-                                            src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/67750f9207f51a6e6aa9892e_about%20section%20thumbnail.avif"
+                                        <v-lazy-image
+                                            src="/images/ninthgrid-GOItLaf-gxY-unsplash.jpg"
                                             loading="lazy"
                                             style="
                                                 transform: translate3d(

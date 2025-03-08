@@ -1,7 +1,6 @@
 <template>
     <div
         class="relative min-h-[40rem] lg:min-h-0 bg-surface-0 dark:bg-surface-900 flex lg:flex-row flex-col"
-        :class="['bg-[url(/images/three-young.jpg)] bg-no-repeat md:bg-none']"
     >
         <div
             class="flex lg:flex lg:flex-row flex-col justify-center md:justify-normal h-full flex-1 ba"
@@ -30,15 +29,15 @@
                             class="flex items-center gap-4 justify-center lg:justify-start"
                         >
                             <Button
+                                label="Retour"
+                                type="button"
+                                severity="secondary"
+                                @click="$inertia.visit(route('dashboard'))"
+                            />
+                            <Button
                                 label="Accueil"
                                 type="button"
                                 @click="$inertia.visit('/')"
-                            />
-                            <Button
-                                label="Retour"
-                                type="button"
-                                onclick="goBack()"
-                                outlined
                             />
                         </div>
                     </div>

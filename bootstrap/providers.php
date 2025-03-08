@@ -1,7 +1,8 @@
 <?php
 
 return [
-    Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+    // Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+    MongoDB\Laravel\MongoDBServiceProvider::class,
     App\Providers\AccountServiceProvider::class,
     App\Providers\AppServiceProvider::class,
     App\Providers\FortifyServiceProvider::class,

@@ -1,30 +1,13 @@
 <script setup lang="ts">
 import { User } from "@/types";
 
+const emits = defineEmits(["tabClick"]);
+
 defineProps({
     user: { type: Object as () => User, required: true },
+    tabs: Object,
+    activeTab: String,
 });
-
-interface Tab {
-    title: string;
-    url?: string;
-    component?: any;
-}
-
-const tabs: Tab[] = [
-    {
-        title: "Formations",
-        url: "",
-    },
-    {
-        title: "Curriculum Vitae (CV)",
-        url: "",
-    },
-    {
-        title: "Jobs",
-        url: "",
-    },
-];
 </script>
 
 <template>
@@ -38,8 +21,15 @@ const tabs: Tab[] = [
                         v-for="(tab, index) in tabs"
                         :key="tab.title"
                         class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary"
+                        :class="{
+                            active: tab.title === activeTab,
+                        }"
                     >
-                        <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="#">
+                        <a
+                            class="menu-link gap-1.5 pb-2 lg:pb-4 px-2"
+                            href="javascript:void(0);"
+                            @click="emits('tabClick', tab)"
+                        >
                             <span
                                 class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
                             >
@@ -53,10 +43,13 @@ const tabs: Tab[] = [
         <div
             class="flex items-center justify-end grow lg:grow-0 lg:pb-4 gap-2.5 mb-3 lg:mb-0"
         >
-            <button class="btn btn-sm btn-primary">
+            <Link
+                :href="route($page.props.routePrefix + 'account')"
+                class="btn btn-sm btn-dark"
+            >
                 <i class="ki-filled ki-user-edit"> </i>
                 Modifier
-            </button>
+            </Link>
             <div
                 class="dropdown"
                 data-dropdown="true"

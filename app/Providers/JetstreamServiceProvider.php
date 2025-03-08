@@ -48,6 +48,15 @@ class JetstreamServiceProvider extends ServiceProvider
                 CustomAuthAction::class,
             ]);
         });
+
+        Jetstream::inertia()->whenRendering(
+            'Profile/Show',
+            function (Request $request, array $data) {
+                return array_merge($data, [
+                    'stepValue' => $request->user()->info->hasCompletedPersonalInfo() && !$request->user()->info->hasCompletedAddress() ? '2' : '1',
+                ]);
+            }
+        );
     }
 
     /**

@@ -19,8 +19,8 @@ export const frontendUrl =
 export const appUrl =
     import.meta.env.VITE_APP_URL || "https://agora-jeunes.com";
 export const cvBuilderUrl =
-    import.meta.env.VITE_CV_BUILDER_URL ||
-    "https://cv-builder.agora-jeunes.com";
+    import.meta.env.VITE_CV_BUILDER_URL || "https://cv.agora-jeunes.com";
+export const apiManagerUrl = import.meta.env.VITE_API_BASE_URL + "/dashboard";
 
 export function appDefault(app) {
     app.config.globalProperties.$route = route;

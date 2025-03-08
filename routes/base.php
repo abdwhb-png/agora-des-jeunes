@@ -29,12 +29,10 @@ Route::resource('filter', FilterController::class)->only([
 ]);
 Route::patch('/filter', [FilterController::class, 'reset'])->name('filter.reset');
 
-Route::middleware('auth')->group(function () {
-
+Route::middleware('auth')->prefix(config('fortify.prefix'))->group(function () {
     Route::controller(BaseController::class)->group(function () {
         Route::get('/account', 'account')->name('account');
         Route::get('/settings', 'settings')->name('settings');
-        Route::get('/profil', 'profil')->name('profil');
     });
 
     // Routes pour l'utilisateur
@@ -105,27 +103,24 @@ Route::middleware('auth')->group(function () {
         'destroy',
     ])->middleware(['can:' . PermissionsEnum::MANAGE_TRAININGS->value]);
 
-    // Routes pour les CVs
-    Route::resource('cvs', CvController::class);
+    // // Routes pour les bourses
+    // Route::resource('scholarships', ScholarshipController::class)->middleware(['can:' . PermissionsEnum::MANAGE_SCHOLARSHIPS->value]);
 
-    // Routes pour les bourses
-    Route::resource('scholarships', ScholarshipController::class)->middleware(['can:' . PermissionsEnum::MANAGE_SCHOLARSHIPS->value]);
+    // // Routes pour les appels d'offres
+    // Route::resource('tenders', TenderController::class)->middleware(['can:' . PermissionsEnum::MANAGE_TENDERS->value]);
 
-    // Routes pour les appels d'offres
-    Route::resource('tenders', TenderController::class)->middleware(['can:' . PermissionsEnum::MANAGE_TENDERS->value]);
+    // // Routes pour les guides entrepreneur
+    // Route::resource('entrepreneur-guides', EntrepreneurGuideController::class);
 
-    // Routes pour les guides entrepreneur
-    Route::resource('entrepreneur-guides', EntrepreneurGuideController::class);
+    // // Routes pour les professionnels
+    // Route::resource('professionals', ProfessionalController::class);
 
-    // Routes pour les professionnels
-    Route::resource('professionals', ProfessionalController::class);
+    // // Routes pour les relations utilisateur-professionnel
+    // Route::resource('user-professional-links', UserProfessionalLinkController::class);
 
-    // Routes pour les relations utilisateur-professionnel
-    Route::resource('user-professional-links', UserProfessionalLinkController::class);
+    // // Routes pour les universités au Bénin
+    // Route::resource('local-universities', LocalUniversityController::class);
 
-    // Routes pour les universités au Bénin
-    Route::resource('local-universities', LocalUniversityController::class);
-
-    // Routes pour les meilleures universités dans le monde
-    Route::resource('top-universities', TopUniversityController::class);
+    // // Routes pour les meilleures universités dans le monde
+    // Route::resource('top-universities', TopUniversityController::class);
 });

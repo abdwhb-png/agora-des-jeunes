@@ -19,7 +19,6 @@ const items: Item[] = [
     {
         title: "Accueil",
         url: page.props.app.url,
-        target: "_blank",
     },
     {
         title: "Profil",
@@ -59,7 +58,7 @@ const setActive = (title: string) => {
                         active: item.route && route().current(item.route),
                     }"
                 >
-                    <a
+                    <Link
                         class="menu-link text-nowrap text-sm text-gray-700 font-medium hover:text-primary menu-item-active:text-gray-900 menu-item-active:font-medium"
                         :href="item.url || route(item.route)"
                         :target="item.target || '_self'"
@@ -67,7 +66,7 @@ const setActive = (title: string) => {
                         <span class="menu-title text-nowrap">
                             {{ item.title }}
                         </span>
-                    </a>
+                    </Link>
                 </div>
             </template>
             <!--End of Megamenu Item-->

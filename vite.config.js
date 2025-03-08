@@ -49,7 +49,7 @@ export default defineConfig({
         alias: {
             "@": "/resources/js",
             "@css": "/resources/css",
-            "@assets": "/resources/assets",
+            "@resources": "/resources",
             "@metronic": "/resources/metronic",
         },
     },

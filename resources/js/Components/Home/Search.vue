@@ -1,9 +1,7 @@
 <template>
     <Drawer>
         <DrawerTrigger as-child>
-            <UiButton variant="outline" size="icon">
-                <i class="pi pi-search"></i>
-            </UiButton>
+            <Button outlined severity="contrast" icon="pi pi-search" />
         </DrawerTrigger>
         <DrawerContent>
             <div class="mx-auto w-full max-w-sm">

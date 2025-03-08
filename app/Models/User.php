@@ -118,33 +118,38 @@ class User extends Authenticatable implements MustVerifyEmail
             ->dontSubmitEmptyLogs();
     }
 
-
     public function info(): HasOne
     {
         return $this->hasOne(UserInfo::class);
     }
-
 
     public function account(): HasOne
     {
         return $this->hasOne(UserAccount::class);
     }
 
-
     public function invitations(): HasMany
     {
         return $this->hasMany(Invitation::class, 'created_by');
     }
-
 
     public function activities(): HasMany
     {
         return $this->hasMany(AccountActivity::class);
     }
 
-
     public function socials(): HasMany
     {
         return $this->hasMany(Social::class);
+    }
+
+    public function resumes(): HasMany
+    {
+        return $this->hasMany(Cv::class);
+    }
+
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
     }
 }

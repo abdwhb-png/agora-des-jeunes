@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class CustomAuthAction
 {
+    protected function isUserAllowedToLogin(Request $request)
+    {
+        // Implement your custom logic
+        return true; // Change this as per your requirements
+    }
+
     public function __invoke(Request $request, $next)
     {
         $user = $request->user();
@@ -16,15 +22,9 @@ class CustomAuthAction
         ]);
         $user->enableLogging();
 
-        $token = $user->createToken($user->email ?? 'api_token');
-        session(['api_token' => $token->plainTextToken]);
+        $token = $user->createToken($user->email ?? 'auth_token');
+        session(['auth_token' => $token->plainTextToken]);
 
         return $next($request);
-    }
-
-    protected function isUserAllowedToLogin(Request $request)
-    {
-        // Implement your custom logic
-        return true; // Change this as per your requirements
     }
 }

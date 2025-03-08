@@ -14,7 +14,7 @@
     @include('inc.favicons')
 
     <!-- Styles -->
-    @vite(['resources/css/home.css', 'resources/scss/app.scss'])
+    @vite(['resources/css/home.css'])
     <link href="{{ asset('/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/css/notefye.webflow.cd2157501.css') }}"
         rel="stylesheet" type="text/css" />
 

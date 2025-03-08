@@ -31,6 +31,6 @@ class UpdateUserPassword implements UpdatesUserPasswords
             'password' => Hash::make($input['password']),
         ])->save();
 
-        AccountActivityLogger::log(AccountActivityEnum::PASSWORD_UPDATED, ['email' => $user->email]);
+        AccountActivityLogger::log(AccountActivityEnum::PASSWORD_UPDATED, $user, ['email' => $user->email]);
     }
 }

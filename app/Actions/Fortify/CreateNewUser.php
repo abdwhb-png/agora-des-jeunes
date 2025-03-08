@@ -49,6 +49,8 @@ class CreateNewUser implements CreatesNewUsers
 
         $user->sendWelcomeEmail();
 
+        $request->session()->flash('status', 'just-registered');
+
         return $user;
     }
 }

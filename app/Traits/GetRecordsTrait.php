@@ -9,6 +9,7 @@ use App\Models\Training;
 use App\Models\AgoraSession;
 use App\Http\Resources\PollCollection;
 use App\Http\Resources\AgoraSessionCollection;
+use App\Models\Project;
 
 trait GetRecordsTrait
 {

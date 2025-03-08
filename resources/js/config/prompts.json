@@ -1,0 +1,6 @@
+{
+    "project_description": {
+        "user": "Génère moi une courte description pour ce projet.",
+        "system": "You are an assistant for project redaction. You must help the user with his queries. You should response with only the description."
+    }
+}

@@ -30,6 +30,7 @@
                 v-model:visible="showDialog"
                 @hide="currentItem = null"
                 modal
+                dismissable-mask
                 :header="currentItem?.title"
                 :style="{ width: '50rem' }"
                 :breakpoints="dialogBreakpoints"

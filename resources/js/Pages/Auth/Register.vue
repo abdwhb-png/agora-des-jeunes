@@ -175,7 +175,7 @@ const submit = () => {
                     </label>
                     <Button
                         type="submit"
-                        label="S'inscrire"
+                        :label="form.processing ? 'Inscription' : 'S\'inscrire'"
                         :loading="form.processing"
                         unstyled
                         class="btn btn-primary flex justify-center grow"

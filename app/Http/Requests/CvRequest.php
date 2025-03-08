@@ -24,10 +24,10 @@ class CvRequest extends FormRequest
         $required = $this->isMethod('POST') ? 'required' : 'sometimes';
 
         return [
-            'user_id' => 'sometimes|exists:users,id',
-            'user_email' => $required . '|email',
-            'resume_id' => $required . '|string',
             'title' => $required . '|string',
+            'user_id' => 'sometimes|exists:users,id',
+            'user_email' => 'nullable|email',
+            'resume_id' => 'sometimes|string',
             'theme_color' => 'nullable|string',
             'sections' => 'nullable|array',
             'file_path' => 'nullable|string',

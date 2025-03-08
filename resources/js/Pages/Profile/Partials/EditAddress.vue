@@ -1,8 +1,8 @@
 <template>
     <form @submit.prevent="submit">
-        <div class="w-full">
-            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label class="max-w-56 min-w-2/5"> Département </label>
+        <div class="hidden">
+            <div class="flex flex-col space-y-1.5">
+                <label class="form-label"> Département de résidence </label>
                 <div class="grow">
                     <Select
                         v-model="form.departement"
@@ -23,73 +23,76 @@
                 </div>
             </div>
         </div>
-        <div class="w-full">
-            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label class="max-w-56 min-w-2/5"> Ville </label>
-                <div class="grow">
-                    <Select
-                        v-model="form.ville"
-                        :options="communes"
-                        editable
-                        optionLabel="name"
-                        optionValue="name"
-                        placeholder="Ecris la ville"
-                        fluid
-                    />
-                    <InputError :message="form.errors.ville" class="mt-1" />
-                </div>
+        <div class="flex flex-col space-y-1.5">
+            <label class="form-label"> Ville de résidence </label>
+            <div class="grow">
+                <Select
+                    v-model="form.ville"
+                    :options="communes"
+                    editable
+                    filter
+                    optionLabel="name"
+                    optionValue="name"
+                    :placeholder="
+                        'Ecris le nom de ' +
+                        (isAuthUser ? 'ta' : 'la') +
+                        ' ville'
+                    "
+                    fluid
+                />
+                <InputError :message="form.errors.ville" class="mt-1" />
             </div>
         </div>
-        <div class="w-full">
-            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label class="max-w-56 min-w-2/5"> Quartier </label>
-                <div class="grow">
-                    <AutoComplete
-                        v-model="form.quartier"
-                        placeholder="Ecris le quartier"
-                        fluid
-                        :suggestions="quartiers"
-                        @complete="searchQuartier"
-                    />
-                    <InputError :message="form.errors.quartier" class="mt-1" />
-                </div>
+        <div class="flex flex-col space-y-1.5">
+            <label class="form-label"> Quartier </label>
+            <div class="grow">
+                <AutoComplete
+                    v-model="form.quartier"
+                    :placeholder="
+                        'Ecris ' + (isAuthUser ? 'ton' : 'le') + ' quarier'
+                    "
+                    fluid
+                    :suggestions="quartiers"
+                    @complete="searchQuartier"
+                />
+                <InputError :message="form.errors.quartier" class="mt-1" />
             </div>
         </div>
-        <div class="w-full">
-            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label class="flex items-center gap-1 max-w-56 min-w-2/5">
-                    Arrondissement (facultatif)
-                </label>
-                <div class="grow">
-                    <Select
-                        v-model="form.arrondissement"
-                        :options="selectedCommune?.arrondissements"
-                        editable
-                        optionLabel="name"
-                        optionValue="name"
-                        placeholder="Ecris l'arrondissement"
-                        fluid
-                    />
-                    <InputError
-                        :message="form.errors.arrondissement"
-                        class="mt-1"
-                    />
-                </div>
+        <div class="flex flex-col space-y-1.5">
+            <label class="form-label"> Arrondissement (facultatif) </label>
+            <div>
+                <Select
+                    v-model="form.arrondissement"
+                    :options="selectedCommune?.arrondissements"
+                    editable
+                    optionLabel="name"
+                    optionValue="name"
+                    :placeholder="
+                        'Ecris ' +
+                        (isAuthUser ? 'ton' : 'l\'') +
+                        ' arrondissement'
+                    "
+                    fluid
+                />
+                <InputError
+                    :message="form.errors.arrondissement"
+                    class="mt-1"
+                />
             </div>
         </div>
-        <div class="w-full">
-            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label class="flex items-center gap-1 max-w-56 min-w-2/5">
-                    Maison (facultatif)
-                </label>
-                <div class="grow">
-                    <InputText
-                        v-model="form.maison"
-                        placeholder="Ecris le nom de la maison"
-                        fluid
-                    />
-                    <InputError :message="form.errors.maison" class="mt-1" />
-                </div>
+        <div class="flex flex-col space-y-1.5">
+            <label class="form-label"> Maison (facultatif) </label>
+            <div class="">
+                <InputText
+                    v-model="form.maison"
+                    :placeholder="
+                        'Ecris le nom de ' +
+                        (isAuthUser ? 'ta' : 'la') +
+                        ' maison'
+                    "
+                    fluid
+                />
+                <InputError :message="form.errors.maison" class="mt-1" />
             </div>
         </div>
         <FormButtonGroup
@@ -100,22 +103,27 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed, onMounted, watch } from "vue";
-import { useApi } from "@/composables/useApi";
 import FormButtonGroup from "@/Components/Base/FormButtonGroup.vue";
 import { useViewport } from "@/composables/useViewport";
 import { useMainStore } from "@/stores/main";
+import { User } from "@/types";
+import { FloatLabel } from "primevue";
 
 const { width: viewportWidth, isMobile } = useViewport();
 
 const props = defineProps({
-    user: Object,
+    user: Object as () => User,
 });
+
+const page = usePage();
 
 const mainStore = useMainStore();
 const data = ref([]);
+
+const isAuthUser = computed(() => props.user.id == page.props.auth.user.id);
 
 const selectedDepartement = computed(() =>
     mainStore.departements.find(
@@ -163,7 +171,7 @@ const submit = () => {
 
 watch(
     () => props.user,
-    (newUser) => {
+    (newUser: User) => {
         form.departement = newUser.info.departement || null;
         form.ville = newUser.info.ville || null;
         form.quartier = newUser.info.quartier || null;

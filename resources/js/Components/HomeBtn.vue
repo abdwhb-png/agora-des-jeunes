@@ -12,9 +12,9 @@ const url = import.meta.env.VITE_FRONTEND_URL;
         size="small"
         outlined
     >
-        <a href="/" :class="slotProps.class">
+        <Link href="/" :class="slotProps.class">
             <i class="pi pi-home"></i>
             Accueil
-        </a>
+        </Link>
     </Button>
 </template>

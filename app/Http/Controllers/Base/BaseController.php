@@ -27,7 +27,6 @@ class BaseController extends Controller
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
-
     protected function storeImage(Request $request, $folder = 'images')
     {
         if ($request->hasFile('image')) {
@@ -38,8 +37,7 @@ class BaseController extends Controller
         return null;
     }
 
-
-    public function validateCaptcha(Request $request): array
+    protected function validateCaptcha(Request $request): array
     {
         // Validation des entrées + reCAPTCHA
         $validator = Validator::make($request->all(), [
@@ -73,10 +71,5 @@ class BaseController extends Controller
         return Inertia::render('Settings/Index', [
             'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
         ]);
-    }
-
-    public function profil()
-    {
-        return Inertia::render('Member/Profile', []);
     }
 }

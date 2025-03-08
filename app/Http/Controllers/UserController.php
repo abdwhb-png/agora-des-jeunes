@@ -60,7 +60,7 @@ class UserController extends BaseController implements HasMiddleware
             'phone' => 'sometimes|string',
             'sexe' => 'nullable|string',
             'date_naissance' => 'nullable|date',
-            'ville' => 'sometimes|string',
+            'ville' => 'nullable|string',
             'quartier' => 'sometimes|string',
             'departement' => 'nullable|string',
             'arrondissement' => 'nullable|string',
@@ -72,7 +72,7 @@ class UserController extends BaseController implements HasMiddleware
             $user->update(['phone' => $request->phone]);
         }
 
-        AccountActivityLogger::log(AccountActivityEnum::PROFILE_UPDATED, ['email' => $user->email]);
+        AccountActivityLogger::log(AccountActivityEnum::PROFILE_UPDATED, $user, ['email' => $user->email]);
 
         return back(303)->with('success', 'Informations mis à jour avec succès.');
     }

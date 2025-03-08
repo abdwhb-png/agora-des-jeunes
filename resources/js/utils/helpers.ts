@@ -21,10 +21,11 @@ export function getIcon(key: string): string {
         profil: "ki-filled ki-user-tick",
         account: "ki-filled ki-user-square",
         profile_pic: "ki-filled ki-face-id",
-        entreprendre: "ki-filled ki-abstract-27",
         formation: "ki-filled ki-book-open",
         emploi: "ki-filled ki-abstract-26",
         cv: "ki-filled ki-mouse-square",
+        projet: "ki-filled ki-notepad",
+        entreprendre: "ki-filled ki-briefcase",
     };
 
     return icons[key] ?? "ki-filled ki-abstract-27";

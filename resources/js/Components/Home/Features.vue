@@ -42,7 +42,7 @@ defineProps({
                             class="quick-insight-image-wrapper"
                         >
                             <div class="quick-insight-image-inner">
-                                <img
+                                <v-lazy-image
                                     src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677782c896e04ee61edc1fc6_Layer%20Blur.png"
                                     loading="lazy"
                                     sizes="(max-width: 604px) 92vw, (max-width: 767px) 556px, (max-width: 991px) 94vw, (max-width: 1279px) 100vw, 1136px"
@@ -52,17 +52,13 @@ defineProps({
                                     "
                                     alt="layer blur"
                                     class="insight-layer-blur"
-                                /><img
-                                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/67887ed56252f1cd7429f7ff_Quick%20Insight%20Section%20Image.avif"
+                                /><v-lazy-image
+                                    src="/images/clout-africa-yhzWaCDebAk-unsplash.jpg"
                                     loading="lazy"
                                     sizes="(max-width: 767px) 92vw, (max-width: 991px) 94vw, (max-width: 1279px) 100vw, 1136px"
-                                    srcset="
-                                        https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/67887ed56252f1cd7429f7ff_Quick%20Insight%20Section%20Image-p-500.avif  500w,
-                                        https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/67887ed56252f1cd7429f7ff_Quick%20Insight%20Section%20Image.avif       1668w
-                                    "
                                     alt="quick insight section image"
                                     class="quick-insight-image"
-                                /><img
+                                /><v-lazy-image
                                     src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677784e464a7158f3d99b26d_Insight%20Value.png"
                                     loading="lazy"
                                     data-w-id="8d473d9f-259a-0e3a-3946-7d3f0143614b"

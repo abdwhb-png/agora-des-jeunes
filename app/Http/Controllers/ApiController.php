@@ -8,6 +8,7 @@ use App\Models\AppFeature;
 use App\Models\Arrondissement;
 use App\Models\Commune;
 use App\Models\Departement;
+use App\Models\MongoDB\AiUsage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -44,5 +45,18 @@ class ApiController extends BaseController
                 'app_features' => AppFeature::all(),
             ]
         );
+    }
+
+    public function aiUsage(Request $request)
+    {
+        AiUsage::create([
+            'user_id' => $request->user()->id,
+            'ai' => $request->ai,
+            'input_text' => $request->input_text,
+            'output_text' => $request->output_text,
+            'tokens_used' => $request->tokens_used,
+            'metadata' => $request->metadata
+        ]);
+        return response()->json(['success' => true], 204);
     }
 }

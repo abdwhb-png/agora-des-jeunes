@@ -25,6 +25,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function version(Request $request): ?string
     {
+        $this->rootView = 'home';
         return parent::version($request);
     }
 
@@ -53,7 +54,7 @@ class HandleInertiaRequests extends Middleware
                     ? new UserResource($request->user())
                     : null,
                 'unreadNotifications' => fn() => $request->user() ? $request->user()->unreadNotifications : null,
-                'api_token' => session()->get('api_token'),
+                'auth_token' => session()->get('auth_token'),
             ],
 
             'filters' => fn() => $request->session()->get('filters', []),

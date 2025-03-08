@@ -86,9 +86,7 @@ watch(
 </script>
 
 <template>
-    <Head :title="title + ' (Gestion)'">
-        <!-- <link href="/static/css/styles.css" rel="stylesheet" /> -->
-    </Head>
+    <Head :title="title + ' (Gestion)'" />
     <!-- Header -->
     <Header :style="{ maxWidth: viewportWidth + 'px' }" />
     <!-- End of Header -->

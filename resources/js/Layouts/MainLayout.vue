@@ -4,6 +4,7 @@
     </Head>
 
     <Loader v-if="!mainStore.showContent" />
+
     <div v-else class="flex grow">
         <GestionLayout
             :title="title"
@@ -35,28 +36,36 @@ import KTLayout from "@metronic/app/layouts/demo1.js";
 import AppLayout from "./AppLayout.vue";
 import GestionLayout from "./GestionLayout.vue";
 import SearchModal from "@/Components/Modals/SearchModal.vue";
-import HomeLayout from "./HomeLayout.vue";
 import Toaster from "@/Components/ui/toast/Toaster.vue";
+import { usePage } from "@inertiajs/vue3";
+import { useBodyClasses } from "@/composables/useBodyClasses";
 
 defineProps({
     title: String,
 });
 
+const page = usePage();
 const mainStore = useMainStore();
 const userStore = useUserStore();
 
 const scrollable = ref(null);
 
-onMounted(() => {
-    userStore.fetchUser();
+useBodyClasses(`antialiased flex h-full text-base text-gray-700`);
 
-    window.addEventListener("load", mainStore.setShowContent(true), false);
+onMounted(() => {
+    if (page.props.auth.auth_token) {
+        localStorage.setItem("auth_token", page.props.auth.auth_token);
+    } else {
+        localStorage.removeItem("auth_token");
+    }
+    userStore.fetchUser();
 
     nextTick(() => {
         KTComponent.init();
         KTLayout.init();
         KTTogglePassword.init();
 
+        window.addEventListener("load", mainStore.setShowContent(true), false);
         scrollable.value = document.getElementById("scrollable_content");
         scrollable.value?.addEventListener("scroll", mainStore.handleScroll);
     });

@@ -5,16 +5,15 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use App\Models\AccountActivity;
 use App\Enums\AccountActivityEnum;
-use Illuminate\Support\Facades\Auth;
 
 class AccountActivityLogger
 {
-    public static function log(AccountActivityEnum $event, array $metadata = [])
+    public static function log(AccountActivityEnum $event, $user, array $metadata = [])
     {
         $request = request();
 
         AccountActivity::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'ip_address' => $request->ip(),
             'user_agent' => $request->header('User-Agent'),
             'event' => $event->value,

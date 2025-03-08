@@ -1,8 +1,11 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import Search from "./Search.vue";
+import { useMediaQuery } from "@/composables/useMediaQuery";
+import { useResponsive } from "@/composables/useResponsive";
 
-const isAuth = usePage().props.auth.user ? true : false;
+const desktopMode = useResponsive("up", "lg");
+const mobileMode = useResponsive("down", "lg");
 </script>
 
 <template>
@@ -32,11 +35,16 @@ const isAuth = usePage().props.auth.user ? true : false;
             </Link>
         </div>
         <div
-            v-if="$page.props.auth.user"
+            v-if="$page.props.auth.user && desktopMode"
             class="w-commerce-commercecartwrapper"
             data-node-type="commerce-cart-wrapper"
         >
-            <Button asChild v-slot="slotProps" severity="contrast" outlined>
+            <Button
+                asChild
+                v-slot="slotProps"
+                severity="secondary"
+                size="small"
+            >
                 <Link
                     method="post"
                     as="button"

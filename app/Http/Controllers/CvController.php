@@ -30,33 +30,18 @@ class CvController extends Controller
     }
 
     // Créer un nouveau CV
-    public function store(CvRequest $request): JsonResponse
+    public function store(CvRequest $request)
     {
         $request->validated();
-
-        $user = User::where('email', $request->user_email)->first();
-
-        $cv = new CV([
-            'user_id' => $request->user_id ?? ($user ? $user->id : null),
-            'user_email' => $request->user_email,
+        $request->user()->resumes()->create([
+            'user_email' => $request->user()->email,
             'resume_id' => Str::uuid(),
             'title' => $request->title,
             'theme_color' => $request->theme_color,
             'sections' => $request->sections,
         ]);
 
-        try {
-            DB::Transaction(function () use ($cv) {
-                $cv->save();
-            });
-
-            return response()->json([
-                'success' => 'CV créé avec succès.',
-                'data' => new CvResource($cv),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return back(303)->with('success', 'CV crée avec succès.');
     }
 
     // Mettre à jour un CV

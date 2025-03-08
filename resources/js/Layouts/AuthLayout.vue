@@ -17,7 +17,7 @@
 <template>
     <div
         v-if="!branded"
-        class="flex items-center justify-center grow bg-center bg-no-repeat page-bg px-2 md:px-0"
+        class="flex items-center justify-center grow bg-center bg-no-repeat page-bg px-2 md:px-0 bg-orange-50 h-lvh"
     >
         <slot />
     </div>
@@ -52,7 +52,7 @@
         >
             <div class="flex flex-col pb-0 sm:pb-8 p-8 lg:p-16 gap-4">
                 <a href="/" class="text-center">
-                    <Logo class="h-20 max-w-none relative left-[-10px]" />
+                    <Logo class="h-20 max-w-[162px] relative left-[-10px]" />
                 </a>
                 <div class="flex flex-col gap-3">
                     <slot name="headerText">
@@ -87,15 +87,15 @@ interface Status {
     severity?: string;
 }
 
-const authStatus: Status | null =
-    (usePage().props.authStatus as Status) || null;
-
 defineProps({
     branded: {
         type: Boolean,
         default: false,
     },
 });
+
+const authStatus: Status | null =
+    (usePage().props.authStatus as Status) || null;
 
 useBodyClasses("dark:bg-coal-500");
 

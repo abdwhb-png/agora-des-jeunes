@@ -124,4 +124,5 @@ return [
     ],
 
     'frontend_url' => env('APP_FRONTEND_URL', 'http://localhost:3000'),
+    'cv_builder_url' => env('CV_BUILDER_URL', 'https://cv.agora-jeunes.com'),
 ];

@@ -99,10 +99,12 @@ const showRolesPerms = ref(false);
                                 {{ $page.props.auth.user.info.full_name }}
                             </span>
                             <a
-                                class="text-xs text-gray-600 hover:text-primary font-medium leading-none"
+                                class="text-xs text-gray-600 hover:text-primary font-medium leading-none max-w-40 truncate"
                                 href="#"
                             >
-                                {{ $page.props.auth.user.email }}
+                                <CopyBtn :text="$page.props.auth.user.email">
+                                    {{ $page.props.auth.user.email }}
+                                </CopyBtn>
                             </a>
 
                             <span
@@ -259,6 +261,7 @@ const showRolesPerms = ref(false);
                             :href="route('logout')"
                             method="post"
                             as="button"
+                            replace
                         >
                             <i class="pi pi-power-off" style="color: red"></i>
                             Déconnexion

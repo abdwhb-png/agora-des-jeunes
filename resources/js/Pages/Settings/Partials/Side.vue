@@ -26,7 +26,7 @@ export default defineComponent({
         const stickyClass = page.props.routePrefix
             ? stickySidebarClasses[page.props.routePrefix] ||
               "top-[calc(var(--tw-header-height)+1rem)]"
-            : "top-[calc(var(--tw-header-height)+1rem)]";
+            : "top-[calc(var(--tw-header-height)+5rem)]";
 
         return {
             stickyClass,

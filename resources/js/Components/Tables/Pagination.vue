@@ -1,7 +1,10 @@
 <template>
     <div
-        class="flex justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium"
-        :class="sizeClass"
+        class="flex flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium"
+        :class="[
+            sizeClass,
+            itemsPerPageDropdownEnabled ? 'justify-between' : 'justify-center',
+        ]"
     >
         <!-- Sélection du nombre de lignes par page -->
         <div
@@ -27,7 +30,7 @@
         </div>
 
         <!-- Boutons de pagination -->
-        <div class="flex items-center gap-4 order-1 md:order-2">
+        <div class="flex justify-center items-center gap-4 order-1 md:order-2">
             <span data-datatable-info="true">{{ paginationInfo }}</span>
             <div class="pagination">
                 <div class="pagination">

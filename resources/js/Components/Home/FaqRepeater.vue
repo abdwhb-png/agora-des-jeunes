@@ -34,13 +34,20 @@ const performSearch = async () => {
     try {
         const res = await axios.post(props.searchUrl, {
             query: query.value,
-            data: items.value,
         });
         console.log(res);
 
-        if (!res.data.data.length) {
+        if (res.data.answer == "null") {
             throw new Error("No results found with ai search");
         }
+
+        filteredResults.value = [
+            {
+                id: Math.floor(Math.random() * 1000),
+                question: res.data.question || query.value,
+                answer: res.data.answer,
+            },
+        ];
     } catch (error) {
         console.log(error);
         const searchResults = fuse.search(query.value);
@@ -68,30 +75,11 @@ watch(
             <div class="container is-secondary">
                 <div class="margin-bottom margin-40px">
                     <div class="flex gap-3">
-                        <IconField>
-                            <InputIcon class="pi pi-search" />
-                            <InputText
-                                v-model="query"
-                                placeholder="Rechercher une question"
-                                size="large"
-                                fluid
-                            />
-                        </IconField>
                         <Button
-                            icon="pi pi-search"
+                            icon="pi pi-question"
                             severity="contrast"
-                            :loading="loading"
-                            @click="performSearch"
-                        />
-                        <Button
-                            v-if="query"
-                            icon="pi pi-times"
-                            severity="secondary"
-                            raised
-                            @click="
-                                query = '';
-                                performSearch;
-                            "
+                            label="Poser une question"
+                            size="large"
                         />
                     </div>
                 </div>

@@ -29,25 +29,25 @@ class AccountServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::listen(Failed::class, function ($event) {
-            AccountActivityLogger::log(AccountActivityEnum::FAILED_LOGIN, [
+            AccountActivityLogger::log(AccountActivityEnum::FAILED_LOGIN, $event->user, [
                 'email' => $event->credentials['email'] ?? 'unknown',
             ]);
         });
 
         Event::listen(Login::class, function ($event) {
-            AccountActivityLogger::log(AccountActivityEnum::LOGED_IN, ['email' => $event->user->email]);
+            AccountActivityLogger::log(AccountActivityEnum::LOGED_IN, $event->user, ['email' => $event->user->email]);
         });
 
         Event::listen(Logout::class, function ($event) {
-            AccountActivityLogger::log(AccountActivityEnum::LOGED_OUT, ['email' => $event->user->email]);
+            AccountActivityLogger::log(AccountActivityEnum::LOGED_OUT, $event->user, ['email' => $event->user->email]);
         });
 
         Event::listen(Registered::class, function ($event) {
-            AccountActivityLogger::log(AccountActivityEnum::REGISTERED, ['email' => $event->user->email]);
+            AccountActivityLogger::log(AccountActivityEnum::REGISTERED, $event->user, ['email' => $event->user->email]);
         });
 
         Event::listen(PasswordReset::class, function ($event) {
-            AccountActivityLogger::log(AccountActivityEnum::PASSWORD_RESET, ['email' => $event->user->email]);
+            AccountActivityLogger::log(AccountActivityEnum::PASSWORD_RESET, $event->user, ['email' => $event->user->email]);
         });
 
         Event::listen(Failed::class, function ($event) {
@@ -60,7 +60,7 @@ class AccountServiceProvider extends ServiceProvider
             Cache::put($key, $attempts, now()->addMinutes(10));
 
             if ($attempts >= 5) {
-                AccountActivityLogger::log(AccountActivityEnum::SUSPICIOUS_LOGIN_ATTEMPT, [
+                AccountActivityLogger::log(AccountActivityEnum::SUSPICIOUS_LOGIN_ATTEMPT, $event->user, [
                     'email' => $email,
                     'attempts' => $attempts
                 ]);

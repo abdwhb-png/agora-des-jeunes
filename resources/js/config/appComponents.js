@@ -17,6 +17,7 @@ import SearchInput from "@/Components/SearchInput.vue";
 import CopyBtn from "@/Components/CopyBtn.vue";
 import NotPermitted from "@/Components/Base/NotPermitted.vue";
 import VLazyImage from "v-lazy-image";
+import UiButton from "@/Components/ui/button/Button.vue";
 
 export default function registerComponents(app) {
     app.component("Head", Head);
@@ -40,6 +41,8 @@ export default function registerComponents(app) {
     app.component("FormButtonGroup", FormButtonGroup);
     app.component("ToastError", ToastError);
     app.component("ToastStatus", ToastStatus);
+
+    app.component("UiButton", UiButton);
 
     app.component("v-lazy-image", VLazyImage);
 }

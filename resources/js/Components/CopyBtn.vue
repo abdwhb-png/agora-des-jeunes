@@ -1,10 +1,12 @@
 <template>
-    <i
-        v-if="text"
-        @click="copy"
-        class="cursor-pointer ki-filled"
-        :class="copied ? 'ki-copy-success text-success' : 'ki-copy'"
-    ></i>
+    <div class="flex items-center gap-1" @click="copy">
+        <i
+            v-if="text"
+            class="cursor-pointer ki-filled"
+            :class="copied ? 'ki-copy-success text-primary' : 'ki-copy'"
+        ></i>
+        <slot></slot>
+    </div>
 </template>
 
 <script setup>

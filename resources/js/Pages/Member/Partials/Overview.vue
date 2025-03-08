@@ -44,17 +44,13 @@ defineProps({
                 </svg>
             </div>
             <div class="flex flex-wrap justify-center gap-1 lg:gap-4.5 text-sm">
-                <div class="flex gap-1.25 items-center">
+                <div
+                    v-if="user.info.profession"
+                    class="flex gap-1.25 items-center"
+                >
                     <i class="ki-filled ki-user text-gray-500 text-sm"> </i>
                     <span class="text-gray-600 font-medium">
                         {{ user.info.profession }}
-                    </span>
-                </div>
-                <div class="flex gap-1.25 items-center">
-                    <i class="ki-filled ki-geolocation text-gray-500 text-sm">
-                    </i>
-                    <span class="text-gray-600 font-medium">
-                        {{ `${user.info.ville}, ${user.info.quartier}` }}
                     </span>
                 </div>
                 <div class="flex gap-1.25 items-center">
@@ -65,6 +61,13 @@ defineProps({
                     >
                         {{ user.email }}
                     </a>
+                </div>
+                <div class="flex gap-1.25 items-center">
+                    <i class="ki-filled ki-geolocation text-gray-500 text-sm">
+                    </i>
+                    <span class="text-gray-600 font-medium">
+                        {{ `${user.info.ville}, ${user.info.quartier}` }}
+                    </span>
                 </div>
             </div>
         </div>

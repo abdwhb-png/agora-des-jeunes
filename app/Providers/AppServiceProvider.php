@@ -20,10 +20,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         require_once app_path('Helpers/helpers.php');
+        require_once app_path('Helpers/app_helpers.php');
 
-        $loader = AliasLoader::getInstance();
-
-        $loader->alias('NoCaptcha', \Anhskohbo\NoCaptcha\Facades\NoCaptcha::class);
+        // $loader = AliasLoader::getInstance();
+        // $loader->alias('NoCaptcha', \Anhskohbo\NoCaptcha\Facades\NoCaptcha::class);
     }
 
     /**

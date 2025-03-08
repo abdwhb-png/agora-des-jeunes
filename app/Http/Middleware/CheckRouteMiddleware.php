@@ -17,13 +17,16 @@ class CheckRouteMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $key = ConfigEnum::ENFORCE_DOMAIN_KEY->value;
+        $enforceDomain = ConfigEnum::ENFORCE_DOMAIN_KEY->value;
+        $redirectTo = ConfigEnum::REDIRECT_TO_KEY->value;
+
         $request->validate([
-            $key => 'sometimes|in:' . ConfigEnum::ADMIN_PREFIX->value . ',' . ConfigEnum::APP_PREFIX->value
+            $enforceDomain => 'sometimes|in:' . ConfigEnum::ADMIN_PREFIX->value . ',' . ConfigEnum::APP_PREFIX->value,
+            $redirectTo => 'sometimes|in:' . config('app.cv_builder_url')
         ]);
 
-        if ($request->has($key)) {
-            $url = url_from_subdomain($request->get($key));
+        if ($request->has($enforceDomain)) {
+            $url = url_from_subdomain($request->get($enforceDomain));
             return $request->headers->has('X-Inertia') ? Inertia::location($url) : redirect()->away($url);
         }
 

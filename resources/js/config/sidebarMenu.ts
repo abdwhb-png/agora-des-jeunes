@@ -15,7 +15,7 @@ import Departements from "@/Pages/Gestion/Partials/Configuration/Departements.vu
 import Trainings from "@/Pages/Gestion/Partials/Configuration/Trainings.vue";
 import Jobs from "@/Pages/Gestion/Partials/Configuration/Jobs.vue";
 
-import { appUrl } from "./appInit";
+import { appUrl, apiManagerUrl } from "./appInit";
 
 export const rapidLinlks: RapidLink[] = [
     {
@@ -27,6 +27,11 @@ export const rapidLinlks: RapidLink[] = [
         label: "Mon Compte",
         route: "account",
         icon: getIcon("account"),
+    },
+    {
+        label: "API Manger",
+        url: apiManagerUrl || route("api-tokens.index"),
+        icon: "ki-filled ki-code",
     },
     {
         label: "Pulse",
@@ -140,12 +145,6 @@ export function menus(routePrefix: string): Menu[] {
             icon: getIcon("permission"),
             route: routePrefix + "permission.index",
             selected: useStorage("permissions_active", 0),
-        },
-        {
-            title: "API",
-            icon: "ki-code",
-            route: "api-tokens.index",
-            selected: useStorage("api_active", 0),
         },
         ...base,
     ];
