@@ -10,7 +10,7 @@ import UiButton from "@/Components/ui/button/Button.vue";
 const PROMPT = prompts.project_description;
 const page = usePage();
 const create = ref(false);
-const needDescForIa = ref(50);
+const needDescForIa = ref(20);
 
 const aiButton = ref(null);
 const userInput = ref("");
@@ -64,27 +64,33 @@ const storeCv = () => {
         header="Nouveau projet"
     >
         <form @submit.prevent="storeCv">
-            <div class="mt-1.5">
-                <InputError class="mb-2" :message="form.errors.title" />
-                <FloatLabel variant="on" class="mb-4">
-                    <InputText
-                        v-model="form.title"
-                        id="project_title"
-                        fluid
-                        required
-                    />
-                    <label for="project_title">Titre du projet</label>
-                </FloatLabel>
-            </div>
+            <div class="grid md:grid-cols-2">
+                <div class="mt-1.5">
+                    <InputError class="mb-2" :message="form.errors.title" />
+                    <FloatLabel variant="on" class="mb-4">
+                        <InputText
+                            v-model="form.title"
+                            id="project_title"
+                            fluid
+                            required
+                        />
+                        <label for="project_title">Titre du projet</label>
+                    </FloatLabel>
+                </div>
 
-            <div>
-                <InputError class="mb-2" :message="form.errors.type" />
-                <FloatLabel variant="on" class="mb-4">
-                    <InputText v-model="form.type" id="project_type" fluid />
-                    <label for="project_type"
-                        >Type de projet (facultatif)</label
-                    >
-                </FloatLabel>
+                <div>
+                    <InputError class="mb-2" :message="form.errors.type" />
+                    <FloatLabel variant="on" class="mb-4">
+                        <InputText
+                            v-model="form.type"
+                            id="project_type"
+                            fluid
+                        />
+                        <label for="project_type"
+                            >Type de projet (facultatif)</label
+                        >
+                    </FloatLabel>
+                </div>
             </div>
 
             <div>

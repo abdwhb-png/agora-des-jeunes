@@ -86,11 +86,12 @@ return [
             'driver' => 'mongodb',
             'dsn' => env('MONGODB_URI', 'mongodb://localhost:27017'),
             'database' => env('MONGODB_DATABASE', 'laravel_app'),
-            'options' => [
-                'retryWrites' => true,
-                'w' => 'majority',
-                'tlsAllowInvalidCertificates' => true,
-            ]
+            // 'options' => [
+            //     'retryWrites' => true,
+            //     'w' => 'majority',
+            //     'tlsAllowInvalidCertificates' => true,
+            //     'tls' => true,
+            // ]
         ],
 
         'mariadb' => [
@@ -115,13 +116,13 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
+            'url' => env('PG_DB_URL'),
+            'host' => env('PG_DB_HOST', '127.0.0.1'),
+            'port' => env('PG_DB_PORT', '5432'),
+            'database' => env('PG_DB_DATABASE', 'laravel'),
+            'username' => env('PG_DB_USERNAME', 'root'),
+            'password' => env('PG_DB_PASSWORD', ''),
+            'charset' => env('PG_DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',

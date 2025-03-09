@@ -2,7 +2,7 @@
 {
   try {
     let e2 = "undefined" != typeof window ? window : "undefined" != typeof global ? global : "undefined" != typeof globalThis ? globalThis : "undefined" != typeof self ? self : {}, n2 = new e2.Error().stack;
-    n2 && (e2._sentryDebugIds = e2._sentryDebugIds || {}, e2._sentryDebugIds[n2] = "0df14aca-e71c-445b-ae1e-82e8c5173931", e2._sentryDebugIdIdentifier = "sentry-dbid-0df14aca-e71c-445b-ae1e-82e8c5173931");
+    n2 && (e2._sentryDebugIds = e2._sentryDebugIds || {}, e2._sentryDebugIds[n2] = "572f1720-1fdb-4898-b0e0-d2990a27637b", e2._sentryDebugIdIdentifier = "sentry-dbid-572f1720-1fdb-4898-b0e0-d2990a27637b");
   } catch (e2) {
   }
 }
@@ -158,7 +158,7 @@ _sfc_main$3J.setup = (props, ctx) => {
 const BottomCta = /* @__PURE__ */ _export_sfc(_sfc_main$3J, [["ssrRender", _sfc_ssrRender$n]]);
 {
   let _global = typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : {};
-  _global.SENTRY_RELEASE = { id: "cff57587ed091be3e44321b2a186a1231be5ec27" };
+  _global.SENTRY_RELEASE = { id: "2bb15873544d743d1af37b971eed25d34e88e9b0" };
 }
 function useApi() {
   const api2 = axios$1.create({
@@ -6518,12 +6518,12 @@ const _sfc_main$2K = {
         route: routePrefix + "entreprendre"
       },
       {
-        title: "Se Former",
+        title: "Formation",
         icon: getIcon("formation"),
         route: routePrefix + "formation"
       },
       {
-        title: "Trouver Job",
+        title: "Emploi",
         icon: getIcon("emploi"),
         route: routePrefix + "emploi"
       }
@@ -21739,7 +21739,7 @@ const _sfc_main$U = {
     const PROMPT = prompts.project_description;
     const page2 = usePage();
     const create = ref(false);
-    const needDescForIa = ref(50);
+    const needDescForIa = ref(20);
     const aiButton = ref(null);
     const userInput = ref("");
     const form = useForm({
@@ -21809,7 +21809,7 @@ const _sfc_main$U = {
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<form${_scopeId}><div class="mt-1.5"${_scopeId}>`);
+            _push2(`<form${_scopeId}><div class="grid md:grid-cols-2"${_scopeId}><div class="mt-1.5"${_scopeId}>`);
             _push2(ssrRenderComponent(_component_InputError, {
               class: "mb-2",
               message: unref(form).errors.title
@@ -21875,7 +21875,7 @@ const _sfc_main$U = {
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(`</div><div${_scopeId}>`);
+            _push2(`</div></div><div${_scopeId}>`);
             _push2(ssrRenderComponent(_component_FloatLabel, {
               variant: "on",
               class: "mb-4"
@@ -21943,48 +21943,50 @@ const _sfc_main$U = {
               createVNode("form", {
                 onSubmit: withModifiers(storeCv, ["prevent"])
               }, [
-                createVNode("div", { class: "mt-1.5" }, [
-                  createVNode(_component_InputError, {
-                    class: "mb-2",
-                    message: unref(form).errors.title
-                  }, null, 8, ["message"]),
-                  createVNode(_component_FloatLabel, {
-                    variant: "on",
-                    class: "mb-4"
-                  }, {
-                    default: withCtx(() => [
-                      createVNode(_component_InputText, {
-                        modelValue: unref(form).title,
-                        "onUpdate:modelValue": ($event) => unref(form).title = $event,
-                        id: "project_title",
-                        fluid: "",
-                        required: ""
-                      }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                      createVNode("label", { for: "project_title" }, "Titre du projet")
-                    ]),
-                    _: 1
-                  })
-                ]),
-                createVNode("div", null, [
-                  createVNode(_component_InputError, {
-                    class: "mb-2",
-                    message: unref(form).errors.type
-                  }, null, 8, ["message"]),
-                  createVNode(_component_FloatLabel, {
-                    variant: "on",
-                    class: "mb-4"
-                  }, {
-                    default: withCtx(() => [
-                      createVNode(_component_InputText, {
-                        modelValue: unref(form).type,
-                        "onUpdate:modelValue": ($event) => unref(form).type = $event,
-                        id: "project_type",
-                        fluid: ""
-                      }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                      createVNode("label", { for: "project_type" }, "Type de projet (facultatif)")
-                    ]),
-                    _: 1
-                  })
+                createVNode("div", { class: "grid md:grid-cols-2" }, [
+                  createVNode("div", { class: "mt-1.5" }, [
+                    createVNode(_component_InputError, {
+                      class: "mb-2",
+                      message: unref(form).errors.title
+                    }, null, 8, ["message"]),
+                    createVNode(_component_FloatLabel, {
+                      variant: "on",
+                      class: "mb-4"
+                    }, {
+                      default: withCtx(() => [
+                        createVNode(_component_InputText, {
+                          modelValue: unref(form).title,
+                          "onUpdate:modelValue": ($event) => unref(form).title = $event,
+                          id: "project_title",
+                          fluid: "",
+                          required: ""
+                        }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                        createVNode("label", { for: "project_title" }, "Titre du projet")
+                      ]),
+                      _: 1
+                    })
+                  ]),
+                  createVNode("div", null, [
+                    createVNode(_component_InputError, {
+                      class: "mb-2",
+                      message: unref(form).errors.type
+                    }, null, 8, ["message"]),
+                    createVNode(_component_FloatLabel, {
+                      variant: "on",
+                      class: "mb-4"
+                    }, {
+                      default: withCtx(() => [
+                        createVNode(_component_InputText, {
+                          modelValue: unref(form).type,
+                          "onUpdate:modelValue": ($event) => unref(form).type = $event,
+                          id: "project_type",
+                          fluid: ""
+                        }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                        createVNode("label", { for: "project_type" }, "Type de projet (facultatif)")
+                      ]),
+                      _: 1
+                    })
+                  ])
                 ]),
                 createVNode("div", null, [
                   createVNode(_component_FloatLabel, {

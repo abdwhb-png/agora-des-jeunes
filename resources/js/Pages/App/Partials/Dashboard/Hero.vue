@@ -18,7 +18,7 @@ const items = [
     {
         title: "Projet",
         icon: getIcon("projet"),
-        route: routePrefix + "entreprendre",
+        route: routePrefix + "profil",
     },
     {
         title: "Entreprendre",
@@ -31,12 +31,12 @@ const items = [
         route: routePrefix + "entreprendre",
     },
     {
-        title: "Se Former",
+        title: "Formation",
         icon: getIcon("formation"),
         route: routePrefix + "formation",
     },
     {
-        title: "Trouver Job",
+        title: "Emploi",
         icon: getIcon("emploi"),
         route: routePrefix + "emploi",
     },
@@ -72,7 +72,6 @@ const items = [
                     v-for="(item, index) in items"
                     :key="item.title"
                     class="_F_1gdhzusC6tSOWHtx_"
-                    @click="console.log(item)"
                 >
                     <a v-if="item.url" :href="item.url" target="_blank">
                         <HeroItemContent :item="item" />

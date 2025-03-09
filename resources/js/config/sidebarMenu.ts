@@ -15,7 +15,7 @@ import Departements from "@/Pages/Gestion/Partials/Configuration/Departements.vu
 import Trainings from "@/Pages/Gestion/Partials/Configuration/Trainings.vue";
 import Jobs from "@/Pages/Gestion/Partials/Configuration/Jobs.vue";
 
-import { appUrl, apiManagerUrl } from "./appInit";
+import { appUrl, apiManagerUrl, cvBuilderUrl } from "./appInit";
 
 export const rapidLinlks: RapidLink[] = [
     {
@@ -27,6 +27,11 @@ export const rapidLinlks: RapidLink[] = [
         label: "Mon Compte",
         route: "account",
         icon: getIcon("account"),
+    },
+    {
+        label: "Constructeur de CV",
+        url: cvBuilderUrl,
+        icon: getIcon("cv"),
     },
     {
         label: "API Manger",

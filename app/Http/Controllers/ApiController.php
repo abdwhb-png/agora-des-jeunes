@@ -8,7 +8,8 @@ use App\Models\AppFeature;
 use App\Models\Arrondissement;
 use App\Models\Commune;
 use App\Models\Departement;
-use App\Models\MongoDB\AiUsage;
+use App\Models\MongoDB\AiUsage as MongoDBAiUsage;
+use App\Models\AiUsage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +50,7 @@ class ApiController extends BaseController
 
     public function aiUsage(Request $request)
     {
-        AiUsage::create([
+        MongoDBAiUsage::create([
             'user_id' => $request->user()->id,
             'ai' => $request->ai,
             'input_text' => $request->input_text,

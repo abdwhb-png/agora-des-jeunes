@@ -1,6 +1,7 @@
 <script setup>
 import ProfileCompToolbar from "./ProfileCompToolbar.vue";
 import NewProject from "./NewProject.vue";
+import ProjectContent from "./ProjectContent.vue";
 
 defineProps({
     projects: { type: Object, default: [] },
@@ -35,94 +36,10 @@ defineProps({
                                 <span class="badge badge-primary badge-outline">
                                     {{ item.status }}
                                 </span>
-                                <div class="menu" data-menu="true">
-                                    <div
-                                        class="menu-item menu-item-dropdown"
-                                        data-menu-item-offset="0, 10px"
-                                        data-menu-item-placement="bottom-end"
-                                        data-menu-item-toggle="dropdown"
-                                        data-menu-item-trigger="click|lg:click"
-                                    >
-                                        <button
-                                            class="menu-toggle btn btn-sm btn-icon btn-light btn-clear"
-                                        >
-                                            <i
-                                                class="ki-filled ki-dots-vertical"
-                                            >
-                                            </i>
-                                        </button>
-                                        <div
-                                            class="menu-dropdown menu-default w-full max-w-[200px]"
-                                            data-menu-dismiss="true"
-                                        >
-                                            <div class="menu-item">
-                                                <a
-                                                    class="menu-link"
-                                                    href="/metronic/tailwind/demo1/account/home/settings-enterprise"
-                                                >
-                                                    <span class="menu-icon">
-                                                        <i
-                                                            class="ki-filled ki-setting-3"
-                                                        >
-                                                        </i>
-                                                    </span>
-                                                    <span class="menu-title">
-                                                        Settings
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div class="menu-item">
-                                                <a
-                                                    class="menu-link"
-                                                    href="/metronic/tailwind/demo1/account/members/import-members"
-                                                >
-                                                    <span class="menu-icon">
-                                                        <i
-                                                            class="ki-filled ki-some-files"
-                                                        >
-                                                        </i>
-                                                    </span>
-                                                    <span class="menu-title">
-                                                        Import
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div class="menu-item">
-                                                <a
-                                                    class="menu-link"
-                                                    href="/metronic/tailwind/demo1/account/activity"
-                                                >
-                                                    <span class="menu-icon">
-                                                        <i
-                                                            class="ki-filled ki-cloud-change"
-                                                        >
-                                                        </i>
-                                                    </span>
-                                                    <span class="menu-title">
-                                                        Activity
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div class="menu-item">
-                                                <a
-                                                    class="menu-link"
-                                                    data-modal-toggle="#report_user_modal"
-                                                    href="#"
-                                                >
-                                                    <span class="menu-icon">
-                                                        <i
-                                                            class="ki-filled ki-dislike"
-                                                        >
-                                                        </i>
-                                                    </span>
-                                                    <span class="menu-title">
-                                                        Report
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <ProjectContent
+                                    :project="item"
+                                    section="dropdown"
+                                />
                             </div>
                             <div class="flex justify-center mb-2">
                                 <v-lazy-image
@@ -150,42 +67,10 @@ defineProps({
                             <div
                                 class="flex items-center justify-center flex-wrap gap-2 lg:gap-5"
                             >
-                                <div
-                                    class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-300 shrink-0 rounded-md px-2.5 py-2 min-w-24 max-w-auto"
-                                >
-                                    <span
-                                        class="text-gray-900 text-sm leading-none font-medium"
-                                    >
-                                        1-3 months
-                                    </span>
-                                    <span class="text-gray-700 text-xs">
-                                        Duration
-                                    </span>
-                                </div>
-                                <div
-                                    class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-300 shrink-0 rounded-md px-2.5 py-2 min-w-24 max-w-auto"
-                                >
-                                    <span
-                                        class="text-gray-900 text-sm leading-none font-medium"
-                                    >
-                                        Flexible
-                                    </span>
-                                    <span class="text-gray-700 text-xs">
-                                        Location
-                                    </span>
-                                </div>
-                                <div
-                                    class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-300 shrink-0 rounded-md px-2.5 py-2 min-w-24 max-w-auto"
-                                >
-                                    <span
-                                        class="text-gray-900 text-sm leading-none font-medium"
-                                    >
-                                        $65 hour
-                                    </span>
-                                    <span class="text-gray-700 text-xs">
-                                        Rate
-                                    </span>
-                                </div>
+                                <ProjectContent
+                                    :project="item"
+                                    section="metadata"
+                                />
                             </div>
                         </div>
                         <div class="progress progress-primary">
@@ -239,42 +124,10 @@ defineProps({
                                     <div
                                         class="flex items-center lg:justify-center flex-wrap gap-2 lg:gap-5"
                                     >
-                                        <div
-                                            class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-300 shrink-0 rounded-md px-2.5 py-2 min-w-24 max-w-auto"
-                                        >
-                                            <span
-                                                class="text-gray-900 text-2sm leading-none font-medium"
-                                            >
-                                                1-3 months
-                                            </span>
-                                            <span class="text-gray-700 text-xs">
-                                                Duration
-                                            </span>
-                                        </div>
-                                        <div
-                                            class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-300 shrink-0 rounded-md px-2.5 py-2 min-w-24 max-w-auto"
-                                        >
-                                            <span
-                                                class="text-gray-900 text-2sm leading-none font-medium"
-                                            >
-                                                Flexible
-                                            </span>
-                                            <span class="text-gray-700 text-xs">
-                                                Location
-                                            </span>
-                                        </div>
-                                        <div
-                                            class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-300 shrink-0 rounded-md px-2.5 py-2 min-w-24 max-w-auto"
-                                        >
-                                            <span
-                                                class="text-gray-900 text-2sm leading-none font-medium"
-                                            >
-                                                $65 hour
-                                            </span>
-                                            <span class="text-gray-700 text-xs">
-                                                Rate
-                                            </span>
-                                        </div>
+                                        <ProjectContent
+                                            :project="item"
+                                            section="metadata"
+                                        />
                                     </div>
                                     <div class="w-[125px] shrink-0">
                                         <span
@@ -285,102 +138,10 @@ defineProps({
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-5 lg:gap-14">
-                                    <div class="menu" data-menu="true">
-                                        <div
-                                            class="menu-item menu-item-dropdown"
-                                            data-menu-item-offset="0, 10px"
-                                            data-menu-item-placement="bottom-end"
-                                            data-menu-item-toggle="dropdown"
-                                            data-menu-item-trigger="click|lg:click"
-                                        >
-                                            <button
-                                                class="menu-toggle btn btn-sm btn-icon btn-light btn-clear"
-                                            >
-                                                <i
-                                                    class="ki-filled ki-dots-vertical"
-                                                >
-                                                </i>
-                                            </button>
-                                            <div
-                                                class="menu-dropdown menu-default w-full max-w-[200px]"
-                                                data-menu-dismiss="true"
-                                            >
-                                                <div class="menu-item">
-                                                    <a
-                                                        class="menu-link"
-                                                        href="/metronic/tailwind/demo1/account/home/settings-enterprise"
-                                                    >
-                                                        <span class="menu-icon">
-                                                            <i
-                                                                class="ki-filled ki-setting-3"
-                                                            >
-                                                            </i>
-                                                        </span>
-                                                        <span
-                                                            class="menu-title"
-                                                        >
-                                                            Settings
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                <div class="menu-item">
-                                                    <a
-                                                        class="menu-link"
-                                                        href="/metronic/tailwind/demo1/account/members/import-members"
-                                                    >
-                                                        <span class="menu-icon">
-                                                            <i
-                                                                class="ki-filled ki-some-files"
-                                                            >
-                                                            </i>
-                                                        </span>
-                                                        <span
-                                                            class="menu-title"
-                                                        >
-                                                            Import
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                <div class="menu-item">
-                                                    <a
-                                                        class="menu-link"
-                                                        href="/metronic/tailwind/demo1/account/activity"
-                                                    >
-                                                        <span class="menu-icon">
-                                                            <i
-                                                                class="ki-filled ki-cloud-change"
-                                                            >
-                                                            </i>
-                                                        </span>
-                                                        <span
-                                                            class="menu-title"
-                                                        >
-                                                            Activity
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                <div class="menu-item">
-                                                    <a
-                                                        class="menu-link"
-                                                        data-modal-toggle="#report_user_modal"
-                                                        href="#"
-                                                    >
-                                                        <span class="menu-icon">
-                                                            <i
-                                                                class="ki-filled ki-dislike"
-                                                            >
-                                                            </i>
-                                                        </span>
-                                                        <span
-                                                            class="menu-title"
-                                                        >
-                                                            Report
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <ProjectContent
+                                        :project="item"
+                                        section="dropdown"
+                                    />
                                 </div>
                             </div>
                         </div>

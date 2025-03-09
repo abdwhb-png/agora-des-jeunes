@@ -6,10 +6,10 @@
 /storage/*.key
 /storage/pail
 /vendor
+composer.lock
 .env
 .env.backup
 .env.production
-.composer.lock
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
