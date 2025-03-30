@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\ConfigHelper;
 use Inertia\Middleware;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Helpers\ConfigHelper;
 use App\Http\Resources\UserResource;
 
 class HandleInertiaRequests extends Middleware
@@ -39,7 +40,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'app' => config('app'),
+            'app' => Arr::only(config('app'), ['cv_builder_url', 'env', 'frontend_url', 'name', 'url']),
             'config' => ConfigHelper::getConfig(),
             'routePrefix' => route_prefix(),
             'socialAuth' => ['facebook', 'google'],

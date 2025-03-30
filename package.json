@@ -41,6 +41,7 @@
         "@tanstack/react-table": "^8.20.5",
         "@vue/server-renderer": "^3.5.13",
         "@vueuse/core": "^12.5.0",
+        "animate.css": "^4.1.1",
         "apexcharts": "3.52.0",
         "array-sort": "^1.0.0",
         "axios": "^1.7.7",

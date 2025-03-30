@@ -99,7 +99,11 @@ const items = [
                         "
                     >
                         <div class="margin-bottom margin-24px">
-                            <div class="why-item-icon-wrapper">
+                            <div
+                                class="why-item-icon-wrapper set-animation"
+                                data-animation="animate__fadeInUp"
+                                data-no-repeat="true"
+                            >
                                 <v-lazy-image
                                     :src="`/images/about/${item.img}`"
                                     loading="lazy"
@@ -110,7 +114,10 @@ const items = [
                         </div>
                         <div class="feature-item-content">
                             <div class="margin-bottom margin-16px">
-                                <h3 class="feature-item-title">
+                                <h3
+                                    class="feature-item-title set-animation"
+                                    data-animation="animate__lightSpeedInLeft"
+                                >
                                     {{ item.title }}
                                 </h3>
                             </div>

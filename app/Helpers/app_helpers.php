@@ -31,10 +31,10 @@ if (!function_exists('seo')) {
     function seo($key = null)
     {
         $data = [
-            'description' => settings()->site_description ?? config('app.name') . " c'est le lieu où l'avenir prend forme pour les jeunes. Viens t'engager et t'exprimer pour ton avenir !",
-            'keywords' => settings()->site_keywords ? implode(',', settings()->site_keywords) : [config('app.name'), "Agora des jeunes", "Adiza Arouna", "Arouna Adizatou"],
-            "og_title" => config('app.name') . " : Exprimes toi, engages toi... C'est ici que l'avenir prend forme.",
-            'slogan' => settings()->site_slogan ?? "Agora, le lieu où l'avenir prend forme !",
+            "title" => config('app.name') . " - Autonomisation et Opportunités pour la Jeunesse",
+            'description' => settings()->site_description ?? config('app.name') . " la plateforme qui t’accompagne dans ton éducation, ton développement personnel et ton avenir professionnel. Rejoins " . config('app.name') . " pour accéder à des formations, offres d’emploi, bourses et outils pour réussir ton avenir !",
+            'keywords' => implode(',', settings('site_keywords') ? settings('site_keywords') : [config('app.name')]),
+            'slogan' => settings()->site_slogan ?? config('app.name') . ", le lieu où l'avenir prend forme !",
         ];
 
         if ($key) {

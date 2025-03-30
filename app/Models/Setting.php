@@ -14,10 +14,13 @@ class Setting extends Model
         'id',
     ];
 
-    protected $casts = [
-        'social_links' => 'array',
-    ];
-
+    protected function casts(): array
+    {
+        return [
+            'social_links' => 'array',
+            'site_keywords' => 'array',
+        ];
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

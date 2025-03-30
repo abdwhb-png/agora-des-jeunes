@@ -38,11 +38,7 @@ const list = [
                                             data-wf--ui-section-subtitle--variant="base"
                                             class="section-subtitle-wrapper"
                                         >
-                                            <img
-                                                src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774def2949f4571378328fa_Section%20Subtitle%20Icon.svg"
-                                                loading="lazy"
-                                                data-w-id="24d52241-d76b-7d8e-9564-1ed94bdc6613"
-                                                alt="Section Subtitle Icon"
+                                            <SubtitleIcon
                                                 class="section-subtitle-icon"
                                                 style="
                                                     transform: translate3d(
@@ -131,55 +127,21 @@ const list = [
                                     </div>
                                     <div
                                         data-w-id="6fa82e0a-3f0d-c066-dc9a-b21dcfed91ae"
-                                        style="
-                                            transform: translate3d(
-                                                    0px,
-                                                    0px,
-                                                    0px
-                                                )
-                                                scale3d(1, 1, 1) rotateX(0deg)
-                                                rotateY(0deg) rotateZ(0deg)
-                                                skew(0deg, 0deg);
-                                            opacity: 1;
-                                            transform-style: preserve-3d;
-                                        "
-                                        class="animate"
+                                        class="set-animation"
+                                        data-animation="animate__fadeOutDown"
+                                        data-no-repeat="true"
                                     >
-                                        <a
-                                            data-wf--button-button-primary--variant="base"
+                                        <BtnLink
                                             href="#how-it-works"
-                                            class="button-primary-wrapper w-inline-block"
-                                            ><div
-                                                class="button-shadow"
-                                                style="
-                                                    transform: translate3d(
-                                                            8px,
-                                                            8px,
-                                                            0px
-                                                        )
-                                                        scale3d(1, 1, 1)
-                                                        rotateX(0deg)
-                                                        rotateY(0deg)
-                                                        rotateZ(0deg)
-                                                        skew(0deg, 0deg);
-                                                    transform-style: preserve-3d;
-                                                "
-                                            ></div>
-                                            <div class="button-primary">
-                                                <div
-                                                    class="button-text-wrapper"
-                                                >
-                                                    <div class="button-text">
-                                                        Comment ça marche ?
-                                                    </div>
-                                                    <div
-                                                        class="button-text is-behind"
-                                                    >
-                                                        Comment ça marche ?
-                                                    </div>
-                                                </div>
-                                            </div></a
+                                            variant="secondary"
+                                            text="Comment ça marche ?"
                                         >
+                                            <template #icon>
+                                                <i
+                                                    class="pi pi-arrow-circle-down"
+                                                ></i>
+                                            </template>
+                                        </BtnLink>
                                     </div>
                                 </div>
                                 <div
@@ -188,23 +150,12 @@ const list = [
                                 >
                                     <div
                                         data-w-id="c037766c-cd0d-2a8e-c4da-370e0062da15"
-                                        class="about-left-thumb-wrap"
+                                        class="about-left-thumb-wrap set-animation animate__delay-1s"
+                                        data-animation="animate__bounceInRight"
+                                        data-no-repeat="true"
                                     >
                                         <v-lazy-image
                                             src="/images/ninthgrid-GOItLaf-gxY-unsplash.jpg"
-                                            loading="lazy"
-                                            style="
-                                                transform: translate3d(
-                                                        0px,
-                                                        0px,
-                                                        0px
-                                                    )
-                                                    scale3d(1, 1, 1)
-                                                    rotateX(0deg) rotateY(0deg)
-                                                    rotateZ(0deg)
-                                                    skew(0deg, 0deg);
-                                                transform-style: preserve-3d;
-                                            "
                                             alt="home about section right thumb"
                                             class="image-cover"
                                         />
@@ -214,28 +165,31 @@ const list = [
                                             <a
                                                 href="#"
                                                 class="about-lightbox-link w-inline-block w-lightbox"
-                                                style="
-                                                    will-change: transform;
-                                                    transform: translate3d(
-                                                            -0.00396vw,
-                                                            -0.00576vh,
-                                                            0px
-                                                        )
-                                                        scale3d(1, 1, 1)
-                                                        rotateX(0deg)
-                                                        rotateY(0deg)
-                                                        rotateZ(0deg)
-                                                        skew(0deg, 0deg);
-                                                    transform-style: preserve-3d;
-                                                "
                                                 aria-label="open lightbox"
                                                 aria-haspopup="dialog"
-                                                ><img
-                                                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6775211a5dfa7e4900234567_About%20Lightbox%20Play%20Icon.svg"
-                                                    loading="lazy"
-                                                    alt="About Lightbox Play Button"
+                                            >
+                                                <div
                                                     class="about-lightbox-play-button"
-                                                />
+                                                >
+                                                    <svg
+                                                        width="100"
+                                                        height="100"
+                                                        viewBox="0 0 100 100"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <circle
+                                                            cx="50"
+                                                            cy="50"
+                                                            r="50"
+                                                            fill="#FF783E"
+                                                        />
+                                                        <path
+                                                            d="M59 50L44.75 61.2583L44.75 38.7417L59 50Z"
+                                                            fill="white"
+                                                        />
+                                                    </svg>
+                                                </div>
                                             </a>
                                         </div>
                                         <div
@@ -259,9 +213,7 @@ const list = [
                         </div>
                     </div>
                 </div>
-                <img
-                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677652337172d5876dc18fbc_Website%20Shape.svg"
-                    loading="lazy"
+                <ShapeIcon
                     style="
                         transform: translate3d(-2.9564px, 2.9564px, 0px)
                             scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
@@ -269,9 +221,7 @@ const list = [
                         transform-style: preserve-3d;
                         will-change: transform;
                     "
-                    data-w-id="7b9d468b-42f7-8f7d-f3ae-254509ca98b4"
-                    alt="about section graphical shape"
-                    class="about-section-shape"
+                    class="about-section-shape hidden"
                 />
             </div>
         </div>

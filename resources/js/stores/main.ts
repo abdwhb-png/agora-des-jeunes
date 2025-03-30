@@ -19,7 +19,6 @@ export const useMainStore = defineStore("main", {
             { label: "Foire Aux Questions", href: route("faqs") },
             { label: "Formations", href: "#" },
             { label: "Emplois et Jobs", href: "#" },
-            { label: "...", href: "#" },
         ],
         faqs: [],
         polls: [],

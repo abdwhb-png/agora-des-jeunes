@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import IndexHeader from "@/Components/Home/IndexHeader.vue";
 import HomeLayout from "@/Layouts/HomeLayout.vue";
 </script>
 
 <template>
-    <HomeLayout title="Blog">
+    <HomeLayout title="Blog" :meta="$page.props.meta">
         <template #header>
             <header class="section-blog-hero">
                 <div class="section-spacer">
@@ -55,11 +54,17 @@ import HomeLayout from "@/Layouts/HomeLayout.vue";
                                             class="blog-hero-info"
                                         >
                                             <p class="body-text-18px">
-                                                Wave goodbye to tedious reports.
-                                                Our new project management
-                                                dashboards are easy to build and
-                                                use, boost visibility, and offer
-                                                instant actionable insights.
+                                                Bienvenue sur le blog d'Agora
+                                                des Jeunes, l’espace où nous
+                                                partageons des conseils, des
+                                                témoignages inspirants et des
+                                                ressources pratiques pour aider
+                                                les jeunes à construire leur
+                                                avenir. Que tu sois étudiant,
+                                                entrepreneur, ou en recherche
+                                                d’opportunités, tu trouveras ici
+                                                du contenu enrichissant pour
+                                                t’accompagner dans ton parcours.
                                             </p>
                                         </div>
                                     </div>
@@ -116,11 +121,9 @@ import HomeLayout from "@/Layouts/HomeLayout.vue";
                                                             transform-style: preserve-3d;
                                                         "
                                                         class="image-animated-overlay"
-                                                    ></div></a
-                                                ><img
-                                                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774d7c902256cce1040b646_Hero%20Shape.svg"
-                                                    loading="lazy"
-                                                    alt="Website Shape"
+                                                    ></div
+                                                ></a>
+                                                <ShapeIcon
                                                     class="blog-item-shape"
                                                 />
                                                 <div

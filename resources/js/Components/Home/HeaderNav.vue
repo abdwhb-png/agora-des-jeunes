@@ -1,3 +1,9 @@
+<style scoped>
+.active {
+    color: #2ac9f9;
+}
+</style>
+
 <script setup>
 import { useMainStore } from "@/stores/main";
 import Logo from "@/Components/Logo.vue";
@@ -78,7 +84,10 @@ const mainStore = useMainStore();
                         </div>
                     </div>
                 </div>
-                <div class="nav-menu-wrap">
+                <div
+                    class="nav-menu-wrap"
+                    style="align-items: center !important"
+                >
                     <Link
                         v-for="(item, index) in mainStore.menuItems"
                         :key="item.label"

@@ -52,14 +52,8 @@ const list = [
                             <div class="margin-bottom margin-24px">
                                 <h2
                                     data-w-id="b9e3a269-3ae5-9f4d-c84e-41ba03f054ae"
-                                    style="
-                                        transform: translate3d(0px, 0px, 0px)
-                                            scale3d(1, 1, 1) rotateX(0deg)
-                                            rotateY(0deg) rotateZ(0deg)
-                                            skew(0deg, 0deg);
-                                        transform-style: preserve-3d;
-                                        opacity: 1;
-                                    "
+                                    class="set-animation"
+                                    data-animation="animate__lightSpeedInRight"
                                 >
                                     Pourquoi
                                     <span class="color-primary">{{
@@ -114,7 +108,7 @@ const list = [
                                         <Link
                                             data-wf--button-primary-with-icon--variant="base"
                                             :href="route('register')"
-                                            class="button-primary-wrapper w-inline-block"
+                                            class="button-primary-wrapper w-inline-block set-animation"
                                             ><div
                                                 class="button-shadow"
                                                 style="

@@ -83,6 +83,11 @@ trait UserTrait
         return $query->role([RolesEnum::SUPERADMIN->value, RolesEnum::ROOT->value]);
     }
 
+    public function scopeRoots($query)
+    {
+        return $query->role([RolesEnum::ROOT->value]);
+    }
+
     public function scopeOnlyUsers($query)
     {
         return $query->whereHas('roles', function ($query) {

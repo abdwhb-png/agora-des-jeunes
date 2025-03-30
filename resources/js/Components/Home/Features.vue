@@ -15,14 +15,8 @@ defineProps({
                 <div class="margin-bottom margin-60px">
                     <h2
                         data-w-id="31f7863a-6d63-8c26-fc5b-947444c7a8b8"
-                        style="
-                            transform: translate3d(0px, 0px, 0px)
-                                scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
-                                rotateZ(0deg) skew(0deg, 0deg);
-                            opacity: 1;
-                            transform-style: preserve-3d;
-                        "
-                        class="quick-insight-section-title"
+                        class="quick-insight-section-title set-animation"
+                        data-animation="animate__fadeInUp"
                     >
                         Fonctionnalités Principales
                     </h2>
@@ -111,97 +105,29 @@ defineProps({
                             class="quick-insight-tab w-tabs"
                         >
                             <div
-                                class="quick-insight-tab-menu w-tab-menu"
-                                role="tablist"
+                                v-for="(feature, index) in features"
+                                :key="feature.id || index"
+                                class="collapse collapse-arrow bg-base-100 border border-base-300 mb-3"
                             >
-                                <a
-                                    v-for="(feature, index) in features"
-                                    :key="feature.id || index"
-                                    :data-w-tab="'Tab ' + (index + 1)"
-                                    data-w-id="2479cfd2-dcc6-96ac-bbc8-4e76a4bab60f"
-                                    style="
-                                        transform: translate3d(0px, 0px, 0px)
-                                            scale3d(1, 1, 1) rotateX(0deg)
-                                            rotateY(0deg) rotateZ(0deg)
-                                            skew(0deg, 0deg);
-                                        opacity: 1;
-                                        transform-style: preserve-3d;
-                                    "
-                                    class="insight-tab-link w-inline-block w-tab-link"
-                                    :id="'w-tabs-0-data-w-tab-' + index"
-                                    :href="'#w-tabs-0-data-w-pane-' + index"
-                                    role="tab"
-                                    :aria-controls="
-                                        'w-tabs-0-data-w-pane-' + index
-                                    "
-                                    aria-selected="false"
-                                    tabindex="-1"
-                                    ><div
-                                        class="quick-insight-item"
-                                        style="
-                                            background-color: rgb(
-                                                247,
-                                                247,
-                                                247
-                                            );
-                                        "
+                                <input
+                                    type="radio"
+                                    name="features-accordion"
+                                    checked="checked"
+                                />
+                                <div class="collapse-title heading-custom-h5">
+                                    {{ feature.name }}
+                                </div>
+                                <div
+                                    class="collapse-content insight-tab-item-detail-text"
+                                >
+                                    {{ feature.description }}
+                                    <Link
+                                        :href="route('dashboard')"
+                                        class="link"
                                     >
-                                        <div class="quick-insight-item-inner">
-                                            <div
-                                                class="insight-tab-question-area"
-                                            >
-                                                <div class="heading-custom-h5">
-                                                    {{ feature.name }}
-                                                </div>
-                                                <div
-                                                    class="insight-tab-icon-wrapper"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="100%"
-                                                        viewBox="0 0 24 25"
-                                                        fill="none"
-                                                        class="insight-tab-arrow-icon"
-                                                        style="
-                                                            transform: translate3d(
-                                                                    0px,
-                                                                    0px,
-                                                                    0px
-                                                                )
-                                                                scale3d(1, 1, 1)
-                                                                rotateX(0deg)
-                                                                rotateY(0deg)
-                                                                rotateZ(0deg)
-                                                                skew(0deg, 0deg);
-                                                            transform-style: preserve-3d;
-                                                        "
-                                                    >
-                                                        <path
-                                                            d="M11.9997 13.6714L16.9495 8.72168L18.3637 10.1359L11.9997 16.4999L5.63574 10.1359L7.04996 8.72168L11.9997 13.6714Z"
-                                                            fill="currentColor"
-                                                        ></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="quick-insight-spacer"
-                                                style="height: 0px"
-                                            ></div>
-                                            <p
-                                                class="insight-tab-item-detail-text"
-                                                style="opacity: 0; height: 0px"
-                                            >
-                                                {{ feature.description }}
-                                                <Link
-                                                    :href="route('dashboard')"
-                                                    class="link"
-                                                >
-                                                    Commencer
-                                                </Link>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
+                                        Commencer
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

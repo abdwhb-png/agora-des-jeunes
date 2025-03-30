@@ -16,7 +16,7 @@ const mainStore = useMainStore();
             <div class="container">
                 <div class="section-inner section-footer">
                     <div class="footer-top">
-                        <div class="footer-info">
+                        <div class="footer-info text-center">
                             <div class="margin-bottom margin-16px">
                                 <a
                                     href="/"
@@ -29,23 +29,30 @@ const mainStore = useMainStore();
                             <div class="margin-bottom margin-30px">
                                 <div>{{ $page.props.config.seo.slogan }}</div>
                             </div>
-                            <div class="margin-bottom margin-40px">
-                                <div class="social-icon-wrapper">
-                                    <SocialLinks
-                                        linkClass="social-icon-item w-inline-block"
-                                    />
-                                </div>
-                            </div>
-                            <div class="button-container">
-                                <Button as-child variant="outline">
+                            <div class="margin-30px mb-3">
+                                <Button
+                                    as-child
+                                    variant="outline"
+                                    class="max-w-3/4 mx-auto"
+                                >
                                     <Link :href="route('login')">
                                         <i class="pi pi-user"></i>
                                         Mon Compte
                                     </Link>
                                 </Button>
                             </div>
+                            <div class="margin-bottom">
+                                <div
+                                    class="social-icon-wrapper"
+                                    style="justify-content: center !important"
+                                >
+                                    <SocialLinks
+                                        linkClass="social-icon-item w-inline-block"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div class="footer-links">
+                        <div class="footer-links text-center">
                             <div class="footer-link-column">
                                 <div class="footer-link-column-title">
                                     Pages

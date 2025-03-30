@@ -1,3 +1,26 @@
+<script setup>
+const items = [
+    {
+        key: 1,
+        title: "Inscription",
+        description:
+            "Inscris-toi gratuitement en quelques secondes et remplis les informations requises.",
+    },
+    {
+        key: 2,
+        title: "Exploration",
+        description:
+            "Accède à toutes les fonctionnalités et commence à explorer.",
+    },
+    {
+        key: 3,
+        title: "Passe à l'action",
+        description:
+            "Développe tes compétences et tes opportunités grâce à notre IA et nos experts.",
+    },
+];
+</script>
+
 <template>
     <section class="section-process" id="how-it-works">
         <div class="padding-global mt-20">
@@ -6,33 +29,13 @@
                     <div class="process-col">
                         <div
                             data-w-id="169cf9ac-5d68-94c5-027e-8271b37e4b85"
-                            style="
-                                transform: translate3d(0px, 0px, 0px)
-                                    scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
-                                    rotateZ(0deg) skew(0deg, 0deg);
-                                transform-style: preserve-3d;
-                                opacity: 1;
-                            "
-                            class="margin-bottom margin-24px"
+                            class="margin-bottom margin-24px set-animation"
                         >
                             <div
                                 data-wf--ui-section-subtitle--variant="base"
                                 class="section-subtitle-wrapper"
                             >
-                                <img
-                                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774def2949f4571378328fa_Section%20Subtitle%20Icon.svg"
-                                    loading="lazy"
-                                    data-w-id="24d52241-d76b-7d8e-9564-1ed94bdc6613"
-                                    alt="Section Subtitle Icon"
-                                    class="section-subtitle-icon"
-                                    style="
-                                        transform: translate3d(0px, 0px, 0px)
-                                            scale3d(1, 1, 1) rotateX(0deg)
-                                            rotateY(0deg) rotateZ(360deg)
-                                            skew(0deg, 0deg);
-                                        transform-style: preserve-3d;
-                                    "
-                                />
+                                <SubtitleIcon class="section-subtitle-icon" />
                                 <p class="section-subtitle">
                                     Comment ça marche ?
                                 </p>
@@ -54,47 +57,22 @@
                         </h2>
                     </div>
                     <div class="process-item-wrapper">
-                        <div class="process-item">
-                            <div class="process-item-count">1</div>
-                            <div class="process-item-content">
-                                <div class="margin-bottom margin-16px">
-                                    <h3 class="heading-custom-h5">
-                                        Inscription
-                                    </h3>
-                                </div>
-                                <p>
-                                    Inscris-toi gratuitement en quelques
-                                    secondes et remplis les informations
-                                    requises.
-                                </p>
+                        <div
+                            v-for="item in items"
+                            :key="item.title"
+                            class="process-item"
+                        >
+                            <div class="process-item-count">
+                                Etape {{ item.key }}
                             </div>
-                        </div>
-                        <div class="process-item">
-                            <div class="process-item-count">2</div>
                             <div class="process-item-content">
                                 <div class="margin-bottom margin-16px">
                                     <h3 class="heading-custom-h5">
-                                        Exploration
+                                        {{ item.title }}
                                     </h3>
                                 </div>
                                 <p>
-                                    Accède à toutes les fonctionnalités et
-                                    commence à explorer.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="process-item">
-                            <div class="process-item-count">3</div>
-                            <div class="process-item-content">
-                                <div class="margin-bottom margin-16px">
-                                    <h3 class="heading-custom-h5">
-                                        Passe à l'action
-                                    </h3>
-                                </div>
-                                <p>
-                                    Développe tes compétences et tes
-                                    opportunités grâce à notre IA et nos
-                                    experts.
+                                    {{ item.description }}
                                 </p>
                             </div>
                         </div>

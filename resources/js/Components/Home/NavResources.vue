@@ -19,6 +19,7 @@ const mainStore = useMainStore();
             aria-expanded="false"
             role="button"
             tabindex="0"
+            style="justify-content: center !important"
         >
             <div class="dropdown-text">Ressources</div>
             <svg
@@ -57,10 +58,13 @@ const mainStore = useMainStore();
             id="w-dropdown-list-0"
             aria-labelledby="w-dropdown-toggle-0"
         >
-            <div class="dropdown-menu-wrapper">
+            <div
+                class="dropdown-menu-wrapper"
+                style="grid-template-columns: 1fr !important"
+            >
                 <div
                     id="w-node-_4de1255d-a207-31fe-6e89-8efec43afa34-c43afa1c"
-                    class="dropdown-menu-column"
+                    class="dropdown-menu-column text-center"
                 >
                     <a
                         v-for="(item, index) in mainStore.resourceItems"

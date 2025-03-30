@@ -11,11 +11,11 @@ use App\Http\Middleware\CheckRouteMiddleware;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+    Route::get('/a-propos', 'about')->name('about');
     Route::get('/faqs', 'faqs')->name('faqs');
-    Route::post('contact', 'contact')->name('contact.perform');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::post('contact', 'contactPerform')->name('contact.perform');
 });
-Route::inertia('/contact', 'Contact')->name('contact');
-Route::inertia('/a-propos', 'About')->name('about');
 Route::inertia('/blog', 'Blog')->name('blog');
 
 Route::withoutMiddleware(CheckRouteMiddleware::class)->group(function () {

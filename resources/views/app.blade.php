@@ -3,10 +3,11 @@
     lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <title inertia>{{ config('app.name', 'Agora des Jeunes') }}</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="canonical" href="{{ config('app.url') }}">
 
     <!-- Seo -->
     @include('inc.seo')
@@ -17,7 +18,8 @@
     <!-- End of Favicons -->
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
     <!-- End of Fonts -->
 
     <!-- Styles -->
@@ -72,7 +74,7 @@
     <!-- End of Base -->
     <!-- End of Page -->
 
-    <!-- Page Scripts -->
+    <!-- Main Scripts -->
     <script
         src="{{ asset('/d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c887ab.js?site=67590e9b756ef477159ae9e4') }}"
         type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
@@ -93,13 +95,12 @@
 
         function loadStyles(items, idPrefix, remove = false) {
             items.forEach((item, index) => {
-                const id = idPrefix + "_"  + index;
+                const id = idPrefix + "_" + index;
                 const existent = document.getElementById(id);
 
                 if (remove && existent) {
                     document.head.removeChild(existent);
-                }
-                else if (!existent) {
+                } else if (!existent) {
                     const s = document.createElement("link");
                     s.rel = "stylesheet";
                     s.id = id;
@@ -112,12 +113,11 @@
 
         function loadScripts(items, idPrefix, remove = false) {
             items.forEach((item, index) => {
-                const id =idPrefix + "_" + index;
+                const id = idPrefix + "_" + index;
                 const existent = document.getElementById(id);
                 if (remove && existent) {
                     document.body.removeChild(existent);
-                }
-                else if (!existent) {
+                } else if (!existent) {
                     const s = document.createElement("script");
                     s.src = item;
                     s.id = id;
@@ -126,7 +126,34 @@
             });
         }
     </script>
-    <!-- End of Page Scripts -->
+    <!-- End of Main Scripts -->
+
+    @if (Route::currentRouteName() === 'faqs')
+        <script type="application/ld+json">
+            {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                "@type": "Question",
+                "name": "Comment créer un CV sur {{ config('app.name') }} ?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Connecte-toi à ton compte, va dans la section 'Création de CV', remplis les informations demandées et télécharge ton CV."
+                }
+                },
+                {
+                "@type": "Question",
+                "name": "Comment rechercher un emploi sur la plateforme ?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Rends-toi dans la section 'Recherche d'emploi', utilise les filtres et postule aux offres qui t’intéressent."
+                }
+                }
+            ]
+            }
+            </script>
+    @endif
 </body>
 
 </html>

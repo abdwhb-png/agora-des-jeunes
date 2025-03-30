@@ -64,8 +64,8 @@ const storeCv = () => {
         header="Nouveau projet"
     >
         <form @submit.prevent="storeCv">
-            <div class="grid md:grid-cols-2">
-                <div class="mt-1.5">
+            <div class="grid md:grid-cols-2 mt-1.5 space-x-4">
+                <div class="">
                     <InputError class="mb-2" :message="form.errors.title" />
                     <FloatLabel variant="on" class="mb-4">
                         <InputText

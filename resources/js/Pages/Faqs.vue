@@ -6,7 +6,7 @@ defineProps(["faqs", "search_url"]);
 </script>
 
 <template>
-    <HomeLayout title="Foire Aux Questions">
+    <HomeLayout title="Foire Aux Questions" :meta="$page.props.meta">
         <template #header>
             <header class="section-features-hero">
                 <div class="section-spacer">

@@ -18,11 +18,10 @@
                                     "
                                     class="hero-title"
                                 >
-                                    Un espace dédié
+                                    Un espace dédié pour les
                                     <span class="color-primary"
-                                        >pour les jeunes</span
-                                    >
-                                    ambitieux.
+                                        >jeunes ambitieux</span
+                                    >.
                                 </h1>
                                 <p
                                     data-w-id="e24309a2-1e52-20c2-f322-14de9cd464e3"
@@ -37,7 +36,7 @@
                                     class="hero-info"
                                 >
                                     Bienvenue sur
-                                    <a href="/" class="underline">{{
+                                    <a href="/" class="link underline">{{
                                         $page.props.app.name
                                     }}</a
                                     >, la plateforme qui t’accompagne dans ton
@@ -88,10 +87,7 @@
                                                     <div
                                                         class="button-icon-wrapper"
                                                     >
-                                                        <img
-                                                            src="/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774bb996c74644eb2599827_Button%20Icon.svg"
-                                                            loading="lazy"
-                                                            alt=""
+                                                        <StarsIcon
                                                             class="button-icon"
                                                         />
                                                     </div>
@@ -106,7 +102,7 @@
                                                         <div
                                                             class="button-text is-behind"
                                                         >
-                                                            Devenir Membre
+                                                            Inscription/Connexion
                                                         </div>
                                                     </div>
                                                 </div>
@@ -129,43 +125,12 @@
                                         "
                                         class="hero-button"
                                     >
-                                        <a
-                                            data-wf--button-button-primary--variant="secondary"
-                                            href="#start"
-                                            class="button-primary-wrapper w-inline-block"
-                                            ><div
-                                                class="button-shadow"
-                                                style="
-                                                    transform: translate3d(
-                                                            8px,
-                                                            8px,
-                                                            0px
-                                                        )
-                                                        scale3d(1, 1, 1)
-                                                        rotateX(0deg)
-                                                        rotateY(0deg)
-                                                        rotateZ(0deg)
-                                                        skew(0deg, 0deg);
-                                                    transform-style: preserve-3d;
-                                                "
-                                            ></div>
-                                            <div
-                                                class="button-primary w-variant-df11cfe8-fb95-3c5a-9007-0ea80cca3abb"
-                                            >
-                                                <div
-                                                    class="button-text-wrapper"
-                                                >
-                                                    <div class="button-text">
-                                                        Je Découvre
-                                                    </div>
-                                                    <div
-                                                        class="button-text is-behind"
-                                                    >
-                                                        Je Découvre
-                                                    </div>
-                                                </div>
-                                            </div></a
-                                        >
+                                        <BtnLink
+                                            href="#discover"
+                                            variant="secondary"
+                                            text="Découvrir"
+                                            behind-text="Je découvre"
+                                        />
                                     </div>
                                 </div>
                                 <p
@@ -180,26 +145,13 @@
                                     "
                                     class="cta-text"
                                 >
-                                    Engage-toi, Exprime toi... C'est le lieu où
-                                    l'avenir prend forme !
+                                    Engage-toi, Exprime toi...
+                                    <br />
+                                    C'est le lieu où l'avenir prend forme !
                                 </p>
                             </div>
                             <div class="hero-image-wrapper">
                                 <v-lazy-image
-                                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774d7c902256cce1040b646_Hero%20Shape.svg"
-                                    loading="lazy"
-                                    style="
-                                        opacity: 1;
-                                        transform: translate3d(0px, 0px, 0px)
-                                            scale3d(1, 1, 1) rotateX(0deg)
-                                            rotateY(0deg) rotateZ(0deg)
-                                            skew(0deg, 0deg);
-                                        transform-style: preserve-3d;
-                                    "
-                                    data-w-id="048a1132-65f4-8eec-9331-04ea2a4dff62"
-                                    alt="Hero Shape One"
-                                    class="hero-shape-one"
-                                /><v-lazy-image
                                     class="hero-image"
                                     src="/images/783shots_so.png"
                                     width="Auto"
@@ -221,9 +173,8 @@
                         </div>
                     </div>
                 </div>
-                <img
-                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774d7c902256cce1040b646_Hero%20Shape.svg"
-                    loading="lazy"
+
+                <ShapeIcon
                     style="
                         opacity: 1;
                         transform: translate3d(-8.1628px, 8.1628px, 0px)
@@ -232,9 +183,7 @@
                         transform-style: preserve-3d;
                         will-change: transform;
                     "
-                    data-w-id="dd592e81-3b56-28c5-52ef-0add236752b7"
-                    alt="Hero Shape Two"
-                    class="hero-shape-two"
+                    class="hero-shape-two hidden md:block"
                 />
             </div>
         </div>

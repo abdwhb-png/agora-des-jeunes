@@ -18,6 +18,10 @@ import CopyBtn from "@/Components/CopyBtn.vue";
 import NotPermitted from "@/Components/Base/NotPermitted.vue";
 import VLazyImage from "v-lazy-image";
 import UiButton from "@/Components/ui/button/Button.vue";
+import ShapeIcon from "@/Components/Shared/Icons/Shape.vue";
+import SubtitleIcon from "@/Components/Shared/Icons/Subtitle.vue";
+import StarsIcon from "@/Components/Shared/Icons/Stars.vue";
+import BtnLink from "@/Components/Home/BtnLink.vue";
 
 export default function registerComponents(app) {
     app.component("Head", Head);
@@ -43,6 +47,11 @@ export default function registerComponents(app) {
     app.component("ToastStatus", ToastStatus);
 
     app.component("UiButton", UiButton);
+
+    app.component("ShapeIcon", ShapeIcon);
+    app.component("SubtitleIcon", SubtitleIcon);
+    app.component("StarsIcon", StarsIcon);
+    app.component("BtnLink", BtnLink);
 
     app.component("v-lazy-image", VLazyImage);
 }

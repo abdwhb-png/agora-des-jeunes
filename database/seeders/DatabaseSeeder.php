@@ -16,7 +16,22 @@ class DatabaseSeeder extends Seeder
         \App\Models\Setting::create([
             'site_email' => 'contact@' . env('SITE_DOMAIN', 'example.com'),
             'site_phone' => '+229 01 96 00 00 00',
-            'site_slogan' => 'Le lieu où l\'avenir prend forme.',
+            'site_description' => seo('description'),
+            'site_keywords' => [
+                config('app.name'),
+                'éducation',
+                'entrepreneuriat',
+                'développement personnel',
+                'jeunes leaders',
+                'formations',
+                'emploi',
+                'bourses',
+                'financement',
+                'mentorat',
+                'accompagnement',
+                'agoradesjeunes'
+            ],
+            'site_slogan' => seo('slogan'),
             'help_availability' => 'Dispo du Lundi au Vendredi, 9h00 à 18h00',
         ]);
 

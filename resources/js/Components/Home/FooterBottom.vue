@@ -3,8 +3,8 @@
         <div class="padding-global">
             <div class="container">
                 <div class="section-inner footer-bottom-inner items-center">
-                    <div class="footer-copyright-text text-center order-2">
-                        © {{ new Date().getFullYear() }} Tous droits réservés.
+                    <div class="text-center md:text-right order-2 w-full">
+                        {{ new Date().getFullYear() }} © Tous droits réservés.
                         <a
                             :href="$page.props.app.url"
                             target="_blank"

@@ -47,6 +47,9 @@ class FortifyServiceProvider extends ServiceProvider
                     'canResetPassword' => Route::has('password.request'),
                     'status' => session('status'),
                     'defaultEmail' => isset($default) ? $default->email : null,
+                    'seo' => [
+                        'description' => "Connecte toi à " . config('app.name') . " pour accéder à des formations, offres d’emploi, bourses et outils pour réussir votre avenir !",
+                    ]
                 ]);
             }
         );
@@ -69,6 +72,9 @@ class FortifyServiceProvider extends ServiceProvider
                 return Inertia::render('Auth/Register', [
                     'invitation' => $invitation,
                     'authStatus' => $authStatus,
+                    'seo' => [
+                        'description' => "Inscris-toi sur " . config('app.name') . " pour accéder à des formations, offres d’emploi, bourses et outils pour réussir votre avenir !",
+                    ]
                 ]);
             }
         );

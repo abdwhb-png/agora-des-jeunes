@@ -1,5 +1,6 @@
-<script setup lang="ts">
-import Logo from "../Logo.vue";
+<script setup>
+import { useViewport } from "@/composables/useViewport";
+const { isMobile } = useViewport();
 </script>
 
 <template>
@@ -65,12 +66,18 @@ import Logo from "../Logo.vue";
                                         transform-style: preserve-3d;
                                     "
                                 >
-                                    <Button
-                                        as="a"
-                                        href="#discover"
-                                        label="En savoir plus"
-                                        severity="contrast"
-                                    />
+                                    <BtnLink
+                                        href="#more-about"
+                                        variant="secondary"
+                                        text="En savoir plus"
+                                        class="animate-bounce"
+                                    >
+                                        <template #icon>
+                                            <i
+                                                class="pi pi-arrow-circle-down"
+                                            ></i>
+                                        </template>
+                                    </BtnLink>
                                 </div>
                             </div>
                             <div class="about-hero-bento-grid-wrapper">
@@ -84,14 +91,9 @@ import Logo from "../Logo.vue";
                                         opacity: 1;
                                         transform-style: preserve-3d;
                                     "
-                                    class="w-layout-grid about-hero-bento-grid"
+                                    class="w-layout-grid about-hero-bento-grid md:pt-7"
                                 >
-                                    <img
-                                        src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774d7c902256cce1040b646_Hero%20Shape.svg"
-                                        loading="eager"
-                                        alt="About Hero Shape"
-                                        class="about-hero-shape"
-                                    />
+                                    <ShapeIcon class="about-hero-shape" />
                                     <div
                                         id="w-node-_358f222d-934c-9557-a081-3bdcaa51574d-159aea3c"
                                         class="about-hero-bento-item"
@@ -108,7 +110,24 @@ import Logo from "../Logo.vue";
                                             ></div>
                                         </div>
                                     </div>
-                                    <div class="about-hero-bento-item">
+                                    <div
+                                        class="about-hero-bento-item"
+                                        :class="{
+                                            hidden: isMobile,
+                                        }"
+                                        style="
+                                            transform: translate3d(
+                                                    0px,
+                                                    0px,
+                                                    0px
+                                                )
+                                                scale3d(1, 1, 1) rotateX(0deg)
+                                                rotateY(0deg) rotateZ(0deg)
+                                                skew(0deg, 0deg);
+                                            opacity: 1;
+                                            transform-style: preserve-3d;
+                                        "
+                                    >
                                         <div class="about-video-wrapper">
                                             <div
                                                 data-poster-url="/cdn.prod.website-files.com/667f8fd8b0d0df360cabad8d_66bae7f4cf5ced4e81109f66_home-hero-video-media-poster-00001.jpg"
@@ -123,6 +142,7 @@ import Logo from "../Logo.vue";
                                                     autoplay
                                                     loop
                                                     style="
+                                                        object-fit: revert !important;
                                                         background-image: url(&quot;/cdn.prod.website-files.com/667f8fd8b0d0df360cabad8d_66bae7f4cf5ced4e81109f66_home-hero-video-media-poster-00001.jpg&quot;);
                                                     "
                                                     muted
@@ -152,9 +172,10 @@ import Logo from "../Logo.vue";
                                             <div
                                                 class="margin-bottom margin-18px"
                                             >
-                                                <Avatar
-                                                    image="/images/favicon.png"
-                                                    shape="circle"
+                                                <img
+                                                    src="/images/favicon.png"
+                                                    loading="eager"
+                                                    alt="about hero testimonial author headshot"
                                                     class="testimonial-author-headshot"
                                                 />
                                             </div>
@@ -170,7 +191,7 @@ import Logo from "../Logo.vue";
                                                 </h2>
                                             </div>
                                             <p class="body-text-14px">
-                                                {{ $page.props.app.name }}
+                                                {{ "- Arouna Adiza" }}
                                             </p>
                                         </div>
                                         <div

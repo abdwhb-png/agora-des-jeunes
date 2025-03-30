@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('help_availability')->nullable();
             $table->string('site_slogan')->nullable();
             $table->string('site_description', 500)->nullable();
-            $table->text('site_keywords')->nullable();
+            $table->json('site_keywords')->nullable();
             $table->string('contact_url')->nullable();
             $table->text('tcs_url')->nullable();
             $table->timestamps();

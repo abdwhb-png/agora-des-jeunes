@@ -9,25 +9,14 @@
                                 <div class="margin-bottom margin-40px">
                                     <h2
                                         data-w-id="7554e351-95b3-c0a0-6327-1e698b044c31"
-                                        class="heading-custom-h2 md:heading-custom-h1 is-footer-cta tracking-wide"
-                                        style="
-                                            transform: translate3d(
-                                                    0px,
-                                                    0px,
-                                                    0px
-                                                )
-                                                scale3d(1, 1, 1) rotateX(0deg)
-                                                rotateY(0deg) rotateZ(0deg)
-                                                skew(0deg, 0deg);
-                                            transform-style: preserve-3d;
-                                            opacity: 1;
-                                        "
+                                        class="heading-custom-h2 md:heading-custom-h1 is-footer-cta tracking-wide set-animation"
+                                        data-animation="animate__fadeInUp"
                                     >
                                         Rejoins d'autres jeunes motivés comme
                                         toi pour
                                         <span class="color-primary"
-                                            >construire ton Avenir</span
-                                        >
+                                            >construire ton avenir</span
+                                        >.
                                     </h2>
                                 </div>
                                 <div
@@ -97,10 +86,7 @@
                                                         <div
                                                             class="button-icon-wrapper"
                                                         >
-                                                            <img
-                                                                src="/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/6774bb996c74644eb2599827_Button%20Icon.svg"
-                                                                loading="lazy"
-                                                                alt=""
+                                                            <StarsIcon
                                                                 class="button-icon"
                                                             />
                                                         </div>
@@ -184,12 +170,10 @@
                             </div>
                         </div>
                     </div>
-                    <img
-                        src="/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677652337172d5876dc18fbc_Website%20Shape.svg"
-                        loading="lazy"
-                        data-w-id="7554e351-95b3-c0a0-6327-1e698b044c3f"
-                        alt="cta section graphical shape"
+                    <ShapeIcon
                         class="global-cta-section-shape"
+                        width="133"
+                        height="133"
                         style="
                             transform: translate3d(-8.1088px, 8.1088px, 0px)
                                 scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
@@ -197,12 +181,11 @@
                             transform-style: preserve-3d;
                             will-change: transform;
                         "
-                    /><img
-                        src="/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677652337172d5876dc18fbc_Website%20Shape.svg"
-                        loading="lazy"
-                        data-w-id="7554e351-95b3-c0a0-6327-1e698b044c40"
-                        alt="cta section graphical shape"
+                    />
+                    <ShapeIcon
                         class="global-cta-section-shape is-two"
+                        width="133"
+                        height="133"
                         style="
                             transform: translate3d(-3.5744px, 3.5744px, 0px)
                                 scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)

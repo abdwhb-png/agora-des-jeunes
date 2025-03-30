@@ -22,11 +22,10 @@ defineProps<Props>();
             class="how-work-list-item"
         >
             <div class="how-work-list-icon">
-                <v-lazy-image
-                    src="/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677525dafc4c34b2e4cfa73b_List%20Icon.svg"
-                    alt="icon de liste"
-                    class="image-auto"
-                />
+                <i
+                    class="pi pi-check-circle"
+                    style="color: var(--color--tertiary)"
+                ></i>
             </div>
             <p v-html="item"></p>
         </li>

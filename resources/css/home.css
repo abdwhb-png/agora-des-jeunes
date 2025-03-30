@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --body-bg: #feedcf;
+    --color-secondary: #2ac9f9 !important;
+    --color--secondary: #c3ebef !important;
+    --color--tertiary: #06bc13 !important;
+    --padding--primary-base: 70px !important;
+}
+body {
+    background-color: var(--body-bg) !important;
+}
+.color-primary {
+    color: var(--color--tertiary) !important;
+}
+.color-secondary {
+    color: var(--color-secondary) !important;
+}
+.menu-horizontal-bar {
+    background-color: black !important;
+}
+.p-scrolltop.p-button {
+    inset-block-end: 45px !important;
+}
+.footer-link-wrapper {
+    align-items: center !important;
+}
+.main-animation {
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
+        rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    transform-style: preserve-3d;
+    opacity: 1;
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;

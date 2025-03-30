@@ -1,4 +1,5 @@
 import "./bootstrap";
+import "animate.css";
 import "primeicons/primeicons.css";
 import "@metronic/core/index";
 import "@metronic/app/layouts/demo1";
