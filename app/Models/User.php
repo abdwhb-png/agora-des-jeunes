@@ -43,6 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'email',
         'password',
+        'avatar_url',
         'status',
         'last_login_at',
         'last_login_ip',
@@ -93,6 +94,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected function defaultProfilePhotoUrl()
     {
+        if ($this->avatar_url) {
+            return $this->avatar_url;
+        }
+
         $name = trim(collect(explode(' ', $this->info->full_name ?? $this->email))->map(function ($segment) {
             return mb_substr($segment, 0, 1);
         })->join(' '));

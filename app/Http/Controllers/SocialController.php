@@ -29,7 +29,7 @@ class SocialController extends Controller
         $enforce_domain = request()->input('enforce_domain');
 
         try {
-            $socialUser = Socialite::driver($provider)->stateless()->user();
+            $socialUser = Socialite::driver($provider)->stateless(false)->user();
         } catch (\Throwable $th) {
             return redirect(route('login'));
         }
@@ -40,6 +40,7 @@ class SocialController extends Controller
         $first_name = $socialUser->user['given_name'] ?? null;
         $last_name = $socialUser->user['family_name'] ?? null;
         $name = $socialUser->getNickname() ?? $socialUser->getName();
+        $avatar = $socialUser->getAvatar() ?? null;
 
         //if doesn's exist
         if (!$authUser) {
@@ -48,6 +49,7 @@ class SocialController extends Controller
                 'email' => $socialUser->getEmail(),
                 'password' => Hash::make(Str::random(16)),
                 'email_verified_at' => now(),
+                'avatar_url' => $avatar,
             ]);
 
             UserInfo::updateOrCreate(

@@ -120,10 +120,7 @@ const list = [
                                     >
                                         <p class="about-section-info">
                                             💡 Ici, on ne parle pas seulement de
-                                            changement.
-                                            <br />
-                                            &nbsp;&nbsp;&nbsp; &nbsp;On le
-                                            construit !
+                                            changement. On le construit !
                                         </p>
                                     </div>
                                     <div
