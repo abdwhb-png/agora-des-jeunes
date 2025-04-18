@@ -69,62 +69,32 @@ const changeItem = (item) => {
         <div class="padding-global section-padding-regular is-bottom-zero">
             <div class="container">
                 <div class="our-journey-main">
-                    <div
-                        data-current="Tab 1"
-                        data-easing="ease"
-                        data-duration-in="300"
-                        data-duration-out="100"
-                        class="our-journey-tabs w-tabs"
-                    >
-                        <div
-                            id="w-node-e598291f-7531-1c79-1544-55e6aa9da07e-159aea3c"
-                            data-w-id="e598291f-7531-1c79-1544-55e6aa9da07e"
-                            style="
-                                transform: translate3d(0px, 0px, 0px)
-                                    scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
-                                    rotateZ(0deg) skew(0deg, 0deg);
-                                opacity: 1;
-                                transform-style: preserve-3d;
-                            "
-                            class="our-journey-tab-menu w-tab-menu"
-                            role="tablist"
-                        >
-                            <button
-                                v-for="(item, index) in items"
-                                :key="item.label || item.title"
-                                type="button"
-                                class="our-journey-tab-link w-inline-block w-tab-link"
-                                :class="{
+                    <div data-current="Tab 1" data-easing="ease" data-duration-in="300" data-duration-out="100"
+                        class="our-journey-tabs w-tabs">
+                        <div id="w-node-e598291f-7531-1c79-1544-55e6aa9da07e-159aea3c"
+                            class="our-journey-tab-menu w-tab-menu" style="justify-content: center !important;"
+                            role="tablist">
+                            <button v-for="(item, index) in items" :key="item.label || item.title" type="button"
+                                class="our-journey-tab-link w-inline-block w-tab-link" :class="{
                                     'w--current':
                                         item.label == activeItem.label,
-                                }"
-                                @click="changeItem(item)"
-                            >
+                                }" @click="changeItem(item)">
                                 <span class="heading-custom-h5">
                                     {{ item.label }}
                                 </span>
                             </button>
                         </div>
-                        <div
-                            class="our-journey-tabs-content w-tab-content"
-                            ref="tabContent"
-                        >
-                            <div
-                                :data-w-tab="'Tab ' + activeItem.label"
-                                class="our-journey-tab-pane w-tab-pane w--tab-active"
-                                role="tabpanel"
-                                style="
+                        <div class="our-journey-tabs-content w-tab-content" ref="tabContent">
+                            <div :data-w-tab="'Tab ' + activeItem.label"
+                                class="our-journey-tab-pane w-tab-pane w--tab-active" role="tabpanel" style="
                                     opacity: 1;
                                     transition:
                                         all,
                                         opacity 300ms;
-                                "
-                            >
+                                ">
                                 <div class="our-journey-tab-item">
                                     <div class="our-journey-item-left">
-                                        <div
-                                            data-w-id="32f8200b-69bc-0007-a624-f8de7809e1db"
-                                            style="
+                                        <div data-w-id="32f8200b-69bc-0007-a624-f8de7809e1db" style="
                                                 transform: translate3d(
                                                         0px,
                                                         0px,
@@ -136,17 +106,13 @@ const changeItem = (item) => {
                                                     skew(0deg, 0deg);
                                                 opacity: 1;
                                                 transform-style: preserve-3d;
-                                            "
-                                            class="margin-bottom margin-24px"
-                                        >
+                                            " class="margin-bottom margin-24px">
                                             <h2>
                                                 {{ activeItem.title }}
                                             </h2>
                                         </div>
                                         <div class="margin-bottom margin-24px">
-                                            <p
-                                                data-w-id="32f8200b-69bc-0007-a624-f8de7809e1df"
-                                                style="
+                                            <p data-w-id="32f8200b-69bc-0007-a624-f8de7809e1df" style="
                                                     transform: translate3d(
                                                             0px,
                                                             0px,
@@ -159,20 +125,15 @@ const changeItem = (item) => {
                                                         skew(0deg, 0deg);
                                                     opacity: 1;
                                                     transform-style: preserve-3d;
-                                                "
-                                            >
+                                                ">
                                                 {{ activeItem.text }}
                                             </p>
                                         </div>
-                                        <ItemsList
-                                            :list="activeItem.list || []"
-                                        />
+                                        <ItemsList :list="activeItem.list || []" />
                                     </div>
-                                    <div
-                                        v-if="activeItem.image"
+                                    <div v-if="activeItem.image"
                                         id="w-node-_32f8200b-69bc-0007-a624-f8de7809e1f1-159aea3c"
-                                        data-w-id="32f8200b-69bc-0007-a624-f8de7809e1f1"
-                                        style="
+                                        data-w-id="32f8200b-69bc-0007-a624-f8de7809e1f1" style="
                                             transform: translate3d(
                                                     0px,
                                                     0px,
@@ -183,16 +144,9 @@ const changeItem = (item) => {
                                                 skew(0deg, 0deg);
                                             opacity: 1;
                                             transform-style: preserve-3d;
-                                        "
-                                        class="our-journey-item-right"
-                                    >
-                                        <v-lazy-image
-                                            :src="activeItem.image"
-                                            :alt="
-                                                'image de ' + activeItem.label
-                                            "
-                                            class="our-journey-right-thumb"
-                                        />
+                                        " class="our-journey-item-right">
+                                        <opt-img :path="activeItem.image" :src="activeItem.image"
+                                            :alt="'image de ' + activeItem.label" class="our-journey-right-thumb" />
                                     </div>
                                 </div>
                             </div>

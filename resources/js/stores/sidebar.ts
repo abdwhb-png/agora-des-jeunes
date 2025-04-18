@@ -1,140 +1,158 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { usePage, router } from "@inertiajs/vue3";
-import { menus, rapidLinlks } from "@/config/sidebarMenu";
-import { Menu, Item } from "@/types/sidebar";
+import { menus as menuFn, rapidLinks as impRapidLinks } from "@/config/sidebarMenu";
+import type { Menu, Item, RapidLink } from "@/types/sidebar";
+import { ref, Ref, toValue } from "vue";
 
-const page = usePage();
+export const useSidebarStore = defineStore("sidebar", () => {
+  const page = usePage();
 
-export const useSidebarStore = defineStore("sidebar", {
-    state: () => ({
-        isOpen: false,
-        selectedMenu: useStorage("selectedMenu", "Accueil"),
-        rapidLinks: rapidLinlks,
-        menus: menus((page.props as any).routePrefix),
-    }),
+  const isOpen = ref(false);
+  const selectedMenu = useStorage<string>("selectedMenu", "Accueil");
 
-    getters: {
-        getMenus: (state) => {
-            return (search: string = "") => {
-                return state.menus.filter((menu: Menu) => {
-                    return (
-                        menu.title
-                            .toLowerCase()
-                            .includes(search.toLowerCase()) ||
-                        menu.items?.some((item: Item) =>
-                            item.name
-                                .toLowerCase()
-                                .includes(search.toLowerCase()),
-                        )
-                    );
-                });
-            };
-        },
+  const menus: Ref<Menu[]> = ref(
+    menuFn((page.props as any).routePrefix).map((menu) => ({
+      ...menu,
+      selected: ref(0),
+    }))
+  );
 
-        getIndex: (state) => {
-            return (items: Item[], itemName: string): number | null => {
-                // Chercher l'index dans les items principaux
-                let index = items.findIndex((item) => item.name === itemName);
-                if (index !== -1) return index;
+  const rapidLinks: Ref<RapidLink[]> = ref(impRapidLinks);
 
-                // Chercher l'index dans les sous-éléments (children)
-                for (let i = 0; i < items.length; i++) {
-                    if (items[i].children) {
-                        let childIndex = items[i].children.findIndex(
-                            (child) => child.name === itemName,
-                        );
-                        if (childIndex !== -1) return childIndex;
-                    }
-                }
+  const getMenu = (search: string | number): Menu | null => {
+    return menus.value.find((menu, index) =>
+      typeof search === "number" ? index === search : menu.title === search
+    ) || null;
+  };
 
-                return null;
-            };
-        },
+  const getIndex = (items: Item[], name: string): number | null => {
+    const index = items.findIndex((item) => item.name === name);
+    if (index !== -1) return index;
 
-        currentMenu: (state): Menu | null => {
-            const menu = state.menus.find((menu: Menu) => {
-                return menu.title === state.selectedMenu;
-            });
+    for (let i = 0; i < items.length; i++) {
+      const children = items[i].children || [];
+      const childIndex = getIndex(children, name);
+      if (childIndex !== null) return childIndex;
+    }
 
-            return menu || null;
-        },
+    return null;
+  };
 
-        currentComponent:
-            (state) =>
-            (name = ""): any => {
-                try {
-                    const menu = state.currentMenu;
-                    if (!menu) return null;
+  const setSelected = (menuSearch: string | number, itemSearch: string | number, childSearch: string | number = "") => {
+    const menu = getMenu(menuSearch);
+    if (!menu) return;
 
-                    let component = null;
+    var index = typeof itemSearch === "number" 
+        ? itemSearch
+        : getIndex(menu.items || [], itemSearch);
 
-                    // Parcourir les éléments du menu
-                    menu.items?.forEach((item: Item, index: number) => {
-                        // Vérifier si l'élément actuel correspond directement au nom recherché
-                        if (item.name === name || menu.selected === index) {
-                            component = item.component || null;
-                        }
+    if(childSearch != ""){
+        index = typeof childSearch === "number" 
+        ? childSearch
+        : getIndex(menu.items[index]?.children || [], childSearch);
+        return;
+    }
 
-                        // Vérifier si l'élément a des sous-éléments (children)
-                        item.children?.forEach(
-                            (child: Item, childIndex: number) => {
-                                if (
-                                    child.name === name ||
-                                    menu.selected === childIndex
-                                ) {
-                                    component = child.component || null;
-                                }
-                            },
-                        );
-                    });
+    if (!route().current(menu.route)) {
+      router.visit(route(menu.route));
+    }
 
-                    return component;
-                } catch (error) {
-                    console.error("Erreur dans currentComponent:", error);
-                    return null;
-                }
-            },
+    selectedMenu.value = menu.title;
+    menu.selected = index || 0;
+  };
 
-        getMenu:
-            (state) =>
-            (search: string | number): Menu | null => {
-                const menu = state.menus.find((menu: Menu, index: number) =>
-                    typeof search === "number"
-                        ? index === search
-                        : menu.title === search,
-                );
+  const isActive = (menu: Menu): boolean => {
+    return route().current(menu.route) && selectedMenu.value === menu.title;
+  };
 
-                return menu || null;
-            },
-    },
+  const searchMenu = (search = ""): Menu[] => {
+    return menus.value.filter((menu) => {
+      return (
+        menu.title.toLowerCase().includes(search.toLowerCase()) ||
+        menu.items?.some(
+          (item) =>
+            item.name.toLowerCase().includes(search.toLowerCase()) ||
+            item.children?.some((child) =>
+              child.name.toLowerCase().includes(search.toLowerCase())
+            )
+        )
+      );
+    });
+  };
 
-    actions: {
-        isActive(menu: Menu) {
-            return (
-                route().current(menu.route) && this.selectedMenu === menu.title
-            );
-        },
-        setSelected(menuSearch: string | number, itemSearch: string | number) {
-            const menu = this.getMenu(menuSearch);
+  const currentMenu = (): Menu | null => {
+    return menus.value.find((menu) => menu.title === selectedMenu.value) || null;
+  };
 
-            if (menu) {
-                const index =
-                    typeof itemSearch === "number"
-                        ? itemSearch
-                        : this.getIndex(menu.items, itemSearch);
+  const currentComponent = (name = ""): any => {
+    try {
+      const menu = currentMenu();
+      if (!menu) return null;
 
-                if (!route().current(menu.route)) {
-                    router.visit(route(menu.route));
-                }
+      let component: any = null;
 
-                this.selectedMenu = menu.title;
-                menu.selected = index || 0;
-            }
-        },
-    },
+      menu.items?.forEach((item, index) => {
+        if (item.name === name || toValue(menu.selected) === index) {
+          component = item.component;
+        }
+
+        item.children?.forEach((child, childIndex) => {
+          if (child.name === name || toValue(menu.selected) === childIndex) {
+            component = child.component;
+          }
+        });
+      });
+
+      return component;
+    } catch (error) {
+      console.error("Erreur dans currentComponent:", error);
+      return null;
+    }
+  };
+  
+  /**
+ * @deprecated Use `menus.value` directly instead.
+ */
+  const getMenus = (): Menu[] => {
+    return menus.value.map((menu) => {
+      const newMenu = { ...menu };
+
+      if (newMenu.items) {
+        newMenu.items = newMenu.items.map((item) => {
+          const newItem = { ...item };
+
+          if (newItem.children) {
+            newItem.children = newItem.children.map((child) => ({
+              ...child,
+              action: () => setSelected(newMenu.title, child.name),
+            }));
+          } else {
+            newItem.action = () => setSelected(newMenu.title, newItem.name);
+          }
+
+          return newItem;
+        });
+      } else {
+        newMenu.action = () => setSelected(newMenu.title, 0);
+      }
+
+      return newMenu;
+    });
+  };
+
+  return {
+    isOpen,
+    selectedMenu,
+    rapidLinks,
+    menus,
+    getMenu,
+    getMenus,
+    getIndex,
+    setSelected,
+    isActive,
+    currentMenu,
+    currentComponent,
+    searchMenu,
+  };
 });
-
-if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useSidebarStore, import.meta.hot));
-}

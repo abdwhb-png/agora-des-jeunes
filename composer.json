@@ -12,6 +12,7 @@
         "php": "^8.2",
         "anhskohbo/no-captcha": "^3.6",
         "inertiajs/inertia-laravel": "2.0",
+        "intervention/image-laravel": "^1.5",
         "laravel/framework": "^11.44.0",
         "laravel/jetstream": "^5.3",
         "laravel/pulse": "^1.4",

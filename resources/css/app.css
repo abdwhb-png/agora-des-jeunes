@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] {
-    display: none;
-}
-
-.bullet {
-    display: inline-block;
-    background-color: var(--bs-bullet-bg-color);
-    border-radius: 6px;
-    width: 8px;
-    height: 4px;
-    flex-shrink: 0;
-}
-
 @layer base {
     :root {
         --background: 0 0% 100%;
@@ -78,4 +65,20 @@
     body {
         @apply bg-background text-foreground;
     }
+    .with-border {
+        @apply border-gray-300 hover:border-secondary-300 dark:hover:border-secondary-800;
+    }
+}
+
+[x-cloak] {
+    display: none;
+}
+
+.bullet {
+    display: inline-block;
+    background-color: var(--bs-bullet-bg-color);
+    border-radius: 6px;
+    width: 8px;
+    height: 4px;
+    flex-shrink: 0;
 }

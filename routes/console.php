@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('telescope:prune --hours=48')->daily();
+Schedule::command('queue:work --stop-when-empty')->everyFiveMinutes();
 
 // Artisan::command('inspire', function () {
 //     $this->comment(Inspiring::quote());

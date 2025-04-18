@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { User2 } from "lucide-vue-next";
+</script>
+
 <template>
     <header class="section-hero">
         <div class="section-spacer">
@@ -64,7 +68,8 @@
                                             data-wf--button-primary-with-icon--variant="base"
                                             :href="route('register')"
                                             class="button-primary-wrapper w-inline-block"
-                                            ><div
+                                        >
+                                            <div
                                                 class="button-shadow"
                                                 style="
                                                     transform: translate3d(
@@ -87,7 +92,7 @@
                                                     <div
                                                         class="button-icon-wrapper"
                                                     >
-                                                        <StarsIcon
+                                                        <User2
                                                             class="button-icon"
                                                         />
                                                     </div>
@@ -97,7 +102,7 @@
                                                         <div
                                                             class="button-text"
                                                         >
-                                                            Devenir Membre
+                                                            Devenir membre
                                                         </div>
                                                         <div
                                                             class="button-text is-behind"
@@ -128,9 +133,15 @@
                                         <BtnLink
                                             href="#discover"
                                             variant="secondary"
-                                            text="Découvrir"
+                                            text="En apprendre plus"
                                             behind-text="Je découvre"
-                                        />
+                                        >
+                                            <template #icon>
+                                                <StarsIcon
+                                                    class="button-icon"
+                                                />
+                                            </template>
+                                        </BtnLink>
                                     </div>
                                 </div>
                                 <p
@@ -151,23 +162,11 @@
                                 </p>
                             </div>
                             <div class="hero-image-wrapper">
-                                <v-lazy-image
+                                <opt-img
                                     class="hero-image"
-                                    src="/images/783shots_so.png"
+                                    path="/images/Layerr-2x.png"
                                     width="Auto"
                                     height="Auto"
-                                    alt="Image d'accueil"
-                                    style="
-                                        transform: translate3d(0px, 0px, 0px)
-                                            scale3d(1, 1, 1) rotateX(0deg)
-                                            rotateY(0deg) rotateZ(0deg)
-                                            skew(0deg, 0deg);
-                                        opacity: 1;
-                                        transform-style: preserve-3d;
-                                    "
-                                    sizes="(max-width: 479px) 100vw, (max-width: 767px) 90vw, (max-width: 991px) 88vw, (max-width: 1439px) 60vw, 828px"
-                                    data-w-id="1064a4c6-41bf-b5f0-f0c2-8492a3824c67"
-                                    loading="eager"
                                 />
                             </div>
                         </div>

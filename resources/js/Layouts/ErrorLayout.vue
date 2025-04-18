@@ -9,7 +9,7 @@ defineProps({
 
 <template>
     <Head :title="title" />
-    <div class="flex flex-col items-center justify-center grow h-[95%]">
+    <div class="flex flex-col items-center justify-center grow min-h-screen">
         <slot />
     </div>
 </template>

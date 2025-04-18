@@ -1,11 +1,12 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import Components from "unplugin-vue-components/vite";
 import { PrimeVueResolver } from "@primevue/auto-import-resolver";
-import Imagemin from "unplugin-imagemin/vite";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { fileURLToPath, URL } from "node:url";
 
 const vueOptions = {
     template: {
@@ -33,15 +34,23 @@ export default defineConfig({
         Components({
             resolvers: [PrimeVueResolver()],
         }),
-        // Imagemin({
-        //     gifsicle: { optimizationLevel: 7 },
-        //     optipng: { optimizationLevel: 7 },
-        //     mozjpeg: { quality: 80 },
-        //     svgo: { plugins: [{ removeViewBox: false }] },
-        // }),
         sentryVitePlugin({
             org: "your-devlab",
             project: "agora-jeunes-vue",
+        }),
+        ViteImageOptimizer({
+            test: /\.(jpe?g|png|gif|webp|svg)$/i,
+            includePublic: true, // Important pour les images dans public
+            dirs: ['public/images'], // Spécifier les dossiers à optimiser
+            png: {
+                quality: 80
+            },
+            jpeg: {
+                quality: 80
+            },
+            jpg: {
+                quality: 80
+            }
         }),
     ],
 
@@ -51,6 +60,7 @@ export default defineConfig({
             "@css": "/resources/css",
             "@resources": "/resources",
             "@metronic": "/resources/metronic",
+            "@public": fileURLToPath(new URL("public", import.meta.url)),
         },
     },
 

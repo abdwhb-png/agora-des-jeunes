@@ -19,32 +19,14 @@ const list = [
                             class="cta-image-wrapper"
                         >
                             <div class="cta-image-inner">
-                                <v-lazy-image
-                                    src="/images/francis-odeyemi-jLKDfxikHzM-unsplash.jpg"
+                                <opt-img
+                                    path="/images/francis-odeyemi-jLKDfxikHzM-unsplash.jpg"
                                     loading="lazy"
                                     alt="CTA Showcase Image"
                                     class="cta-showcase-image"
                                 />
                             </div>
-                            <v-lazy-image
-                                src="/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677652337172d5876dc18fbc_Website%20Shape.svg"
-                                loading="lazy"
-                                style="
-                                    transform: translate3d(
-                                            -5.412px,
-                                            5.412px,
-                                            0px
-                                        )
-                                        scale3d(1, 1, 1) rotateX(0deg)
-                                        rotateY(0deg) rotateZ(0deg)
-                                        skew(0deg, 0deg);
-                                    transform-style: preserve-3d;
-                                    will-change: transform;
-                                "
-                                data-w-id="d11e7362-4afa-f0e7-b813-ae678a6145a3"
-                                alt="cta section graphical shape"
-                                class="cta-shape-asset"
-                            />
+                            <ShapeIcon class="cta-shape-asset" />
                         </div>
                     </div>
                     <div class="column">
@@ -76,7 +58,7 @@ const list = [
                                 >
                                     Nous sommes convaincus que laisser son
                                     avenir au hasard ou à d'autres personnes ne
-                                    fera rien avancer.
+                                    fera pas avancer les choses.
                                     <br />
                                     C'est pour celà que nous avons créé
                                     <span class="font-medium"
@@ -109,7 +91,8 @@ const list = [
                                             data-wf--button-primary-with-icon--variant="base"
                                             :href="route('register')"
                                             class="button-primary-wrapper w-inline-block set-animation"
-                                            ><div
+                                        >
+                                            <div
                                                 class="button-shadow"
                                                 style="
                                                     transform: translate3d(

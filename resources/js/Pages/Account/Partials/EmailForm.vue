@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
 import ActionMessage from "@/Components/ActionMessage.vue";
 import FormSection from "@/Components/FormSection.vue";
@@ -12,6 +12,7 @@ const emits = defineEmits(["updated"]);
 
 const props = defineProps({
     user: Object,
+    hasEmailVerification: Boolean,
 });
 
 const form = useForm({
@@ -20,6 +21,10 @@ const form = useForm({
 });
 
 const verificationLinkSent = ref(null);
+
+const sendEmailVerification = () => {
+    verificationLinkSent.value = true;
+};
 
 const updateProfileInformation = () => {
     form.post(route("user-profile-information.update"), {
@@ -31,37 +36,31 @@ const updateProfileInformation = () => {
     });
 };
 
-const sendEmailVerification = () => {
-    verificationLinkSent.value = true;
-};
+const isEmailVerified = computed(() => props.user?.email_verified_at !== null);
 </script>
 
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title> Adresse Email </template>
-
-        <template #description> Met à jour ton adresse email. </template>
+        <template #description>
+            Tu peux mettre à jour l'email de ton compte ici.
+        </template>
 
         <template #form>
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Entre ton email" />
                 <TextInput
                     id="email"
                     v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="username"
+                    autocomplete="email"
                 />
                 <InputError :message="form.errors.email" class="mt-2" />
 
-                <div
-                    v-if="
-                        $page.props.jetstream.hasEmailVerification &&
-                        user.email_verified_at === null
-                    "
-                >
+                <div v-if="hasEmailVerification && !isEmailVerified">
                     <p class="text-sm mt-2">
                         Ton email n'est pas encore verifié.
 

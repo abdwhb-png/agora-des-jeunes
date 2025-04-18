@@ -2,6 +2,8 @@
 import DropdownNotification from "@/Components/Base/DropdownNotification.vue";
 import DropdownUser from "@/Components/Base/DropdownUser.vue";
 import Megamenu from "./Megamenu.vue";
+import Logo from "../Logo.vue";
+import SearchTrigger from "../Shared/Search/SearchTrigger.vue";
 </script>
 
 <template>
@@ -20,11 +22,7 @@ import Megamenu from "./Megamenu.vue";
             <!-- Mobile Logo -->
             <div class="flex gap-1 lg:hidden items-center -ms-1">
                 <a class="shrink-0" href="/">
-                    <v-lazy-image
-                        src="/images/favicon.png"
-                        :alt="'Logo ' + $page.props.app.name"
-                        class="max-h-[25px] w-full"
-                    />
+                    <Logo class="w-8 h-8" favicon />
                 </a>
                 <div class="flex items-center">
                     <button
@@ -62,12 +60,7 @@ import Megamenu from "./Megamenu.vue";
 
             <!-- Topbar -->
             <div class="flex items-center gap-2 lg:gap-3.5">
-                <button
-                    class="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500"
-                    data-modal-toggle="#search_modal"
-                >
-                    <i class="ki-filled ki-magnifier"> </i>
-                </button>
+                <SearchTrigger />
                 <DropdownNotification />
                 <DropdownUser
                     data-menu-item-offset="20px, 10px"

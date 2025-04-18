@@ -53,7 +53,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'Profile/Show',
             function (Request $request, array $data) {
                 return array_merge($data, [
-                    'stepValue' => $request->user()->info->hasCompletedPersonalInfo() && !$request->user()->info->hasCompletedAddress() ? '2' : '1',
+                    'stepValue' => $request->user()->info->hasCompletedPersonalInfo() && !$request->user()->info->hasCompletedAddress() ? 'residence' : 'personal',
                 ]);
             }
         );

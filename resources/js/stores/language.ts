@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
+import { router } from "@inertiajs/vue3";
 
 interface Language {
     name: string;
@@ -35,7 +36,7 @@ export const useLanguageStore = defineStore("language", () => {
 
     function changeLanguage(item: Language) {
         currentLanguage.value = item;
-        window.location.reload();
+        router.reload();
     }
 
     return { currentLanguage, languages, changeLanguage };

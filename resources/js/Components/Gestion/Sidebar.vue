@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { router } from "@inertiajs/vue3";
 import { ref, onMounted, nextTick, computed } from "vue";
 import { useSidebarStore } from "@/stores/sidebar";
 import { useUserStore } from "@/stores/user";
@@ -9,6 +8,7 @@ import { getHeight } from "@/utils/helpers";
 import { Menu } from "@/types/sidebar";
 
 import MenuElement from "./Sidebar/MenuElement.vue";
+import DropdownChat from "@/Components/Base/DropdownChat.vue";
 import DropdownUser from "@/Components/Base/DropdownUser.vue";
 import DropdownSetting from "@/Components/Base/DropdownSetting.vue";
 
@@ -18,12 +18,12 @@ const userStore = useUserStore();
 const desktopMode = useResponsive("up", "lg");
 const mobileMode = useResponsive("down", "lg");
 
-const sidebarRef = ref();
+const sidebarDrawer = ref<HTMLDivElement>();
 const headerRef = ref();
 const footerRef = ref();
 
 const scrollableHeight = ref(589);
-const { height: viewportHeight, isMobile } = useViewport();
+const { height: viewportHeight } = useViewport();
 
 const showMenu = (name: string) =>
     computed(() => {
@@ -43,8 +43,8 @@ const showMenu = (name: string) =>
 
 onMounted(async () => {
     nextTick(() => {
-        if (isMobile) {
-            closeMobileSidebar();
+        if (mobileMode) {
+            closeSidebarDrawer();
         } else {
             updateScrollableHeight();
         }
@@ -61,8 +61,8 @@ function updateScrollableHeight() {
         viewportHeight.value - headerHeight - footerHeight - 40;
 }
 
-function closeMobileSidebar() {
-    const drawer = KTDrawer.getInstance(sidebarRef.value);
+function closeSidebarDrawer() {
+    const drawer = KTDrawer.getInstance(sidebarDrawer.value);
 
     if (drawer) {
         drawer.hide();
@@ -78,7 +78,7 @@ function closeMobileSidebar() {
         data-drawer-enable="true|lg:false"
         data-drawer-backdrop-static="false"
         data-drawer-persistent="false"
-        ref="sidebarRef"
+        ref="sidebarDrawer"
         id="sidebar"
     >
         <!-- logo -->
@@ -136,7 +136,7 @@ function closeMobileSidebar() {
         >
             <div class="flex flex-col gap-1.5">
                 <!-- Dropdown Chat -->
-                <!-- <DropdownChat /> -->
+                <DropdownChat v-if="false" />
                 <!-- End of Dropdown Chat -->
 
                 <!-- Dropdown Setting -->

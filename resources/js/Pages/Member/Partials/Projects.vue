@@ -1,6 +1,6 @@
 <script setup>
 import ProfileCompToolbar from "./ProfileCompToolbar.vue";
-import NewProject from "./NewProject.vue";
+import NewProject from "../../App/Partials/NewProject.vue";
 import ProjectContent from "./ProjectContent.vue";
 
 defineProps({

@@ -20,21 +20,41 @@
                 </div>
             </div>
             <div class="flex items-center gap-2.5">
-                <Link
-                    v-if="!route().current('profil')"
-                    class="btn btn-sm btn-light"
-                    :href="route('profil')"
-                >
-                    Mon Profil
-                </Link>
+                <UiButton @click="onReload" variant="outline">
+                    <RefreshCw />
+                    Actualiser
+                </UiButton>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { RefreshCw } from "lucide-vue-next";
+import { router } from "@inertiajs/vue3";
+import { toast } from "vue-sonner";
+
 defineProps({
     title: String,
     description: String,
 });
+
+const onReload = () => {
+    const content = document.getElementById("content");
+    router.reload({
+        onStart: () => {
+            content.classList.add("animate-pulse");
+        },
+        onFinish: () => {
+            content.classList.remove("animate-pulse");
+            toast("Rechargement terminé", {
+                description: "La page a été rechargée avec succès",
+                action: {
+                    label: "Fermer",
+                    onClick: () => console.log("Fermer  "),
+                },
+            });
+        },
+    });
+};
 </script>

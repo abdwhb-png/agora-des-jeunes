@@ -76,8 +76,8 @@ import ContactForm from "@/Components/Home/ContactForm.vue";
                                         data-w-id="d345c4e9-3b27-3ee9-1da0-d0604c8900be"
                                         class="contact-hero-thumb-block"
                                     >
-                                        <v-lazy-image
-                                            src="/images/customer-service.jpg"
+                                        <opt-img
+                                            path="/images/customer-service.jpg"
                                             style="
                                                 transform: translate3d(
                                                         0px,

@@ -83,6 +83,7 @@ const list = [
                                             à ne pas rater !
                                         </h2>
                                     </div>
+
                                     <div
                                         data-w-id="7f206eab-b5d6-78f0-ad7a-40a35ce7e5d6"
                                         style="
@@ -127,13 +128,15 @@ const list = [
                                     </div>
                                     <div
                                         data-w-id="6fa82e0a-3f0d-c066-dc9a-b21dcfed91ae"
-                                        class="set-animation"
-                                        data-animation="animate__fadeOutDown"
+                                        class="set-animation max-w-auto mx-auto md:mx-0"
+                                        data-animation="animate__fadeInUp"
                                         data-no-repeat="true"
                                     >
                                         <BtnLink
                                             href="#how-it-works"
+                                            class="hover:animate-bounce"
                                             variant="secondary"
+                                            type="2"
                                             text="Comment ça marche ?"
                                         >
                                             <template #icon>
@@ -150,12 +153,12 @@ const list = [
                                 >
                                     <div
                                         data-w-id="c037766c-cd0d-2a8e-c4da-370e0062da15"
-                                        class="about-left-thumb-wrap set-animation animate__delay-1s"
+                                        class="about-left-thumb-wrap set-animation animate__delay-0.5s"
                                         data-animation="animate__bounceInRight"
                                         data-no-repeat="true"
                                     >
-                                        <v-lazy-image
-                                            src="/images/ninthgrid-GOItLaf-gxY-unsplash.jpg"
+                                        <opt-img
+                                            path="/images/ninthgrid-GOItLaf-gxY-unsplash.jpg"
                                             alt="home about section right thumb"
                                             class="image-cover"
                                         />

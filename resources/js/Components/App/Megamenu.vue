@@ -22,7 +22,7 @@ const items: Item[] = [
     },
     {
         title: "Profil",
-        route: "profil",
+        route: "profile.show",
     },
     {
         title: "Compte",
@@ -39,13 +39,27 @@ const setActive = (title: string) => {
     <div
         class="hidden lg:flex lg:items-stretch"
         data-drawer="true"
-        data-drawer-class="drawer drawer-start fixed z-10 top-0 bottom-0 w-full me-5 max-w-[250px] p-5 lg:p-0 overflow-auto"
+        data-drawer-class="drawer drawer-start fixed z-10 top-0 bottom-0 w-full me-5 max-w-[250px] overflow-auto"
         data-drawer-enable="true|lg:false"
+        data-drawer-backdrop-static="false"
+        data-drawer-persistent="false"
         id="mega_menu_wrapper"
     >
+        <div class="flex lg:hidden items-center justify-between p-2 border-b">
+            <h3 class="text-base font-semibold text-gray-900">
+                Menu Secondaire
+            </h3>
+            <button
+                class="btn btn-xs btn-icon btn-light"
+                data-drawer-dismiss="true"
+            >
+                <i class="ki-outline ki-cross"> </i>
+            </button>
+        </div>
+
         <!--Megamenu-->
         <div
-            class="menu flex-col lg:flex-row gap-5 lg:gap-7.5"
+            class="menu flex-col lg:flex-row gap-5 lg:gap-7.5 p-5 lg:p-0"
             data-menu="true"
             id="mega_menu"
         >
@@ -57,6 +71,7 @@ const setActive = (title: string) => {
                     :class="{
                         active: item.route && route().current(item.route),
                     }"
+                    data-drawer-dismiss="true"
                 >
                     <Link
                         class="menu-link text-nowrap text-sm text-gray-700 font-medium hover:text-primary menu-item-active:text-gray-900 menu-item-active:font-medium"

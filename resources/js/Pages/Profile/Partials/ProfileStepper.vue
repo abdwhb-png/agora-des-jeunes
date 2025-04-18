@@ -1,27 +1,46 @@
 <template>
-    <Stepper :value="stepValue">
-        <StepItem value="1">
-            <Step>Informations Personnelles</Step>
-            <StepPanel>
-                <EditPersonalInfo
-                    :user="user"
-                    class="card-body grid gap-5 lg:py-7.5 px-0"
-                />
-            </StepPanel>
-        </StepItem>
-        <StepItem value="2">
-            <Step>Adresse de résidence</Step>
-            <StepPanel>
-                <EditAddress
-                    :user="user"
-                    class="card-body grid gap-5 lg:py-7.5 px-0"
-                />
-            </StepPanel>
-        </StepItem>
-    </Stepper>
+    <Tabs :default-value="stepValue" class="max-w-[400px]">
+        <TabsList class="grid w-full grid-cols-2">
+            <TabsTrigger
+                v-for="item in items"
+                :key="item.key"
+                :value="item.key"
+                >{{ item.title }}</TabsTrigger
+            >
+        </TabsList>
+        <template v-for="item in items" :key="item.key">
+            <TabsContent :value="item.key">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>{{ item.title }}</CardTitle>
+                        <CardDescription>{{
+                            item.description
+                        }}</CardDescription>
+                        <CardContent class="my-2">
+                            <component
+                                :is="item.component"
+                                class="grid gap-5 lg:py-7.5"
+                                :user="user"
+                            />
+                        </CardContent>
+                    </CardHeader>
+                </Card>
+            </TabsContent>
+        </template>
+    </Tabs>
 </template>
 
 <script setup>
+import { markRaw } from "vue";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import EditAddress from "./EditAddress.vue";
 import EditPersonalInfo from "./EditPersonalInfo.vue";
 
@@ -32,7 +51,22 @@ defineProps({
     },
     stepValue: {
         type: String,
-        default: "1",
+        default: "personal",
     },
 });
+
+const items = [
+    {
+        title: "Informations Personnelles",
+        description: "Met à jour tes informations personnelles.",
+        key: "personal",
+        component: markRaw(EditPersonalInfo),
+    },
+    {
+        title: "Adresse de résidence",
+        description: "Met à jour ton adresse de résidence.",
+        key: "residence",
+        component: markRaw(EditAddress),
+    },
+];
 </script>

@@ -11,6 +11,9 @@ class UserAccount extends Model
         'id',
     ];
 
+    protected $casts = [
+        'interests' => 'array',
+    ];
 
     public function user(): BelongsTo
     {

@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\CvController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsersController;
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::controller(UserController::class)->group(function () {
-        Route::get('/user', 'show')->name('user');
+    Route::get('/user', [UserController::class, 'me'])->name('user');
+
+    Route::controller(UsersController::class)->group(function () {
         Route::get('/users', 'index')->name('users');
         Route::get('/managers', 'managers')->name('managers');
     });

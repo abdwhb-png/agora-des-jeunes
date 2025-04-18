@@ -46,17 +46,18 @@ defineProps({
                                     "
                                     alt="layer blur"
                                     class="insight-layer-blur"
-                                /><v-lazy-image
-                                    src="/images/clout-africa-yhzWaCDebAk-unsplash.jpg"
+                                />
+                                <opt-img
+                                    path="/images/clout-africa-yhzWaCDebAk-unsplash.jpg"
                                     loading="lazy"
-                                    sizes="(max-width: 767px) 92vw, (max-width: 991px) 94vw, (max-width: 1279px) 100vw, 1136px"
                                     alt="quick insight section image"
                                     class="quick-insight-image"
-                                /><v-lazy-image
-                                    src="https://cdn.prod.website-files.com/67590e9b756ef477159ae9e4/677784e464a7158f3d99b26d_Insight%20Value.png"
+                                />
+                                <v-lazy-image
+                                    src="/images/bot.webp"
                                     loading="lazy"
                                     data-w-id="8d473d9f-259a-0e3a-3946-7d3f0143614b"
-                                    alt="Insight Matrix"
+                                    alt="Bot Agora des jeunes"
                                     class="insight-matrix"
                                     style="
                                         will-change: transform;
@@ -107,18 +108,20 @@ defineProps({
                             <div
                                 v-for="(feature, index) in features"
                                 :key="feature.id || index"
-                                class="collapse collapse-arrow bg-base-100 border border-base-300 mb-3"
+                                class="dsy-collapse dsy-collapse-arrow bg-base-100 border border-base-300 mb-3"
                             >
                                 <input
                                     type="radio"
                                     name="features-accordion"
                                     checked="checked"
                                 />
-                                <div class="collapse-title heading-custom-h5">
+                                <div
+                                    class="dsy-collapse-title heading-custom-h5"
+                                >
                                     {{ feature.name }}
                                 </div>
                                 <div
-                                    class="collapse-content insight-tab-item-detail-text"
+                                    class="dsy-collapse-content insight-tab-item-detail-text"
                                 >
                                     {{ feature.description }}
                                     <Link

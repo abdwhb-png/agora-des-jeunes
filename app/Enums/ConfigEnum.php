@@ -14,4 +14,6 @@ enum ConfigEnum: string
     case REDIRECT_TO_KEY = 'redirect_to';
 
     case IMG_MAX_FILE_SIZE = '5120';
+
+    case GET_IMAGE_URL_PATH = 'images';
 }

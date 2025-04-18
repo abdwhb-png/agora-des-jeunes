@@ -13,7 +13,7 @@ import { cvBuilderUrl } from "@/config/appInit";
 import { ref, computed } from "vue";
 import Notice from "@/Components/Base/Notice.vue";
 import ProfileCompToolbar from "./ProfileCompToolbar.vue";
-import NewCv from "./NewCv.vue";
+import NewCv from "../../App/Partials/NewCv.vue";
 
 const props = defineProps({
     user: { type: Object, required: true },

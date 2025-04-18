@@ -1,8 +1,5 @@
-<style>
-/* @import "@css/home.css"; */
-</style>
-
 <template>
+
     <Head :title="meta?.title || title" />
 
     <div class="page-wrapper">
@@ -32,6 +29,7 @@ import Footer from "@/Components/Home/Footer.vue";
 import HeaderNav from "@/Components/Home/HeaderNav.vue";
 import Toaster from "@/Components/ui/toast/Toaster.vue";
 import { onMounted, nextTick, onUnmounted } from "vue";
+import { useDarkModeStore } from "@/stores/darkMode";
 
 const props = defineProps({
     title: String,
@@ -45,9 +43,11 @@ const props = defineProps({
     },
 });
 
+const { isDark, toggleDarkMode } = useDarkModeStore();
+
 const styles = [
+    // "https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css",
     "/cdn.prod.website-files.com/67590e9b756ef477159ae9e4/css/notefye.webflow.cd2157501.css",
-    "https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css",
 ];
 const scripts = [
     // "/d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c887ab.js?site=67590e9b756ef477159ae9e4",
@@ -56,9 +56,17 @@ const scripts = [
 
 onMounted(() => {
     loadMeta();
+
+    if (isDark) {
+        toggleDarkMode();
+    }
+
     loadStyles(styles, "home-styles");
     loadScripts(scripts, "home-scripts");
+
     nextTick(() => {
+        document.querySelector("html").setAttribute("data-theme", "light");
+
         document.querySelectorAll(".set-animation").forEach((el) => {
             // Créer un observateur pour surveiller la visibilité de l'élément
             const observer = new IntersectionObserver(

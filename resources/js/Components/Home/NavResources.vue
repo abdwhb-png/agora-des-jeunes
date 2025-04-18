@@ -1,8 +1,20 @@
 <script setup>
 import { useMainStore } from "@/stores/main";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
 import SocialLinks from "./SocialLinks.vue";
+import { useResponsive } from "@/composables/useResponsive";
 
 const mainStore = useMainStore();
+const desktopMode = useResponsive("up", "lg");
+const mobileMode = useResponsive("down", "lg");
 </script>
 <template>
     <div

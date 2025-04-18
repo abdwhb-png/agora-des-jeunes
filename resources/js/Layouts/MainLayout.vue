@@ -3,14 +3,13 @@
         <link href="/static/css/styles.css" rel="stylesheet" />
     </Head>
 
-    <Loader v-if="!mainStore.showContent" />
-
-    <div v-else class="flex grow">
+    <div class="flex grow">
         <GestionLayout
             :title="title"
             v-if="$page.props.routePrefix === 'gestion.'"
         >
-            <slot></slot>
+            <Loader v-if="!mainStore.showContent && false" />
+            <slot v-else></slot>
         </GestionLayout>
 
         <AppLayout :title="title" v-else>
@@ -22,6 +21,7 @@
 
     <Toast />
     <Toaster />
+    <SonnerToaster />
     <ConfirmDialog />
     <ScrollTop />
 </template>
@@ -35,8 +35,9 @@ import KTLayout from "@metronic/app/layouts/demo1.js";
 
 import AppLayout from "./AppLayout.vue";
 import GestionLayout from "./GestionLayout.vue";
-import SearchModal from "@/Components/Modals/SearchModal.vue";
+import SearchModal from "@/Components/Shared/Search/SearchModal.vue";
 import Toaster from "@/Components/ui/toast/Toaster.vue";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { usePage } from "@inertiajs/vue3";
 import { useBodyClasses } from "@/composables/useBodyClasses";
 
@@ -65,14 +66,15 @@ onMounted(() => {
         KTLayout.init();
         KTTogglePassword.init();
 
-        window.addEventListener("load", mainStore.setShowContent(true), false);
         scrollable.value = document.getElementById("scrollable_content");
         scrollable.value?.addEventListener("scroll", mainStore.handleScroll);
+
+        // window.addEventListener("load", mainStore.setShowContent(true), false);
     });
 });
 
 onUnmounted(() => {
     scrollable.value?.removeEventListener("scroll", mainStore.handleScroll);
-    window.removeEventListener("load", mainStore.setShowContent(true));
+    // window.removeEventListener("load", mainStore.setShowContent(true));
 });
 </script>

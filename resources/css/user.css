@@ -1,0 +1,7 @@
+.p-scrolltop {
+    z-index: 9999 !important;
+    bottom: 80px !important;
+    /* background-color: #000 !important;
+    border-color: #000 !important;
+    color: #fff !important; */
+}

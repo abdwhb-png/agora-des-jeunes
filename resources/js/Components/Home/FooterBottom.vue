@@ -4,38 +4,24 @@
             <div class="container">
                 <div class="section-inner footer-bottom-inner items-center">
                     <div class="text-center md:text-right order-2 w-full">
-                        {{ new Date().getFullYear() }} © Tous droits réservés.
-                        <a
-                            :href="$page.props.app.url"
-                            target="_blank"
-                            class="flowfye-link"
-                            >{{ $page.props.app.name }}</a
-                        >. &nbsp;Sité créé par
-                        <a
-                            :href="$page.props.dev.site_url"
-                            target="_blank"
-                            class="webflow-link underline"
-                            >{{ $page.props.dev.name }}</a
-                        >.
+                        {{ new Date().getFullYear() }} © <a :href="$page.props.app.url" target="_blank"
+                            class="flowfye-link underline">{{ $page.props.app.name
+                            }}</a> |
+                        Tous droits réservés.
+                        <br />
+                        Site web créé par
+                        <a :href="$page.props.dev.site_url" target="_blank" class="webflow-link underline font-mono">@{{
+                            $page.props.dev.name }}</a>.
                     </div>
-                    <div
-                        v-if="
-                            $page.props.jetstream
-                                .hasTermsAndPrivacyPolicyFeature
-                        "
-                        class="flex text-center gap-2"
-                    >
-                        <Link
-                            :href="route('terms.show')"
-                            target="_blank"
-                            class="privacy-policy-link underline"
-                            >Conditions d'utilisations
+                    <div v-if="
+                        $page.props.jetstream
+                            .hasTermsAndPrivacyPolicyFeature
+                    " class="flex gap-2 w-full justify-center">
+                        <Link :href="route('terms.show')" target="_blank" class="privacy-policy-link underline">
+                        Conditions d'utilisations
                         </Link>
-                        <Link
-                            :href="route('policy.show')"
-                            target="_blank"
-                            class="privacy-policy-link underline"
-                            >Politique de confidentialité
+                        <Link :href="route('policy.show')" target="_blank" class="privacy-policy-link underline">
+                        Politique de confidentialité
                         </Link>
                     </div>
                 </div>

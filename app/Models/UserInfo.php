@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GenderEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -47,16 +48,16 @@ class UserInfo extends Model
 
     public function hasCompletedAddress(): bool
     {
-        return $this->quartier !== null;
+        return $this->quartier !== null && $this->ville !== null;
     }
 
     public function avatar(): string
     {
         switch ($this->sexe) {
-            case 'masculin':
-                return asset('images/avatars/male.png');
-            case 'feminin':
-                return asset('images/avatars/female.jpg');
+            case GenderEnum::MALE->value:
+                return asset('images/avatars/male-3d.png');
+            case GenderEnum::FEMALE->value:
+                return asset('images/avatars/female-3d.png');
             default:
                 return asset('images/avatars/default.png');
         }

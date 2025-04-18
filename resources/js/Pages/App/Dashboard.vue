@@ -1,190 +1,251 @@
 <script setup lang="ts">
-import TopContainer from "@/Components/App/Breadcrumb.vue";
-import Hero from "./Partials/Dashboard/Hero.vue";
-</script>
+import { Link } from "@inertiajs/vue3";
+import { cvBuilderUrl } from "@/config/appInit";
+import DashBottom from "./Partials/Dashboard/DashBottom.vue";
+import SectionBorder from "@/Components/SectionBorder.vue";
 
-<style>
-.channel-stats-bg {
-    background-image: url("/static/media/images/2600x1600/bg-3.png");
-}
-.dark .channel-stats-bg {
-    background-image: url("/static/media/images/2600x1600/bg-3-dark.png");
-}
-.entry-callout-bg {
-    background-image: url("/static/media/images/2600x1600/2.png");
-}
-.dark .entry-callout-bg {
-    background-image: url("/static/media/images/2600x1600/2-dark.png");
-}
-</style>
+const startAI = () => {
+    // Logic to start AI interaction
+    console.log("Starting AI interaction...");
+};
+
+const features = [
+    {
+        name: "Créer un CV",
+        position: "left",
+        color: "#ffd066",
+        url: cvBuilderUrl,
+    },
+    {
+        name: "Entreprendre",
+        position: "right",
+        color: "#71ec71",
+        route: "entreprendre",
+    },
+    {
+        name: "Créer un projet",
+        position: "top",
+        color: "#a8c8e8",
+        route: "projets",
+    },
+    {
+        name: "Etudes",
+        position: "bottom",
+        color: "#ff89c4",
+        route: "entreprendre",
+    },
+    {
+        name: "Se former",
+        position: "bottom-left",
+        color: "#ceb0ec",
+        route: "formation",
+    },
+    {
+        name: "Emploi",
+        position: "bottom-right",
+        color: "#ffccaa",
+        route: "emploi",
+    },
+];
+
+// Basic positioning logic (adjust values as needed for visual accuracy)
+const getPositionClasses = (position: string) => {
+    const baseClasses =
+        "absolute text-center text-gray-700 dark:text-gray-300 font-medium text-sm";
+    const transformCenter = "transform -translate-x-1/2 -translate-y-1/2"; // Center the item origin
+
+    switch (position) {
+        case "top":
+            return `${baseClasses} top-[calc(50%-80px)] left-1/2 -translate-x-1/2 -translate-y-full`; // Adjusted for better top placement
+        case "right":
+            return `${baseClasses} top-1/2 left-[calc(50%+100px)] -translate-y-1/2 translate-x-0`; // Adjusted for better right placement
+        case "bottom-right":
+            return `${baseClasses} top-[calc(50%+70px)] left-[calc(50%+70px)] ${transformCenter}`;
+        case "bottom":
+            return `${baseClasses} top-[calc(50%+100px)] left-1/2 -translate-x-1/2 translate-y-0`; // Adjusted for better bottom placement
+        case "bottom-left":
+            return `${baseClasses} top-[calc(50%+70px)] left-[calc(50%-70px)] ${transformCenter}`;
+        case "left":
+            return `${baseClasses} top-1/2 left-[calc(50%-100px)] -translate-y-1/2 -translate-x-full`; // Adjusted for better left placement
+        default:
+            return baseClasses;
+    }
+};
+</script>
 
 <template>
     <MainLayout title="Tableau de bord">
         <div class="grid gap-5 lg:gap-7.5">
-            <Hero />
-            <div class="grid lg:grid-cols-3 gap-y-5 lg:gap-7.5 items-stretch">
-                <div class="lg:col-span-1">
+            <div class="bg-bottom bg-cover bg-no-repeat hero-bg relative"></div>
+            <div
+                class="flex flex-col items-center justify-center text-center px-4"
+            >
+                <!-- Title -->
+                <h1
+                    class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-900 mb-3"
+                >
+                    {{ $page.props.config.seo.slogan }}
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-lg text-gray-600 dark:text-gray-700 mb-12">
+                    Des outils et ressources adaptés aux besoins des jeunes.
+                </p>
+
+                <!-- Central Icon and Circular Elements -->
+                <div class="relative w-64 h-64 md:w-80 md:h-80 mb-16">
+                    <!-- Increased size -->
+                    <!-- Central Icon -->
                     <div
-                        class="grid grid-cols-2 gap-5 lg:gap-7.5 h-full items-stretch"
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                     >
-                        <div
-                            class="card flex-col justify-between gap-6 h-full bg-cover rtl:bg-[left_top_-1.7rem] bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg"
+                        <!-- Ajout d'un background circulaire linéaire derrière l'image IA -->
+                        <div class="ai-background"></div>
+                        <img
+                            @click="startAI"
+                            src="/images/the-bot.png"
+                            alt="Image de l'IA"
+                            class="text-7xl md:text-8xl ai-animation cursor-pointer"
+                        />
+                    </div>
+
+                    <!-- Circular Feature Items -->
+                    <div
+                        v-for="feature in features"
+                        :key="feature.name"
+                        :class="getPositionClasses(feature.position)"
+                    >
+                        <component
+                            :is="feature.route ? Link : 'a'"
+                            :href="
+                                feature.route
+                                    ? route(feature.route)
+                                    : feature.url
+                            "
+                            prefetch
                         >
-                            <img
-                                alt=""
-                                class="w-7 mt-4 ms-5"
-                                src="/static/media/brand-logos/linkedin-2.svg"
-                            />
-                            <div class="flex flex-col gap-1 pb-4 px-5">
-                                <span
-                                    class="text-3xl font-semibold text-gray-900"
-                                >
-                                    9.3k
-                                </span>
-                                <span
-                                    class="text-2sm font-normal text-gray-700"
-                                >
-                                    Amazing mates
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            class="card flex-col justify-between gap-6 h-full bg-cover rtl:bg-[left_top_-1.7rem] bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg"
-                        >
-                            <img
-                                alt=""
-                                class="w-7 mt-4 ms-5"
-                                src="/static/media/brand-logos/youtube-2.svg"
-                            />
-                            <div class="flex flex-col gap-1 pb-4 px-5">
-                                <span
-                                    class="text-3xl font-semibold text-gray-900"
-                                >
-                                    24k
-                                </span>
-                                <span
-                                    class="text-2sm font-normal text-gray-700"
-                                >
-                                    Lessons Views
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            class="card flex-col justify-between gap-6 h-full bg-cover rtl:bg-[left_top_-1.7rem] bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg"
-                        >
-                            <img
-                                alt=""
-                                class="w-7 mt-4 ms-5"
-                                src="/static/media/brand-logos/instagram-03.svg"
-                            />
-                            <div class="flex flex-col gap-1 pb-4 px-5">
-                                <span
-                                    class="text-3xl font-semibold text-gray-900"
-                                >
-                                    608
-                                </span>
-                                <span
-                                    class="text-2sm font-normal text-gray-700"
-                                >
-                                    New subscribers
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            class="card flex-col justify-between gap-6 h-full bg-cover rtl:bg-[left_top_-1.7rem] bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg"
-                        >
-                            <img
-                                alt=""
-                                class="dark:hidden w-7 mt-4 ms-5"
-                                src="/static/media/brand-logos/tiktok.svg"
-                            />
-                            <img
-                                alt=""
-                                class="light:hidden w-7 mt-4 ms-5"
-                                src="/static/media/brand-logos/tiktok-dark.svg"
-                            />
-                            <div class="flex flex-col gap-1 pb-4 px-5">
-                                <span
-                                    class="text-3xl font-semibold text-gray-900"
-                                >
-                                    2.5k
-                                </span>
-                                <span
-                                    class="text-2sm font-normal text-gray-700"
-                                >
-                                    Stream audience
-                                </span>
-                            </div>
-                        </div>
+                            <Chip
+                                :class="`border-2 border-gray-300 dark:border-gray-600`"
+                                :style="{ backgroundColor: feature.color }"
+                            >
+                                {{ feature.name }}
+                            </Chip>
+                        </component>
                     </div>
                 </div>
-                <div class="lg:col-span-2">
-                    <div class="card h-full h-full">
-                        <div
-                            class="card-body p-10 bg-[length:80%] rtl:[background-position:-70%_25%] [background-position:175%_25%] bg-no-repeat entry-callout-bg"
-                        >
-                            <div class="flex flex-col justify-center gap-4">
-                                <div class="flex -space-x-2">
-                                    <div class="flex">
-                                        <img
-                                            class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-10"
-                                            src="/static/media/avatars/300-4.png"
-                                        />
-                                    </div>
-                                    <div class="flex">
-                                        <img
-                                            class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-10"
-                                            src="/static/media/avatars/300-1.png"
-                                        />
-                                    </div>
-                                    <div class="flex">
-                                        <img
-                                            class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-10"
-                                            src="/static/media/avatars/300-2.png"
-                                        />
-                                    </div>
-                                    <div class="flex">
-                                        <span
-                                            class="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-10 text-success-inverse text-xs ring-success-light bg-success"
-                                        >
-                                            S
-                                        </span>
-                                    </div>
-                                </div>
-                                <h2
-                                    class="text-1.5xl font-semibold text-gray-900"
-                                >
-                                    Connect Today &amp; Join
-                                    <br />
-                                    the
-                                    <a class="link" href="#">
-                                        KeenThemes Network
-                                    </a>
-                                </h2>
-                                <p
-                                    class="text-sm font-normal text-gray-700 leading-5.5"
-                                >
-                                    Enhance your projects with premium themes
-                                    and
-                                    <br />
-                                    templates. Join the KeenThemes community
-                                    today
-                                    <br />
-                                    for top-quality designs and resources.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-footer justify-center">
-                            <a
-                                class="btn btn-link"
-                                href="/metronic/tailwind/demo1/account/home/get-started"
-                            >
-                                Get Started
-                            </a>
-                        </div>
+                <div>
+                    <!-- Button -->
+                    <Link href="#" class="btn btn-primary btn-lg mb-4">
+                        Allons-y !
+                    </Link>
+                    <!-- Description -->
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        Chosis une option ou clique sur le bouton ci-dessus.
                     </div>
                 </div>
             </div>
+            <SectionBorder />
+            <DashBottom />
         </div>
     </MainLayout>
 </template>
+
+<style scoped>
+.hero-bg {
+    background-image: url("/static/media/images/2600x1200/bg-3.png");
+}
+.dark .hero-bg {
+    background-image: url("/static/media/images/2600x1200/bg-3-dark.png");
+}
+
+/* Animation pour l'image de l'IA */
+.ai-animation {
+    animation: aiMove 3s ease-in-out;
+    animation-iteration-count: infinite;
+    animation-delay: 3s; /* Animation se produit pendant 3s toutes les 6s (3s pause + 3s animation) */
+}
+
+@keyframes aiMove {
+    0% {
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+    25% {
+        transform: translateY(-5px) scale(1.05);
+        filter: brightness(1.1);
+    }
+    50% {
+        transform: translateY(0) scale(1.1);
+        filter: brightness(1.2);
+    }
+    75% {
+        transform: translateY(5px) scale(1.05);
+        filter: brightness(1.1);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Pour assurer un fonctionnement correct dans dark mode */
+.dark .ai-animation {
+    animation-name: aiMoveDark;
+}
+
+@keyframes aiMoveDark {
+    0% {
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+    25% {
+        transform: translateY(-5px) scale(1.05);
+        filter: brightness(1.15);
+    }
+    50% {
+        transform: translateY(0) scale(1.1);
+        filter: brightness(1.3);
+    }
+    75% {
+        transform: translateY(5px) scale(1.05);
+        filter: brightness(1.15);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Ajout d'un effet de propagation radial pour le background circulaire */
+.ai-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.5),
+        rgba(0, 0, 0, 0.1)
+    );
+    z-index: -1;
+    animation: radialExpand 3s infinite ease-in-out;
+}
+
+@keyframes radialExpand {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+</style>

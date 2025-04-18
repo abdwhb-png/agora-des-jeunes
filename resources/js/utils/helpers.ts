@@ -13,22 +13,25 @@ export function sleep(ms: number = 1000): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function getIcon(key: string): string {
+export function getIcon(key: string, filled: boolean = true): string {
     const icons = {
-        role: "ki-filled ki-share",
-        permission: "ki-filled ki-key-square",
-        profile: "ki-filled ki-badge",
-        profil: "ki-filled ki-user-tick",
-        account: "ki-filled ki-user-square",
-        profile_pic: "ki-filled ki-face-id",
-        formation: "ki-filled ki-book-open",
-        emploi: "ki-filled ki-abstract-26",
-        cv: "ki-filled ki-mouse-square",
-        projet: "ki-filled ki-notepad",
-        entreprendre: "ki-filled ki-briefcase",
+        role: "ki-share",
+        permission: "ki-key-square",
+        profile: "ki-badge",
+        profil: "ki-user-tick",
+        account: "ki-user-square",
+        settings: "ki-setting-2",
+        profile_pic: "ki-face-id",
+        formation: "ki-book-open",
+        emploi: "ki-briefcase",
+        cv: "ki-mouse-square",
+        projet: "ki-notepad",
+        entreprendre: "ki-abstract-26",
     };
 
-    return icons[key] ?? "ki-filled ki-abstract-27";
+    const prefix = filled ? "ki-filled " : "ki-outline ";
+
+    return prefix + (icons[key] || "ki-abstract-27");
 }
 
 export function neighbourColor(index: number): string {

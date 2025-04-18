@@ -82,7 +82,7 @@ const clearPhotoFileInput = () => {
             <!-- Profile Photo -->
             <div
                 v-if="$page.props.jetstream.managesProfilePhotos"
-                class="col-span-6 sm:col-span-4 text-center"
+                class="col-span-6 text-center"
             >
                 <!-- Profile Photo File Input -->
                 <input

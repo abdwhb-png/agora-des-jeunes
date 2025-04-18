@@ -22,8 +22,8 @@ defineProps({
     },
 });
 
-const { isDark, toggleDarkMode } = useDarkModeStore();
-const { currentLanguage, languages, changeLanguage } = useLanguageStore();
+const darkModeStore = useDarkModeStore();
+const languageStore = useLanguageStore();
 
 const editProfilePic = ref(false);
 const showRolesPerms = ref(false);
@@ -136,23 +136,21 @@ const showRolesPerms = ref(false);
                 <div class="menu-separator"></div>
                 <div class="flex flex-col">
                     <div class="menu-item">
-                        <a
-                            class="menu-link"
-                            href="javascript:void(0);"
-                            @click="editProfilePic = true"
-                        >
-                            <span class="menu-icon">
-                                <i :class="getIcon('profile_pic')"> </i>
-                            </span>
-                            <span class="menu-title"> Ma photo de profil </span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
                         <Link class="menu-link" :href="route('profile.show')">
                             <span class="menu-icon">
                                 <i :class="getIcon('profile')"> </i>
                             </span>
                             <span class="menu-title"> Mes informations </span>
+                        </Link>
+                    </div>
+                    <div class="menu-item">
+                        <Link class="menu-link" :href="route('settings')">
+                            <span class="menu-icon">
+                                <i :class="getIcon('settings')"> </i>
+                            </span>
+                            <span class="menu-title">
+                                Paramètres du compte
+                            </span>
                         </Link>
                     </div>
                     <div class="menu-item" v-if="$page.props.app.env = 'local'">
@@ -184,11 +182,11 @@ const showRolesPerms = ref(false);
                             <div
                                 class="flex items-center gap-1.5 rounded-md border border-gray-300 text-gray-600 p-1.5 text-2xs font-medium shrink-0"
                             >
-                                {{ currentLanguage.name }}
+                                {{ languageStore.currentLanguage.name }}
                                 <img
                                     alt=""
                                     class="inline-block size-3.5 rounded-full"
-                                    :src="currentLanguage.flag"
+                                    :src="languageStore.currentLanguage.flag"
                                 />
                             </div>
                         </div>
@@ -196,17 +194,19 @@ const showRolesPerms = ref(false);
                             class="menu-dropdown menu-default light:border-gray-300 w-full max-w-[170px]"
                         >
                             <div
-                                v-for="(item, index) in languages"
+                                v-for="(item, index) in languageStore.languages"
                                 :key="index"
                                 class="menu-item"
                                 :class="{
-                                    active: item.code === currentLanguage.code,
+                                    active:
+                                        item.code ===
+                                        languageStore.currentLanguage.code,
                                 }"
                             >
                                 <a
                                     class="menu-link h-10"
                                     href="#"
-                                    @click="changeLanguage(item)"
+                                    @click="languageStore.changeLanguage(item)"
                                 >
                                     <span class="menu-icon">
                                         <img
@@ -220,7 +220,8 @@ const showRolesPerms = ref(false);
                                     </span>
                                     <span
                                         v-if="
-                                            item.code === currentLanguage.code
+                                            item.code ===
+                                            languageStore.currentLanguage.code
                                         "
                                         class="menu-badge"
                                     >
@@ -249,8 +250,8 @@ const showRolesPerms = ref(false);
                                     name="check"
                                     type="checkbox"
                                     value="1"
-                                    @change="toggleDarkMode"
-                                    :checked="isDark"
+                                    @change="darkModeStore.toggleDarkMode"
+                                    :checked="darkModeStore.isDark"
                                 />
                             </label>
                         </div>

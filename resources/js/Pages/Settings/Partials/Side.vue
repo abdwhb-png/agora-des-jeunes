@@ -40,14 +40,12 @@ export default defineComponent({
                     target: "#auth_settings",
                 },
                 {
-                    title: "Sécurité",
-                    target: "#security",
-                    children: [
-                        {
-                            title: "Paramètres du compte",
-                            target: "#account_settings",
-                        },
-                    ],
+                    title: "Historique des activités",
+                    target: "#activities",
+                },
+                {
+                    title: "Autre paramètres",
+                    target: "#other_settings",
                 },
                 {
                     title: "Désactivation",

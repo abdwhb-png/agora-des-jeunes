@@ -223,7 +223,7 @@ const disableTwoFactorAuthentication = () => {
                 </div>
             </div>
 
-            <div class="mt-5">
+            <div class="mt-5 text-right">
                 <div v-if="!twoFactorEnabled">
                     <ConfirmsPassword
                         @confirmed="enableTwoFactorAuthentication"

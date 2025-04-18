@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full" data-theme="true" data-theme-mode="light" dir="ltr"
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html data-theme="true" data-theme-mode="light" dir="ltr" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <title inertia>{{ config('app.name', 'Agora des Jeunes') }}</title>
@@ -24,7 +23,6 @@
 
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/scss/app.scss'])
-    {{-- @vite(['resources/css/home.css']) --}}
     <!-- End of Styles -->
 
     <!-- Scripts -->
@@ -37,7 +35,6 @@
         }(window, document);
     </script>
 
-    @viteReactRefresh
     @routes
     @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
     @inertiaHead

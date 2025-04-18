@@ -1,6 +1,9 @@
 <template>
     <!-- Social auth buttons -->
-    <div class="grid grid-cols-2 gap-2.5" v-if="route().has('social.redirect')">
+    <div
+        class="flex justify-center gap-2.5 items-center"
+        v-if="route().has('social.redirect')"
+    >
         <a
             v-if="$page.props.socialAuth?.includes('google')"
             class="btn btn-light btn-sm justify-center"

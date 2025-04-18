@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Commune;
 use App\Models\UserInfo;
 use Illuminate\Support\Str;
+use App\Helpers\ConfigHelper;
 use Laravel\Jetstream\Features;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -89,7 +90,7 @@ class UserFactory extends Factory
                 [
                     'nom' => fake()->lastName(),
                     'prenom' => fake()->firstName(),
-                    'sexe' => fake()->randomElement(['M', 'F']),
+                    'sexe' => fake()->randomElement(ConfigHelper::getGenders()),
                     'date_naissance' => fake()->date(),
                 ]
             );

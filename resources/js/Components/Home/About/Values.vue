@@ -68,56 +68,36 @@ const items = [
         <div class="padding-global section-padding-regular is-bottom-zero">
             <div class="container">
                 <div class="margin-bottom margin-60px">
-                    <h2
-                        data-w-id="13038584-1b14-5a76-2644-c0bd12e9e7d7"
-                        style="
+                    <h2 data-w-id="13038584-1b14-5a76-2644-c0bd12e9e7d7" style="
                             transform: translate3d(0px, 0px, 0px)
                                 scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
                                 rotateZ(0deg) skew(0deg, 0deg);
                             opacity: 1;
                             transform-style: preserve-3d;
-                        "
-                        class="features-section-title tracking-wide"
-                    >
-                        Toutes nos actions sont guidées par
+                        " class="features-section-title tracking-wide">
                         <span class="color-primary">Nos Valeurs </span>
-                        qui définissent l’essence même de notre initiative.
+                        définissent l’essence même de notre initiative.
                     </h2>
                 </div>
                 <div class="feature-item-wrapper">
-                    <div
-                        v-for="(item, index) in items"
-                        :key="item.title"
-                        :data-w-id="'f53211b0 - 9418 - f943 - a12e - ecd633409e17'"
-                        class="feature-item"
-                        style="
+                    <div v-for="(item, index) in items" :key="item.title"
+                        :data-w-id="'f53211b0 - 9418 - f943 - a12e - ecd633409e17'" class="feature-item" style="
                             transform: translate3d(0px, 0px, 0px)
                                 scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)
                                 rotateZ(0deg) skew(0deg, 0deg);
                             transform-style: preserve-3d;
                             opacity: 1;
-                        "
-                    >
+                        ">
                         <div class="margin-bottom margin-24px">
-                            <div
-                                class="why-item-icon-wrapper set-animation"
-                                data-animation="animate__fadeInUp"
-                                data-no-repeat="true"
-                            >
-                                <v-lazy-image
-                                    :src="`/images/about/${item.img}`"
-                                    loading="lazy"
-                                    :alt="'icon ' + item.title"
-                                    class="why-item-icon"
-                                />
+                            <div class="why-item-icon-wrapper set-animation" data-animation="animate__fadeInUp"
+                                data-no-repeat="true">
+                                <v-lazy-image :src="`/images/about/${item.img}`" loading="lazy"
+                                    :alt="'icon ' + item.title" class="why-item-icon" />
                             </div>
                         </div>
                         <div class="feature-item-content">
                             <div class="margin-bottom margin-16px">
-                                <h3
-                                    class="feature-item-title set-animation"
-                                    data-animation="animate__lightSpeedInLeft"
-                                >
+                                <h3 class="feature-item-title set-animation" data-animation="animate__lightSpeedInLeft">
                                     {{ item.title }}
                                 </h3>
                             </div>

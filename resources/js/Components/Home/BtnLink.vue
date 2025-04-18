@@ -1,21 +1,29 @@
+<style scoped>
+.btn-medium {
+    padding: 5px;
+}
+</style>
+
 <template>
-    <a v-bind="attrs" class="button-primary-wrapper w-inline-block">
-        <div
-            class="button-shadow"
-            style="
+    <a v-if="type == '2'" :class="{
+        'bg-white': variant == 'secondary',
+        'bg-primary': variant == 'base',
+    }" class="rounded-lg shadow-md px-4 py-2 flex items-center gap-2 hover:shadow-lg transition-shadow">
+        <span>
+            <slot name="icon" />
+        </span>
+        <span>{{ text }}</span>
+    </a>
+    <a v-else v-bind="attrs" class="button-primary-wrapper w-inline-block">
+        <div class="button-shadow" style="
                 transform: translate3d(8px, 8px, 0px) scale3d(1, 1, 1)
                     rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
                 transform-style: preserve-3d;
-            "
-        ></div>
-        <div
-            class="button-primary"
-            :class="
-                variant == 'secondary'
-                    ? 'w-variant-df11cfe8-fb95-3c5a-9007-0ea80cca3abb'
-                    : ''
-            "
-        >
+            "></div>
+        <div class="button-primary" :class="{
+            'w-variant-df11cfe8-fb95-3c5a-9007-0ea80cca3abb': variant == 'secondary',
+        }
+            ">
             <div class="button-content-wrapper">
                 <div class="button-icon-wrapper">
                     <span class="button-icon" ref="btnIcon">
@@ -23,7 +31,7 @@
                     </span>
                 </div>
                 <div class="button-text-wrapper">
-                    <div class="button-text">{{ text }}</div>
+                    <div class="button-text txt">{{ text }}</div>
                     <div class="button-text is-behind">
                         {{ behindText || text }}
                     </div>
@@ -46,6 +54,10 @@ const props = defineProps({
         required: true,
     },
     behindText: String,
+    type: {
+        type: [Number, String],
+        default: "1",
+    },
 });
 
 const btnIcon = ref();

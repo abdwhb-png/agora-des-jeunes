@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Helpers\ConfigHelper;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('nom')->nullable();
             $table->string('prenom')->nullable();
-            $table->string('sexe')->nullable();
+            $table->enum('sexe', ConfigHelper::getGenders())->nullable();
             $table->string('date_naissance')->nullable();
             $table->string('profession')->nullable();
             $table->string('pays')->default('Bénin');

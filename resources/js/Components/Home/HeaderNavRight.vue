@@ -1,8 +1,6 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
-import Search from "./Search.vue";
-import { useMediaQuery } from "@/composables/useMediaQuery";
 import { useResponsive } from "@/composables/useResponsive";
+import GlobalSearch from "../Shared/Search/GlobalSearch.vue";
 
 const desktopMode = useResponsive("up", "lg");
 const mobileMode = useResponsive("down", "lg");
@@ -14,7 +12,7 @@ const mobileMode = useResponsive("down", "lg");
             class="w-commerce-commercecartwrapper"
             data-node-type="commerce-cart-wrapper"
         >
-            <Search />
+            <GlobalSearch />
         </div>
         <div
             class="w-commerce-commercecartwrapper"
@@ -22,14 +20,7 @@ const mobileMode = useResponsive("down", "lg");
         >
             <Link
                 class="w-commerce-commercecartopenlink cart-button w-inline-block"
-                role="button"
-                v-tooltip.bottom="
-                    $page.props.auth.user ? 'Mon Compte' : 'Connexion'
-                "
-                aria-haspopup="dialog"
-                aria-label="Open empty cart"
-                data-node-type="commerce-cart-open-link"
-                :href="route('login')"
+                :href="route('dashboard')"
             >
                 <i class="pi pi-user"></i>
             </Link>
@@ -64,7 +55,8 @@ const mobileMode = useResponsive("down", "lg");
                 data-wf--button-button-primary--variant="base"
                 :href="route('register')"
                 class="button-primary-wrapper w-inline-block"
-                ><div
+            >
+                <div
                     class="button-shadow"
                     style="
                         transform: translate3d(8px, 8px, 0px) scale3d(1, 1, 1)

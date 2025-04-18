@@ -5,16 +5,20 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\ProjectController;
 
+$prefix = config('fortify.prefix');
 require __DIR__ . '/base.php';
 
-Route::middleware([
+Route::prefix($prefix)->middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'onboarding',
 ])->group(function () {
     Route::controller(AppController::class)->group(function () {
+        Route::get('/onboarding', 'onboarding')->name('onboarding');
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/profil', 'profil')->name('profil');
+        Route::get('/projets', 'projets')->name('projets');
         Route::get('/emploi', 'emploi')->name('emploi');
         Route::get('/formation', 'formation')->name('formation');
         Route::get('/entreprendre', 'entreprendre')->name('entreprendre');

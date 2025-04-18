@@ -3,7 +3,6 @@ import { ref } from "vue";
 import Repeater from "@/Components/Permissions/Repeater.vue";
 import CreateForm from "@/Components/Permissions/PermissionForm.vue";
 import Pagination from "@/Components/Tables/Pagination.vue";
-import SearchInput from "@/Components/SearchInput.vue";
 
 const filterName = "permissions";
 const showForm = ref(false);

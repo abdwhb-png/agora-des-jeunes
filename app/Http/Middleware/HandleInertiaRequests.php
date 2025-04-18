@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
             'app' => Arr::only(config('app'), ['cv_builder_url', 'env', 'frontend_url', 'name', 'url']),
             'config' => ConfigHelper::getConfig(),
             'routePrefix' => route_prefix(),
-            'socialAuth' => ['facebook', 'google'],
+            'socialAuth' => ['google'],
 
             'dev' => [
                 'name' => 'Your DevLab',

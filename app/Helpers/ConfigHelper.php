@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Enums\ConfigEnum;
+use App\Enums\GenderEnum;
 use Illuminate\Support\Arr;
 
 class ConfigHelper
@@ -25,5 +26,10 @@ class ConfigHelper
             'seo' => seo(),
             'default_avatar' => asset('images/avatar/default.png'),
         ];
+    }
+
+    static public function getGenders(): array
+    {
+        return array_map(fn(GenderEnum $gender) => $gender->value, GenderEnum::cases());
     }
 }

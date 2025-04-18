@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->json('interests')->nullable();
             $table->boolean('allow_tracking')->default(true);
             $table->boolean('two_step_verification')->default(false);
             $table->boolean('notification_emails')->default(true);

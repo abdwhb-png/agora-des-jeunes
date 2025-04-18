@@ -11,6 +11,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AgoraSessionController;
 
 require __DIR__ . '/base.php';
+
 $prefix = config('fortify.prefix');
 
 Route::redirect('/', '/' . $prefix . '/dashboard');

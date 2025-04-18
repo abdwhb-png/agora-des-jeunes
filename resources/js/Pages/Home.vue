@@ -17,46 +17,29 @@ import HomeLayout from "@/Layouts/HomeLayout.vue";
             <div class="padding-global section-padding-regular">
                 <div class="container">
                     <div class="margin-bottom margin-5px">
-                        <div
-                            data-w-id="e9455644-14f2-71a0-efb9-fdc168804b44"
-                            class="margin-bottom margin-24px set-animation"
-                            data-animation="animate__slideInUp"
-                        >
+                        <div data-w-id="e9455644-14f2-71a0-efb9-fdc168804b44"
+                            class="margin-bottom margin-24px set-animation" data-animation="animate__slideInUp">
                             <div class="content-align-center">
-                                <div
-                                    data-wf--ui-section-subtitle--variant="base"
-                                    class="section-subtitle-wrapper"
-                                >
-                                    <SubtitleIcon
-                                        class="section-subtitle-icon main-animation"
-                                    />
+                                <div data-wf--ui-section-subtitle--variant="base" class="section-subtitle-wrapper">
+                                    <SubtitleIcon class="section-subtitle-icon main-animation" />
                                     <p class="section-subtitle uppercase">
-                                        Ton futur commence ici : Apprends,
-                                        Connecte-toi, Agis
+                                        Apprends, explore et bâtis ton futur avec les bons
+                                        outils
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div
-                            data-w-id="6898c518-4252-720f-a2fa-5631d1294c7a"
-                            class="margin-bottom margin-24px"
-                        >
-                            <h2
-                                class="text-align-center set-animation"
-                                data-animation="animate__lightSpeedInLeft"
-                                data-no-repeat="true"
-                            >
+                        <div data-w-id="6898c518-4252-720f-a2fa-5631d1294c7a" class="margin-bottom margin-24px">
+                            <h2 class="text-align-center set-animation" data-animation="animate__lightSpeedInLeft"
+                                data-no-repeat="true">
                                 Introduction à
                                 <span class="color-primary">{{
                                     $page.props.app.name
-                                }}</span>
+                                    }}</span>
                             </h2>
                         </div>
-                        <p
-                            id="start"
-                            data-w-id="939075c9-95f8-d793-c179-46f996358825"
-                            class="why-us-section-info main-animation"
-                        >
+                        <p id="start" data-w-id="939075c9-95f8-d793-c179-46f996358825"
+                            class="why-us-section-info main-animation">
                             <span class="underline">
                                 Tu veux savoir comment lancer et réussir ton
                                 projet ?

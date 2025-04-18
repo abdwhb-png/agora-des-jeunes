@@ -18,6 +18,10 @@ module.exports = {
     ],
     darkMode: "class",
     theme: {
+        colors:{
+            'black': '#000',
+            'white': '#fff',
+        },
         extend: {
             base: {
                 colors: {
@@ -55,7 +59,7 @@ module.exports = {
                                 inverse: "#ffffff",
                             },
                             primary: {
-                                default: "#1B84FF",
+                                default: "#2acaf9",
                                 active: "#056EE9",
                                 light: "#EFF6FF",
                                 clarity: "rgba(27, 132, 255, 0.20)",
@@ -246,7 +250,62 @@ module.exports = {
                     4: "hsl(var(--chart-4))",
                     5: "hsl(var(--chart-5))",
                 },
-                //end
+                //end: Shadcn UI Colors
+                // primary: {
+                //     DEFAULT: "var(--tw-primary)",
+                //     active: "var(--tw-primary-active)",
+                //     light: "var(--tw-primary-light)",
+                //     clarity: "var(--tw-primary-clarity)",
+                //     inverse: "var(--tw-primary-inverse)",
+                //     foreground: "hsl(var(--primary-foreground))",
+                // },
+                // secondary: {
+                //     DEFAULT: "var(--tw-secondary)",
+                //     active: "var(--tw-secondary-active)",
+                //     light: "var(--tw-secondary-light)",
+                //     clarity: "var(--tw-secondary-clarity)",
+                //     inverse: "var(--tw-secondary-inverse)",
+                //     foreground: "hsl(var(--secondary-foreground))",
+                // },
+                primary: {
+                    // Orange
+                    50: "#fff3e0",
+                    100: "#ffe0b2",
+                    200: "#ffcc80",
+                    300: "#ffb74d",
+                    400: "#ffa726",
+                    500: "#f27518", // Couleur de base
+                    600: "#fb8c00",
+                    700: "#f57c00",
+                    800: "#ef6c00",
+                    900: "#e65100",
+                },
+                secondary: {
+                    // Bleu
+                    50: "#e0f7fa",
+                    100: "#b2ebf2",
+                    200: "#80deea",
+                    300: "#4dd1e0",
+                    400: "#26c6da",
+                    500: "#2acaf9", // Couleur de base
+                    600: "#00acc1",
+                    700: "#0097a7",
+                    800: "#00838f",
+                    900: "#006064",
+                },
+                tertiary: {
+                    // Vert
+                    50: "#e8f5e9",
+                    100: "#c8e6c9",
+                    200: "#a5d6a7",
+                    300: "#81c784",
+                    400: "#66bb6a",
+                    500: "#0dbd1a", // Couleur de base
+                    600: "#43a047",
+                    700: "#388e3c",
+                    800: "#2e7d32",
+                    900: "#1b5e20",
+                },
                 gray: {
                     100: "var(--tw-gray-100)",
                     200: "var(--tw-gray-200)",
@@ -257,14 +316,6 @@ module.exports = {
                     700: "var(--tw-gray-700)",
                     800: "var(--tw-gray-800)",
                     900: "var(--tw-gray-900)",
-                },
-                primary: {
-                    DEFAULT: "var(--tw-primary)",
-                    active: "var(--tw-primary-active)",
-                    light: "var(--tw-primary-light)",
-                    clarity: "var(--tw-primary-clarity)",
-                    inverse: "var(--tw-primary-inverse)",
-                    foreground: "hsl(var(--primary-foreground))",
                 },
                 success: {
                     DEFAULT: "var(--tw-success)",
@@ -300,14 +351,6 @@ module.exports = {
                     light: "var(--tw-dark-light)",
                     clarity: "var(--tw-dark-clarity)",
                     inverse: "var(--tw-dark-inverse)",
-                },
-                secondary: {
-                    DEFAULT: "var(--tw-secondary)",
-                    active: "var(--tw-secondary-active)",
-                    light: "var(--tw-secondary-light)",
-                    clarity: "var(--tw-secondary-clarity)",
-                    inverse: "var(--tw-secondary-inverse)",
-                    foreground: "hsl(var(--secondary-foreground))",
                 },
                 light: {
                     DEFAULT: "var(--tw-light)",
@@ -439,12 +482,22 @@ module.exports = {
                     from: { height: "var(--radix-collapsible-content-height)" },
                     to: { height: "0" },
                 },
+                slideIn: {
+                    "0%": { transform: "translateX(100%)", opacity: "0" },
+                    "100%": { transform: "translateX(0)", opacity: "1" },
+                },
+                fadeIn: {
+                    "0%": { opacity: "0" },
+                    "100%": { opacity: "1" },
+                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
                 "collapsible-down": "collapsible-down 0.2s ease-out",
                 "collapsible-up": "collapsible-up 0.2s ease-out",
+                "slide-in": "slideIn 0.3s ease-out",
+                "fade-in": "fadeIn 0.3s ease-out",
             },
             //end
         },
@@ -730,5 +783,15 @@ module.exports = {
         require("./resources/metronic/core/plugins/components/apexcharts"),
         require("./resources/metronic/core/plugins/components/leaflet"),
         require("tailwindcss-animate"),
+        require("daisyui"),
     ],
+    daisyui: {
+        // Specify only the components you want to use
+        components: ["accordion"],
+        // Other daisyui config options
+        themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
+        base: true, // applies background color and foreground color for root element by default
+        prefix: "dsy-", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+        utils: true, // adds responsive and modifier utility classes
+    },
 };

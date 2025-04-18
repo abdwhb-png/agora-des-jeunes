@@ -1,24 +1,20 @@
 <template>
     <Drawer>
         <DrawerTrigger as-child>
-            <Button outlined severity="contrast" icon="pi pi-search" />
+            <UiButton variant="outline" size="icon" class="opacity-60">
+                <Search />
+            </UiButton>
         </DrawerTrigger>
         <DrawerContent>
             <div class="mx-auto w-full max-w-sm">
                 <DrawerHeader>
                     <DrawerTitle>Recherche</DrawerTitle>
-                    <DrawerDescription
-                        >Rechercher une ressource du site.</DrawerDescription
-                    >
+                    <DrawerDescription>Rechercher une ressource du site.</DrawerDescription>
                 </DrawerHeader>
                 <div class="p-4 pb-0">
                     <IconField>
                         <InputIcon class="pi pi-search" />
-                        <InputText
-                            placeholder="Entrer votre recherche"
-                            fluid
-                            v-model="input"
-                        />
+                        <InputText placeholder="Entrer votre recherche" fluid v-model="input" />
                     </IconField>
                 </div>
                 <DrawerFooter>
@@ -45,6 +41,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/Components/ui/drawer";
+import { Search } from "lucide-vue-next";
 
 const input = ref(null);
 </script>

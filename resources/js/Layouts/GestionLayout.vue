@@ -11,7 +11,7 @@ import { useSidebarStore } from "@/stores/sidebar";
 
 import Header from "@/Components/Gestion/Header.vue";
 import Sidebar from "@/Components/Gestion/Sidebar.vue";
-import Toolbar from "@/Components/Gestion/Toolbar.vue";
+import TopToolbar from "@/Components/Gestion/TopToolbar.vue";
 import Footer from "@/Components/Base/Footer.vue";
 import NoContentCard from "@/Components/Base/NoContentCard.vue";
 
@@ -57,19 +57,15 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-    router.on("start", (event) => {
-        if (event.detail.visit.method.toLowerCase() === "get")
-            mainStore.showContent = false;
-    });
+    // router.on("start", (event) => {
+    //     if (event.detail.visit.method.toLowerCase() === "get")
+    //         mainStore.showContent = false;
+    // });
 
     router.on("finish", (event) => {
         setDefaultMenu();
-        mainStore.showContent = true;
+        // mainStore.showContent = true;
     });
-});
-
-onUnmounted(() => {
-    // mainStore.showContent = false;
 });
 
 watch(
@@ -91,7 +87,9 @@ watch(
     <Header :style="{ maxWidth: viewportWidth + 'px' }" />
     <!-- End of Header -->
     <!-- Wrapper -->
-    <div class="flex flex-col lg:flex-row grow pt-[--tw-header-height] lg:pt-0">
+    <div
+        class="flex flex-col lg:flex-row grow pt-[--tw-header-height] lg:pt-0 min-h-screen"
+    >
         <!-- Sidebar -->
         <Sidebar />
         <!-- End of Sidebar -->
@@ -106,7 +104,9 @@ watch(
                 id="scrollable_content"
             >
                 <main class="grow pb-3" role="content">
-                    <Toolbar :title />
+                    <!-- Toolbar -->
+                    <TopToolbar :title />
+                    <!-- End of Toolbar -->
                     <!-- Container -->
                     <div class="container-fluid xxl:container-fixed">
                         <div class="xl:px-[70px]">

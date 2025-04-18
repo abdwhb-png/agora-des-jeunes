@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from "vue";
-import { Head, router } from "@inertiajs/vue3";
+import "@css/user.css";
+import { Head } from "@inertiajs/vue3";
 import { useBodyClasses } from "@/composables/useBodyClasses";
 
-import Toaster from "@/Components/ui/toast/Toaster.vue";
 import Sidebar from "@/Components/App/Sidebar.vue";
 import Header from "@/Components/App/Header.vue";
 import Footer from "@/Components/Base/Footer.vue";
 import Breadcrumb from "@/Components/App/Breadcrumb.vue";
+import BottomNav from "@/Components/App/BottomNav.vue";
 
 defineProps({
     title: String,
@@ -20,21 +20,20 @@ useBodyClasses(`
     demo1
     sidebar-fixed
     header-fixed
-    bg-[--tw-page-bg]
+    light:bg-gradient-to-br from-primary-50 to-white
     dark:bg-[--tw-page-bg-dark]
   `);
 </script>
 
 <template>
     <Head :title="title + ' (App)'" />
-    <Toaster />
 
     <!-- Sidebar -->
     <Sidebar />
     <!-- End of Sidebar -->
 
     <!-- Wrapper -->
-    <div class="wrapper flex grow flex-col">
+    <div class="wrapper flex grow flex-col min-h-screen min-w-screen">
         <!-- Header -->
         <Header />
         <!-- End of Header -->
@@ -60,8 +59,11 @@ useBodyClasses(`
         <!-- End of Content -->
 
         <!-- Footer -->
-        <Footer />
+        <div class="pb-20">
+            <Footer />
+        </div>
         <!-- End of Footer -->
+        <BottomNav />
     </div>
     <!-- End of Wrapper -->
 </template>

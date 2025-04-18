@@ -5,16 +5,19 @@
                 <SettingsSide />
             </div>
             <div class="flex flex-col items-stretch grow gap-5 lg:gap-7.5">
-                <AuthSetting
+                <Authentification
                     :user="$page.props.auth.user"
                     :confirms-two-factor-authentication="
                         confirmsTwoFactorAuthentication
                     "
                 />
                 <SectionBorder />
-                <AccountSetting :user="$page.props.auth.user" />
+                <Activities :account-activities="account_activities" />
+                <SectionBorder />
+                <Others :user="$page.props.auth.user" />
                 <SectionBorder />
                 <DeactivateAccount />
+                <SectionBorder />
             </div>
         </div>
     </MainLayout>
@@ -24,11 +27,13 @@
 import SettingsSide from "./Partials/Side.vue";
 import SectionBorder from "@/Components/SectionBorder.vue";
 import DeactivateAccount from "./Partials/DeactivateAccount.vue";
-import AuthSetting from "./Partials/AuthSetting.vue";
-import AccountSetting from "./Partials/AccountSetting.vue";
+import Authentification from "./Partials/Authentification.vue";
+import Activities from "./Partials/Activities.vue";
+import Others from "./Partials/Others.vue";
 
 defineProps({
     confirmsTwoFactorAuthentication: Boolean,
     sessions: Array,
+    account_activities: Object,
 });
 </script>

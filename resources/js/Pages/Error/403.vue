@@ -1,5 +1,5 @@
 <template>
-    <ErrorLayout>
+    <ErrorLayout title="403 Error">
         <div class="flex flex-col items-center">
             <div class="mb-16">
                 <img

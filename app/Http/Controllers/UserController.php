@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Inertia\Inertia;
+use Inertia\Response;
 use App\Enums\RolesEnum;
-use App\Models\Invitation;
 use App\Traits\HasSessions;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Helpers\ConfigHelper;
+use Laravel\Fortify\Features;
 use Illuminate\Http\JsonResponse;
 use App\Enums\AccountActivityEnum;
-use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use App\Services\AccountActivityLogger;
-use App\Mail\Invitation as InvitationMail;
 use App\Http\Controllers\Base\BaseController;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class UserController extends BaseController implements HasMiddleware
@@ -30,16 +27,6 @@ class UserController extends BaseController implements HasMiddleware
         return [
             new Middleware('role:' . RolesEnum::ROOT->value, only: ['updateRoles']),
         ];
-    }
-
-    public function index()
-    {
-        return UserResource::collection(User::role(RolesEnum::USER->value)->get());
-    }
-
-    public function managers()
-    {
-        return UserResource::collection(User::role(RolesEnum::MANAGER->value)->get());
     }
 
     public function me()
@@ -58,18 +45,23 @@ class UserController extends BaseController implements HasMiddleware
             'nom' => 'sometimes|string',
             'prenom' => 'sometimes|string',
             'phone' => 'sometimes|string',
-            'sexe' => 'nullable|string',
+            'sexe' => 'nullable|string|in:' . implode(',', ConfigHelper::getGenders()),
             'date_naissance' => 'nullable|date',
-            'ville' => 'nullable|string',
             'quartier' => 'sometimes|string',
+            'ville' => 'nullable|string',
             'departement' => 'nullable|string',
             'arrondissement' => 'nullable|string',
+            'interests' => 'nullable|array',
         ]);
 
-        $user->info()->update($request->except('phone'));
+        $user->info()->update($request->except('phone', 'interests'));
 
         if ($request->phone) {
             $user->update(['phone' => $request->phone]);
+        }
+
+        if ($request->interests) {
+            $user->account()->update(['interests' => $request->interests]);
         }
 
         AccountActivityLogger::log(AccountActivityEnum::PROFILE_UPDATED, $user, ['email' => $user->email]);
@@ -89,46 +81,15 @@ class UserController extends BaseController implements HasMiddleware
         return back(303)->with('success', 'Informations mis à jour avec succès.');
     }
 
-    public function invite(Request $request)
+    public function settings(): Response
     {
-        $request->validate([
-            'email' => 'required|email',
-            'name' => 'nullable|string|max:30',
-            'role' => 'required|string|in:user,admin',
+        $search = $this->getFilter('account_activities', 'search');
+        return Inertia::render('Settings/Index', [
+            'account_activities' => request()->user()->activities()
+                ->where('event', 'like', '%' . $search . '%')
+                ->latest()->paginate($this->perPage($this->getFilter('account_activities', 'per_page', 20))),
+            'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
         ]);
-
-        if (User::where('email', $request->email)->exists()) {
-            throw ValidationException::withMessages([
-                'email' => 'Un utilisateur avec cette adresse email existe deja !',
-            ]);
-        }
-
-        DB::transaction(function () use ($request) {
-            $token = Str::random(32);
-            $invitation = Invitation::updateOrCreate(
-                [
-                    'email' => $request->email,
-                    'created_by' => Auth::id(),
-                ],
-                [
-                    'name' => $request->name,
-                    'token' => $token,
-                    'link' => $request->role == 'user' ? reg_url($token) : null,
-                    'expires_at' => now()->addHours(3),
-                ]
-            );
-
-            // Envoyer un email d'invitation
-            Mail::to($request->email)->send(new InvitationMail($request->user(), $invitation, $request->only('name')));
-
-            // Enregistrer l'activité
-            activity()
-                ->withProperties(['ip_address' => $request->ip()])
-                ->event('invitation_sent')
-                ->log('Invitation envoyée par ' . $request->user()->email);
-        });
-
-        return back(303)->with('success', 'Invitation envoyée avec succès.');
     }
 
     public function sessions(): JsonResponse
@@ -146,11 +107,20 @@ class UserController extends BaseController implements HasMiddleware
         ]);
     }
 
+    public function updatePermissions(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'permissions' => 'required|array',
+            'permissions.*' => ['string', 'exists:permissions,name'],
+        ]);
+
+        $user->syncPermissions($validated['permissions']);
+    }
+
     public function roles(): JsonResponse
     {
         return response()->json(request()->user()->roles);
     }
-
 
     public function updateRoles(Request $request, User $user)
     {
@@ -160,16 +130,5 @@ class UserController extends BaseController implements HasMiddleware
         ]);
 
         $user->syncRoles($validated['roles']);
-    }
-
-
-    public function updatePermissions(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'permissions' => 'required|array',
-            'permissions.*' => ['string', 'exists:permissions,name'],
-        ]);
-
-        $user->syncPermissions($validated['permissions']);
     }
 }

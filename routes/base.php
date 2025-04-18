@@ -1,24 +1,18 @@
 <?php
 
+use App\Enums\ConfigEnum;
 use App\Enums\PermissionsEnum;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CvController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\FilterController;
-use App\Http\Controllers\TenderController;
 use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\ScholarshipController;
-use App\Http\Controllers\AgoraSessionController;
 use App\Http\Controllers\Base\BaseController;
+use App\Http\Controllers\AgoraSessionController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProfessionalController;
-use App\Http\Controllers\TopUniversityController;
-use App\Http\Controllers\LocalUniversityController;
-use App\Http\Controllers\EntrepreneurGuideController;
-use App\Http\Controllers\UserProfessionalLinkController;
 
 require __DIR__ . '/auth.php';
 
@@ -29,13 +23,24 @@ Route::resource('filter', FilterController::class)->only([
 ]);
 Route::patch('/filter', [FilterController::class, 'reset'])->name('filter.reset');
 
-Route::middleware('auth')->prefix(config('fortify.prefix'))->group(function () {
-    Route::controller(BaseController::class)->group(function () {
-        Route::get('/account', 'account')->name('account');
-        Route::get('/settings', 'settings')->name('settings');
-    });
+Route::get('/' . ConfigEnum::GET_IMAGE_URL_PATH->value . '/{path}', function ($path) {
+    $imagePath = public_path("images/$path");
 
+    if (file_exists($imagePath)) {
+        return response()->file($imagePath);
+    }
+
+    abort(404);
+})->where('path', '.*');
+
+Route::middleware('auth')->prefix(config('fortify.prefix'))->group(function () {
+    Route::inertia('/account', 'Account/Index')->name('account');
+    Route::get('/settings', [UserController::class, 'settings'])->name('settings');
     // Routes pour l'utilisateur
+    Route::resource('user', UserController::class)->only([
+        'show',
+        'update',
+    ]);
     Route::prefix('user')->as('user.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/me', 'me')->name('me');
@@ -48,18 +53,14 @@ Route::middleware('auth')->prefix(config('fortify.prefix'))->group(function () {
             Route::patch('/permissions/{user}', 'updatePermissions')->name('permissions.update');
             Route::get('/roles', 'roles')->name('roles');
             Route::patch('/roles/{user}', 'updateRoles')->name('roles.update');
-
-            Route::post('/invite', 'invite')->name('invite');
         });
 
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     });
-    Route::resource('user', UserController::class)->only([
-        'index',
-        'show',
-        'update',
-        'destroy',
-    ]);
+
+    Route::controller(NotificationController::class)->group(function () {
+        Route::post('/invite', 'invite')->name('user.invite');
+    });
 
     Route::controller(NotificationController::class)->group(function () {
         Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
@@ -69,10 +70,7 @@ Route::middleware('auth')->prefix(config('fortify.prefix'))->group(function () {
     });
 
     // Routes pour la faq
-    Route::resource(
-        'faq',
-        FaqController::class
-    )->only([
+    Route::resource('faq', FaqController::class)->only([
         'index',
         'show',
     ]);
@@ -102,25 +100,4 @@ Route::middleware('auth')->prefix(config('fortify.prefix'))->group(function () {
         'update',
         'destroy',
     ])->middleware(['can:' . PermissionsEnum::MANAGE_TRAININGS->value]);
-
-    // // Routes pour les bourses
-    // Route::resource('scholarships', ScholarshipController::class)->middleware(['can:' . PermissionsEnum::MANAGE_SCHOLARSHIPS->value]);
-
-    // // Routes pour les appels d'offres
-    // Route::resource('tenders', TenderController::class)->middleware(['can:' . PermissionsEnum::MANAGE_TENDERS->value]);
-
-    // // Routes pour les guides entrepreneur
-    // Route::resource('entrepreneur-guides', EntrepreneurGuideController::class);
-
-    // // Routes pour les professionnels
-    // Route::resource('professionals', ProfessionalController::class);
-
-    // // Routes pour les relations utilisateur-professionnel
-    // Route::resource('user-professional-links', UserProfessionalLinkController::class);
-
-    // // Routes pour les universités au Bénin
-    // Route::resource('local-universities', LocalUniversityController::class);
-
-    // // Routes pour les meilleures universités dans le monde
-    // Route::resource('top-universities', TopUniversityController::class);
 });

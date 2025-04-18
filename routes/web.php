@@ -20,7 +20,6 @@ Route::inertia('/blog', 'Blog')->name('blog');
 
 Route::withoutMiddleware(CheckRouteMiddleware::class)->group(function () {
     $param = ConfigEnum::ENFORCE_DOMAIN_KEY->value . "=" . ConfigEnum::APP_PREFIX->value;
-    // $redirectParams = [ConfigEnum::ENFORCE_DOMAIN_KEY->value => ConfigEnum::APP_PREFIX->value];
     Route::permanentRedirect('/connexion', '/login?' . $param)->name('connexion');
     Route::permanentRedirect('/inscription', '/register?' . $param)->name('inscription');
 });

@@ -3,55 +3,83 @@ import Groq from "groq-sdk";
 import { useExternalApi } from "./useExternalApi";
 import { useApi } from "./useApi";
 
-const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+// Types
+interface AiUsageData {
+    input_text: Groq.Chat.CompletionCreateParams;
+    output_text: Groq.Chat.ChatCompletionChoice[];
+    ai: string;
+    tokens_used: number;
+    metadata: Groq.Chat.ChatCompletion;
+}
 
-interface ReturnResponse {
+interface ChatResponse {
     success: boolean;
     output: string;
+    error?: string;
+}
+
+// Configuration
+const CONFIG = {
+    API_KEY: import.meta.env.VITE_GROQ_API_KEY,
+    TIMEOUT: Number(import.meta.env.VITE_GROQ_TIMEOUT) || 20 * 1000,
+    MODEL: 'llama3-8b-8192' as const,
+} as const;
+
+// Error handling
+class GroqError extends Error {
+    constructor(message: string, public originalError?: unknown) {
+        super(message);
+        this.name = 'GroqError';
+    }
 }
 
 async function fallBack(
-    error: any,
+    error: unknown,
     userInput: string,
     systemPrompt: string = "",
-): Promise<ReturnResponse> {
+): Promise<ChatResponse> {
     try {
         if (error instanceof Groq.APIError) {
-            console.error("API Error -> ", error);
+            logger.error("Groq API Error:", error);
         }
         const { api } = useExternalApi();
-        const { data } = await api.post("/ai/chat", {
+        const { data } = await api.post<ChatResponse>("/ai/chat", {
             user_input: userInput,
             system_prompt: systemPrompt || null,
         });
 
         return data;
-    } catch (error) {
-        console.error("Fallback failed : ", error);
+    } catch (fallbackError) {
+        logger.error("Fallback failed:", fallbackError);
         return {
             success: false,
-            output: "Erreur lors de la requête vers l'IA.",
+            output: "Erreur lors de la requête vers l'IA.",
+            error: fallbackError instanceof Error ? fallbackError.message : "Unknown error",
         };
     }
 }
 
-async function setAiUsage(data: Object) {
-    const { api } = useApi();
-    const res = await api.post("/ai-usage", data);
-    console.log(res);
+async function setAiUsage(data: AiUsageData): Promise<void> {
+    try {
+        const { api } = useApi();
+        const response = await api.post("/ai-usage", data);
+        logger.debug("AI usage logged:", response);
+    } catch (error) {
+        logger.error("Failed to log AI usage:", error);
+    }
 }
 
 export function useGroq() {
     const client = new Groq({
-        apiKey: apiKey,
+        apiKey: CONFIG.API_KEY,
         dangerouslyAllowBrowser: true,
-        timeout: 20 * 1000, // 20 seconds (default is 1 minute)
+        timeout: CONFIG.TIMEOUT,
     });
 
     async function mainChat(
         userInput: string,
         systemPrompt: string = "",
-    ): Promise<ReturnResponse> {
+    ): Promise<ChatResponse> {
         try {
             const params: Groq.Chat.CompletionCreateParams = {
                 messages: [
@@ -60,21 +88,21 @@ export function useGroq() {
                         content: userInput,
                     },
                 ],
-                model: "llama3-8b-8192",
+                model: CONFIG.MODEL,
             };
 
             if (systemPrompt) {
-                params.messages.push({ role: "system", content: systemPrompt });
+                params.messages.unshift({ role: "system", content: systemPrompt });
             }
 
-            const chatCompletion: Groq.Chat.ChatCompletion =
-                await client.chat.completions.create(params);
+            const chatCompletion = await client.chat.completions.create(params);
+            const answer = chatCompletion.choices[0]?.message?.content;
 
-            const answer = chatCompletion.choices[0].message.content;
+            if (!answer) {
+                throw new GroqError("No response content received");
+            }
 
-            console.log(answer);
-
-            setAiUsage({
+            await setAiUsage({
                 input_text: params,
                 output_text: chatCompletion.choices,
                 ai: "groq",
@@ -86,10 +114,16 @@ export function useGroq() {
                 success: true,
                 output: answer,
             };
-        } catch (err) {
-            return fallBack(err, userInput, systemPrompt);
+        } catch (error) {
+            return fallBack(error, userInput, systemPrompt);
         }
     }
 
     return { client, mainChat };
 }
+
+// Logger utility (à implémenter selon vos besoins)
+const logger = {
+    debug: (message: string, ...args: unknown[]) => console.debug(message, ...args),
+    error: (message: string, ...args: unknown[]) => console.error(message, ...args),
+};

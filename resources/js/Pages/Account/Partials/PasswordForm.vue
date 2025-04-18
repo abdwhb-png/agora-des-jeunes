@@ -39,7 +39,7 @@ const updatePassword = () => {
 
 <template>
     <FormSection @submitted="updatePassword">
-        <template #title> Mot de passe </template>
+        <template #title> Mot de passe du compte </template>
 
         <template #description>
             Assure toi d'utiliser un mot de passe long et aléatoire pour rester

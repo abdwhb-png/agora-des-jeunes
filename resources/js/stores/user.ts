@@ -1,10 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { usePage } from "@inertiajs/vue3";
-import { useApi } from "@/composables/useApi";
+import axios from "axios";
 import { Role, Permission } from "@/types";
-
-const api = useApi();
-const page = usePage();
 
 export const useUserStore = defineStore("userStore", {
     state: () => ({
@@ -30,9 +26,9 @@ export const useUserStore = defineStore("userStore", {
         hasPermission:
             (state) =>
             (name: string): boolean => {
-                const allPermissions = state.permissions.all || [];
-                const viaRolesPermissions = state.permissions.via_roles || [];
-                const direct = state.permissions.direct || [];
+                const allPermissions = (state.permissions as any).all || [];
+                const viaRolesPermissions = (state.permissions as any).via_roles || [];
+                const direct = (state.permissions as any).direct || [];
 
                 return [
                     ...allPermissions,

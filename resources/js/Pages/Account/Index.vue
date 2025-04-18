@@ -1,7 +1,8 @@
 <template>
     <MainLayout title="Mon Compte">
+        <ProfileOverview :user="$page.props.auth.user" />
         <div
-            class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 lg:gap-7.5"
         >
             <div
                 v-for="(item, index) in items"
@@ -38,6 +39,7 @@
                 <component
                     v-if="currentItem"
                     :is="currentItem.component"
+                    :user="page.props.auth.user"
                     v-bind="currentItem?.props || {}"
                 />
             </Dialog>
@@ -47,32 +49,24 @@
 
 <script setup lang="ts">
 import { router, usePage } from "@inertiajs/vue3";
-import { markRaw, ref, onMounted } from "vue";
-import { useUserStore } from "@/stores/user";
+import { markRaw, ref } from "vue";
 import { dialogBreakpoints, getIcon } from "@/utils/helpers";
 
 import EmailAndPassword from "./Partials/EmailAndPassword.vue";
-import Activities from "./Partials/Activities.vue";
-import LogoutOtherBrowserSessionsForm from "./Partials/LogoutOtherBrowserSessionsForm.vue";
 import EditProfilePhoto from "@/Pages/Profile/Partials/EditProfilePhoto.vue";
 import ProfileStepper from "@/Pages/Profile/Partials/ProfileStepper.vue";
+import ProfileOverview from "./Partials/ProfileOverview.vue";
 
 interface Item {
     icon: string;
     title: string;
     url?: string;
     component?: any;
-    props?: any;
+    props?: Object;
     description?: string;
 }
 
-const props = defineProps({
-    confirmsTwoFactorAuthentication: Boolean,
-    account_activities: Object,
-});
-
 const page = usePage();
-const userStore = useUserStore();
 
 const showDialog = ref(false);
 const currentItem = ref<Item | null>(null);
@@ -88,48 +82,28 @@ const goTo = (item: Item) => {
 
 const items = ref<Item[]>([
     {
+        icon: getIcon("profile_pic"),
+        title: "Ma photo de profil",
+        component: markRaw(EditProfilePhoto),
+        description: "Met à jour ta photo de profil.",
+    },
+    {
         icon: getIcon("profile"),
-        title: "A propos de moi",
+        title: "À propos de moi",
         component: markRaw(ProfileStepper),
-        props: { user: page.props.auth.user },
-        description:
-            "Gère tes informations personnelles et met à jour ton profil.",
+        description: "Gère tes informations personnelles.",
     },
     {
         icon: "ki-filled ki-security-user",
         title: "Email & Mot de passe",
         component: markRaw(EmailAndPassword),
-        props: { user: page.props.auth.user },
         description: "Modifie ton email ou ton mot de passe.",
     },
     {
-        icon: getIcon("profile_pic"),
-        title: "Photo de Profil",
-        component: markRaw(EditProfilePhoto),
-        props: { user: page.props.auth.user },
-        description: "Change ta photo de profil.",
-    },
-
-    {
-        icon: "ki-filled ki-chart-line-star",
-        title: "Activités du compte",
-        component: markRaw(Activities),
-        props: { paginated: props.account_activities },
-        description:
-            "Consulte l'historique des activités et surveille les accès à ton compte.",
+        icon: getIcon("settings"),
+        title: "Paramètres du compte",
+        url: route(page.props.routePrefix + "settings"),
+        description: "Gère la sécurité de ton compte.",
     },
 ]);
-
-onMounted(async () => {
-    await userStore.fetchSessions().then(() =>
-        items.value.push({
-            icon: "ki-filled ki-desktop-mobile",
-            title: "Appareils Connectés",
-            component: markRaw(LogoutOtherBrowserSessionsForm),
-            props: { sessions: userStore.sessions },
-            description:
-                "Consulte et gère les appareils connectés à ton compte.",
-        }),
-    );
-});
 </script>
