@@ -1,6 +1,6 @@
 <template>
     <Loader v-if="loading" />
-    <Card v-else-if="$page.props.app.env == 'local'">
+    <Card v-else>
         <template #content>
             <Stepper value="1">
                 <StepItem value="1">

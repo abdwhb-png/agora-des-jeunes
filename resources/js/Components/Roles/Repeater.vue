@@ -1,3 +1,56 @@
+<script lang="ts">
+export default {
+    name: "RolesRepeater",
+};
+</script>
+
+<script setup lang="ts">
+import { ref, watch } from "vue";
+import { Role } from "@/types";
+import { useUserStore } from "@/stores/user";
+import { dialogBreakpoints, getIcon } from "@/utils";
+import UpdateForm from "./RoleForm.vue";
+import RolePerms from "./RolePerms.vue";
+import SimpleSearch from "@/Components/Shared/Search/SimpleSearch.vue";
+
+const props = defineProps({
+    data: { type: Object as () => Role[], default: null },
+    showEdit: { type: Boolean, default: false },
+    showSearch: { type: Boolean, default: true },
+});
+
+const userStore = useUserStore();
+const searchInput = ref("");
+
+const items = ref([]);
+const edit = ref(false);
+const showPermissions = ref(false);
+const role = ref(null);
+
+const formCancel = () => {
+    role.value = null;
+    edit.value = false;
+};
+
+const search = (event: Event) => {
+    items.value = props.data?.filter((item: Role) =>
+        item.name.toLowerCase().includes(event.target.value?.toLowerCase()),
+    );
+};
+
+watch(searchInput, () => {
+    search();
+});
+
+watch(
+    () => props.data,
+    (newData) => {
+        items.value = newData;
+    },
+    { immediate: true, deep: true },
+);
+</script>
+
 <template>
     <ToastError :errors="$page.props.errors" />
 
@@ -5,14 +58,7 @@
         class="flex justify-between items-center"
         v-if="showSearch && data.length"
     >
-        <div class="input input-sm max-w-56">
-            <i class="ki-filled ki-magnifier"> </i>
-            <input
-                placeholder="Rechercher un role"
-                type="text"
-                @input="search"
-            />
-        </div>
+        <SimpleSearch v-model="searchInput" @reset="searchInput = ''" />
         <span class="font-bold"> {{ items.length }} résultats </span>
     </div>
     <div
@@ -176,52 +222,3 @@
         </div>
     </div>
 </template>
-
-<script lang="ts">
-export default {
-    name: "RolesRepeater",
-};
-</script>
-
-<script setup lang="ts">
-import { ref, watch } from "vue";
-import { dialogBreakpoints, getIcon } from "@/utils/helpers";
-import UpdateForm from "./RoleForm.vue";
-import RolePerms from "./RolePerms.vue";
-import { Role } from "@/types";
-import { useUserStore } from "@/stores/user";
-
-const props = defineProps({
-    data: { type: Object as () => Role[], default: null },
-    showEdit: { type: Boolean, default: false },
-    showSearch: { type: Boolean, default: true },
-});
-
-const userStore = useUserStore();
-
-const items = ref([]);
-
-const edit = ref(false);
-const showPermissions = ref(false);
-
-const role = ref(null);
-
-const formCancel = () => {
-    role.value = null;
-    edit.value = false;
-};
-
-const search = (event: Event) => {
-    items.value = props.data?.filter((item: Role) =>
-        item.name.toLowerCase().includes(event.target.value.toLowerCase()),
-    );
-};
-
-watch(
-    () => props.data,
-    (newData) => {
-        items.value = newData;
-    },
-    { immediate: true, deep: true },
-);
-</script>

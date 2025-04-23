@@ -786,8 +786,7 @@ module.exports = {
         require("daisyui"),
     ],
     daisyui: {
-        // Specify only the components you want to use
-        components: ["accordion"],
+         // components: ["accordion"], // Specify only the components you want to use
         // Other daisyui config options
         themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
         base: true, // applies background color and foreground color for root element by default

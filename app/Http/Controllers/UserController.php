@@ -5,38 +5,45 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Enums\RolesEnum;
 use App\Traits\HasSessions;
 use Illuminate\Http\Request;
 use App\Helpers\ConfigHelper;
 use Laravel\Fortify\Features;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
-use App\Enums\AccountActivityEnum;
 use App\Http\Resources\UserResource;
-use App\Services\AccountActivityLogger;
 use App\Http\Controllers\Base\BaseController;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
 
-class UserController extends BaseController implements HasMiddleware
+class UserController extends BaseController
 {
     use HasSessions;
 
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('role:' . RolesEnum::ROOT->value, only: ['updateRoles']),
-        ];
-    }
-
-    public function me()
+    public function index()
     {
         return new UserResource(request()->user());
     }
 
-    public function show(User $user)
+    public function me()
     {
+        return $this->index();
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
         return new UserResource($user);
+    }
+
+    public function updateProfilePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => ['required', 'mimes:jpg,jpeg,png,heic', 'max:3072'],
+        ]);
+
+        $user = request()->user();
+        $user->updateProfilePhoto($request->file('photo'));
+
+        return back(303)->with('success', 'Photo de profil mise à jour avec succès.');
     }
 
     public function updateInfo(Request $request, User $user)
@@ -45,7 +52,7 @@ class UserController extends BaseController implements HasMiddleware
             'nom' => 'sometimes|string',
             'prenom' => 'sometimes|string',
             'phone' => 'sometimes|string',
-            'sexe' => 'nullable|string|in:' . implode(',', ConfigHelper::getGenders()),
+            'sexe' => ['nullable', 'string', Rule::in(ConfigHelper::getGenders())],
             'date_naissance' => 'nullable|date',
             'quartier' => 'sometimes|string',
             'ville' => 'nullable|string',
@@ -64,7 +71,7 @@ class UserController extends BaseController implements HasMiddleware
             $user->account()->update(['interests' => $request->interests]);
         }
 
-        AccountActivityLogger::log(AccountActivityEnum::PROFILE_UPDATED, $user, ['email' => $user->email]);
+        // AccountActivityLogger::log(AccountActivityEnum::PROFILE_UPDATED, $user, ['email' => $user->email]);
 
         return back(303)->with('success', 'Informations mis à jour avec succès.');
     }
@@ -107,28 +114,8 @@ class UserController extends BaseController implements HasMiddleware
         ]);
     }
 
-    public function updatePermissions(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'permissions' => 'required|array',
-            'permissions.*' => ['string', 'exists:permissions,name'],
-        ]);
-
-        $user->syncPermissions($validated['permissions']);
-    }
-
     public function roles(): JsonResponse
     {
         return response()->json(request()->user()->roles);
-    }
-
-    public function updateRoles(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'roles' => 'required|array',
-            'roles.*' => ['string', 'exists:roles,name'],
-        ]);
-
-        $user->syncRoles($validated['roles']);
     }
 }

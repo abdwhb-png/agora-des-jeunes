@@ -7,10 +7,6 @@ import LogoutOtherBrowserSessionsForm from "./LogoutOtherBrowserSessionsForm.vue
 import AccountActivities from "./AccountActivities.vue";
 
 defineProps({
-    user: {
-        type: Object,
-        required: true,
-    },
     accountActivities: {
         type: Object as () => LaravelPagination<any>,
         default: null,

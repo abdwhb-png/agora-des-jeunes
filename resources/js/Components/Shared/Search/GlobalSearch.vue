@@ -82,13 +82,16 @@
                         <!-- Search Results Section -->
                         <div class="max-h-[60vh] overflow-y-auto">
                             <div v-if="searchQuery.length > 0" class="p-4">
-                                <!-- AI Suggestion (always first) -->
+                                <!-- Ask AI (always first) -->
                                 <div
-                                    class="flex items-start p-3 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                                    @click="activateAiMode"
+                                    class="flex items-center p-3 mb-4 bg-gray-100 dark:bg-gray-700 border border-secondary-500 dark:border-secondary-400 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                    @click="isAiMode = true"
                                 >
                                     <div class="mr-3 mt-1">
-                                        <Bot class="text-tertiary-500" />
+                                        <Bot
+                                            class="text-tertiary-500 dark:text-tertiary-400"
+                                            :size="25"
+                                        />
                                     </div>
                                     <div class="flex-1">
                                         <div
@@ -125,12 +128,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <AiSearch
+                                    v-if="isAiMode"
+                                    :query="searchQuery"
+                                    @back="isAiMode = false"
+                                    @search="handleAiSearch"
+                                    @close="handleClose"
+                                    @feedback="handleFeedback"
+                                />
 
                                 <!-- Search Results -->
-                                <div
-                                    v-if="!isAiMode"
-                                    class="border-t border-gray-200 dark:border-gray-700 pt-4"
-                                >
+                                <div v-else class="mb-4">
                                     <div
                                         v-for="(
                                             result, index
@@ -161,145 +169,6 @@
                                         ></div>
                                     </div>
                                 </div>
-
-                                <!-- AI Answer Mode -->
-                                <div v-else class="mt-4">
-                                    <!-- Back Button -->
-                                    <div
-                                        class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 mb-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                        @click="isAiMode = false"
-                                    >
-                                        <div
-                                            class="flex items-center text-gray-500 dark:text-gray-400"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-5 w-5 mr-2"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M15 19l-7-7 7-7"
-                                                />
-                                            </svg>
-                                            Retour à la recherche générique...
-                                        </div>
-                                    </div>
-
-                                    <!-- Original Query -->
-                                    <div class="flex items-center mb-3">
-                                        <div
-                                            class="bg-blue-500 rounded-full p-1 mr-2"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-4 w-4 text-white"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clip-rule="evenodd"
-                                                />
-                                            </svg>
-                                        </div>
-                                        <div
-                                            class="text-gray-900 dark:text-white"
-                                        >
-                                            {{ searchQuery }}
-                                        </div>
-                                    </div>
-
-                                    <!-- AI Response -->
-                                    <div
-                                        class="text-gray-800 dark:text-gray-300 mb-4 prose dark:prose-invert max-w-none"
-                                    >
-                                        <div v-if="aiResponse">
-                                            <h3>{{ aiResponse.title }}</h3>
-                                            <p>{{ aiResponse.description }}</p>
-                                            <ul>
-                                                <li
-                                                    v-for="(
-                                                        point, i
-                                                    ) in aiResponse.points"
-                                                    :key="i"
-                                                >
-                                                    {{ point }}
-                                                </li>
-                                            </ul>
-                                            <pre
-                                                v-if="aiResponse.code"
-                                                class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md overflow-x-auto"
-                                            ><code>{{ aiResponse.code }}</code></pre>
-                                        </div>
-                                        <div v-else class="text-center py-4">
-                                            <div class="animate-pulse">
-                                                Génération de la réponse...
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Related Topics -->
-                                    <div class="flex flex-wrap gap-2 mb-3">
-                                        <span
-                                            v-for="(tag, i) in relatedTopics"
-                                            :key="i"
-                                            class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-md text-sm"
-                                            >{{ tag }}</span
-                                        >
-                                    </div>
-
-                                    <!-- Feedback Buttons -->
-                                    <div class="flex justify-end mt-3">
-                                        <button
-                                            class="text-gray-500 dark:text-gray-400 mx-1 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-5 w-5"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"
-                                                />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            class="text-gray-500 dark:text-gray-400 mx-1 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-5 w-5"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"
-                                                />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            class="text-gray-500 dark:text-gray-400 mx-1 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-5 w-5"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -310,29 +179,29 @@
 </template>
 
 <script setup lang="ts">
+import { usePage } from "@inertiajs/vue3";
 import { ref, computed, onMounted, nextTick, watch } from "vue";
 import { debounce } from "lodash";
 import { useSidebarStore } from "@/stores/sidebar";
 import { Bot } from "lucide-vue-next";
 import { useMainStore } from "@/stores/main";
+import { MENU_CONFIGS } from "@/constants";
+import AiSearch from "./AiSearch.vue";
 
+const page = usePage();
 const mainStore = useMainStore();
 const sidebarStore = useSidebarStore();
 
 // State
 const isModalOpen = ref(false);
+const isAiMode = ref(false);
 const searchQuery = ref("");
 const searchInput = ref<HTMLInputElement | null>(null);
-const isAiMode = ref(false);
-const aiResponse = ref<null | {
-    title: string;
-    description: string;
-    points: string[];
-    code?: string;
-}>(null);
+
+const searchResults = ref([]);
 
 // Convert the menus to searchResults format
-const searchResults = computed(() => {
+const convertMenusToSearchResults = () => {
     const items = [...mainStore.menuItems, ...mainStore.resourceItems];
     const mainMenus = items.map((item) => ({
         section: item.label,
@@ -340,6 +209,16 @@ const searchResults = computed(() => {
         preview: item.description || "",
         url: item.href ? item.href : route(item.route) || "#",
     }));
+
+    var dashMenus = [];
+    if (page.props.config.is_gestion) {
+        dashMenus = Object.values(MENU_CONFIGS).map((item) => ({
+            section: item.title,
+            subsection: null,
+            preview: item.description || "",
+            url: route(page.props.routePrefix + "dashboard"),
+        }));
+    }
 
     const sidebarsMenus = sidebarStore.menus.flatMap((menu) => {
         const results = [];
@@ -378,17 +257,9 @@ const searchResults = computed(() => {
         return results;
     });
 
-    return [...mainMenus, ...sidebarsMenus];
-});
-
-const relatedTopics = ref([
-    "API",
-    "Documentation",
-    "Search",
-    "Integration",
-    "Authentication",
-    "Examples",
-]);
+    searchResults.value = [...mainMenus, ...sidebarsMenus, ...dashMenus];
+};
+convertMenusToSearchResults();
 
 // Computed properties
 const filteredResults = computed(() => {
@@ -407,7 +278,6 @@ const filteredResults = computed(() => {
 // Methods
 const openSearchModal = () => {
     isModalOpen.value = true;
-    isAiMode.value = false;
     searchQuery.value = "";
 
     // Focus the search input after the modal is rendered
@@ -434,33 +304,22 @@ const handleEscKey = (e: KeyboardEvent) => {
 
 const handleSearchInput = debounce(() => {
     // In a real implementation, this would trigger an API call to fetch search results
-    console.log("Searching for:", searchQuery.value);
+    // console.log("Searching for:", searchQuery.value);
 }, 300);
 
-const activateAiMode = () => {
-    isAiMode.value = true;
-    aiResponse.value = null;
+const handleAiSearch = (query: string) => {
+    isAiMode.value = false;
+    searchQuery.value = query;
+};
 
-    // Simulate AI response generation with a delay
-    setTimeout(() => {
-        aiResponse.value = {
-            title: `Information about "${searchQuery.value}"`,
-            description: `Here's what I found about "${searchQuery.value}" in our documentation:`,
-            points: [
-                `"${searchQuery.value}" is a key concept in our platform that helps developers build efficient applications.`,
-                `You can configure "${searchQuery.value}" settings in the dashboard under Settings > Advanced.`,
-                `For optimal performance, make sure to follow the best practices for "${searchQuery.value}" as outlined in our guides.`,
-            ],
-            code: `// Example code for ${searchQuery.value}
-const client = new ApiClient({
-  apiKey: 'your-api-key',
-  options: {
-    ${searchQuery.value}: true,
-    timeout: 5000
-  }
-});`,
-        };
-    }, 1500);
+const handleFeedback = (type: "thumbsUp" | "thumbsDown" | "regenerate") => {
+    // You can add any feedback handling logic here
+    console.log("Feedback received:", type);
+};
+
+const handleClose = () => {
+    searchQuery.value = "";
+    isModalOpen.value = false;
 };
 
 const selectResult = (result: any) => {

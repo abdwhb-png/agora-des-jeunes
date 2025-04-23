@@ -10,9 +10,10 @@ use App\Http\Controllers\GestionController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AgoraSessionController;
 
-require __DIR__ . '/base.php';
-
 $prefix = config('fortify.prefix');
+require_once __DIR__ . '/base.php';
+// Call the function to register shared routes
+registerSharedRoutes(Route::getFacadeRoot());
 
 Route::redirect('/', '/' . $prefix . '/dashboard');
 
@@ -29,25 +30,8 @@ Route::prefix($prefix)->middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    Route::resource('agora-session', AgoraSessionController::class)->only([
-        'update',
-        'store',
-    ])->middleware(['can:' . PermissionsEnum::MANAGE_AGORA_SESSIONS->value]);
-
-    Route::middleware(['can:' . PermissionsEnum::MANAGE_POLLS->value])->group(function () {
-        Route::resource('poll', PollController::class)->only([
-            'update',
-            'store',
-        ]);
-        Route::get('polls-stats', [PollController::class, 'stats'])->name('polls.stats');
-    });
-
-    Route::resource('faq', FaqController::class)->only([
-        'store',
-        'update',
-        'destroy',
-    ]);
-
-    Route::resource('role', RoleController::class);
-    Route::resource('permission', PermissionController::class);
+    Route::get('roles', [RoleController::class, 'index'])->name('roles');
+    Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
+    Route::resource('role', RoleController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('permission', PermissionController::class)->only(['store', 'update', 'destroy']);
 });

@@ -1,12 +1,8 @@
 <?php
 
-use App\Enums\ConfigEnum;
-use App\Models\JobOffer;
 use App\Models\Setting;
 use App\Models\SocialLink;
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Support\Uri;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 if (!function_exists('settings')) {
     function settings($key = null)
@@ -59,6 +55,18 @@ if (!function_exists('social_links')) {
         }
 
         return $links::all();
+    }
+}
+
+if (!function_exists('is_date')) {
+    function is_date($param): String
+    {
+        $factory = new ValidationFactory();
+
+        return !$factory->make(
+            ['date' => $param],
+            ['date' => 'date']
+        )->fails();
     }
 }
 

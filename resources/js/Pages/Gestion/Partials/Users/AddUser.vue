@@ -103,7 +103,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("user.invite"), {
+    form.post(route("joining.invite"), {
         preserveScroll: true,
         onSuccess: (page) => {
             form.reset();

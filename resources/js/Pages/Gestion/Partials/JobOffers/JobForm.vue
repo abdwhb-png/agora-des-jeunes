@@ -106,8 +106,8 @@ const form = useForm({
 
 const submit = () => {
     const url = props.item
-        ? route("job.update", props.item.id)
-        : route("job.store");
+        ? route("job-offer.update", props.item.id)
+        : route("job-offer.store");
 
     form.post(url, {
         preserveScroll: true,

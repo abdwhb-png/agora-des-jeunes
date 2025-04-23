@@ -12,6 +12,7 @@ import { useSidebarStore } from "@/stores/sidebar";
 import Header from "@/Components/Gestion/Header.vue";
 import Sidebar from "@/Components/Gestion/Sidebar.vue";
 import TopToolbar from "@/Components/Gestion/TopToolbar.vue";
+import DockPanel from "@/Components/Gestion/DockPanel.vue";
 import Footer from "@/Components/Base/Footer.vue";
 import NoContentCard from "@/Components/Base/NoContentCard.vue";
 
@@ -107,11 +108,15 @@ watch(
                     <!-- Toolbar -->
                     <TopToolbar :title />
                     <!-- End of Toolbar -->
+
                     <!-- Container -->
                     <div class="container-fluid xxl:container-fixed">
                         <div class="xl:px-[70px]">
                             <NoContentCard v-if="noContent" />
-                            <slot v-else />
+                            <template v-else>
+                                <slot />
+                                <!-- <DockPanel /> -->
+                            </template>
                         </div>
                     </div>
                     <!-- End of Container -->

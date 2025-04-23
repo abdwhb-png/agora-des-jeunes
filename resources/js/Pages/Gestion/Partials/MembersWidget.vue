@@ -19,9 +19,9 @@ const lastAvatarValue = ref(
                     <span class="link">{{ data.members_count }}</span>
                     membres uniques
                 </h2>
-                <p class="text-sm font-normal text-gray-700 leading-5.5">
-                    Inscrits aujourd'hui
-                </p>
+                <Message severity="secondary">
+                    Inscrits aujourd'hui: {{ data.today_count }}
+                </Message>
                 <AvatarGroup v-if="data.show_today.length">
                     <Avatar
                         v-for="(user, index) in data.show_today"
@@ -35,9 +35,6 @@ const lastAvatarValue = ref(
                         shape="circle"
                     />
                 </AvatarGroup>
-                <Message v-else severity="secondary">
-                    Aucun membre inscrit aujourd'hui
-                </Message>
             </div>
         </div>
         <div class="card-footer justify-center">

@@ -4303,7 +4303,7 @@ spurious results.`);
                     many(e, t, n) {
                         this.expectToken(e);
                         let a = [];
-                        do a.push(t.call(this));
+                        do a.push(t?.call(this));
                         while (!this.expectOptionalToken(n));
                         return a;
                     }
@@ -32227,7 +32227,7 @@ spurious results.`);
                     (m.config.keepInherited = !0),
                     (r.define = function (e, t, n) {
                         o[e] && y(o[e]);
-                        var a = (o[e] = t(u, p, n) || {});
+                        var a = (o[e] = (typeof(t) == 'function' ? t(u, p, n) : {}) || {});
                         return h(a), a;
                     }),
                     (r.require = function (e) {
@@ -34910,7 +34910,7 @@ spurious results.`);
                             return;
                         }
                         c.forEach((e) => {
-                            t.query({
+                            t?.query({
                                 query: (0, a.default)`
           ${e.getAttribute(o.CART_QUERY)}
         `,

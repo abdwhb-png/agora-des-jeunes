@@ -80,172 +80,177 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 my-2">
-        <div class="grid md:grid-cols-2 gap-5 lg:gap-7.5 items-stretch">
-            <div class="md:col-span-1">
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <IconField>
-                            <InputText v-model="form.theme" id="theme" fluid />
-                            <InputIcon class="pi pi-bullseye" />
-                        </IconField>
-                        <label for="theme">Thème de la session </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.theme" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <IconField>
-                            <InputText v-model="form.lieu" id="lieu" fluid />
-                            <InputIcon class="pi pi-map-marker" />
-                        </IconField>
-                        <label for="lieu">Lieu </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.lieu" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <DatePicker
-                            id="date"
-                            v-model="form.date"
-                            dateOnly
-                            showIcon
-                            iconDisplay="input"
-                            fluid
-                        />
-                        <label for="date">Date </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.date" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <DatePicker
-                            id="debut"
-                            v-model="form.heure_debut"
-                            timeOnly
-                            showIcon
-                            iconDisplay="input"
-                            fluid
-                        >
-                            <template #inputicon="slotProps">
-                                <i
-                                    class="pi pi-clock"
-                                    @click="slotProps.clickCallback"
+    <form @submit.prevent="submit">
+        <div class="flex flex-col gap-6 my-2">
+            <div class="grid md:grid-cols-2 gap-5 lg:gap-7.5 items-stretch">
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <IconField>
+                                <InputText
+                                    v-model="form.theme"
+                                    id="theme"
+                                    fluid
                                 />
-                            </template>
-                        </DatePicker>
-                        <label for="debut">Heure de début </label>
-                    </FloatLabel>
-                    <InputError
-                        class="mt-1"
-                        :message="form.errors.heure_debut"
-                    />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <DatePicker
-                            id="fin"
-                            v-model="form.heure_fin"
-                            format="H:i:s"
-                            timeOnly
-                            showIcon
-                            iconDisplay="input"
-                            fluid
-                        >
-                            <template #inputicon="slotProps">
-                                <i
-                                    class="pi pi-clock"
-                                    @click="slotProps.clickCallback"
+                                <InputIcon class="pi pi-bullseye" />
+                            </IconField>
+                            <label for="theme">Thème de la session </label>
+                        </FloatLabel>
+                        <InputError class="mt-1" :message="form.errors.theme" />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <IconField>
+                                <InputText
+                                    v-model="form.lieu"
+                                    id="lieu"
+                                    fluid
                                 />
-                            </template>
-                        </DatePicker>
-                        <label for="fin">Heure de fin (facultatif) </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.heure_fin" />
-                </div>
-            </div>
-            <div class="md:col-span-1">
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <InputNumber
-                            v-model="form.places"
-                            id="places"
-                            :min="1"
-                            :step="10"
-                            :show-buttons="true"
-                            fluid
-                        />
-                        <label for="places" class="capitalize"
-                            >Nombre de places</label
-                        >
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.places" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <IconField>
-                            <AutoComplete
-                                v-model="form.presentateur"
+                                <InputIcon class="pi pi-map-marker" />
+                            </IconField>
+                            <label for="lieu">Lieu </label>
+                        </FloatLabel>
+                        <InputError class="mt-1" :message="form.errors.lieu" />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <DatePicker
+                                id="date"
+                                v-model="form.date"
+                                dateOnly
+                                showIcon
+                                iconDisplay="input"
                                 fluid
-                                id="presentateur"
-                                :suggestions="managers"
-                                @complete="search"
                             />
-                            <InputIcon class="pi pi-user" />
-                        </IconField>
-                        <label for="presentateur">Présentateur</label>
-                    </FloatLabel>
-                    <InputError
-                        class="mt-1"
-                        :message="form.errors.presentateur"
-                    />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <IconField>
-                            <ImageInput
-                                id="image"
-                                :image-name="form.image?.name || form.image"
-                                @selected="form.image = $event"
-                            />
-                            <InputIcon class="pi pi-image" />
-                        </IconField>
-                        <label for="image">Image d'affiche (facultatif)</label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.image" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <Textarea
-                            v-model="form.description"
-                            id="description"
-                            rows="3"
-                            fluid
+                            <label for="date">Date </label>
+                        </FloatLabel>
+                        <InputError class="mt-1" :message="form.errors.date" />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <DatePicker
+                                id="debut"
+                                v-model="form.heure_debut"
+                                timeOnly
+                                showIcon
+                                iconDisplay="input"
+                                fluid
+                            >
+                                <template #inputicon="slotProps">
+                                    <i
+                                        class="pi pi-clock"
+                                        @click="slotProps.clickCallback"
+                                    />
+                                </template>
+                            </DatePicker>
+                            <label for="debut">Heure de début </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.heure_debut"
                         />
-                        <label for="description"
-                            >Description de la session (facultatif)</label
-                        >
-                    </FloatLabel>
-                    <InputError
-                        class="mt-1"
-                        :message="form.errors.description"
-                    />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <DatePicker
+                                id="fin"
+                                v-model="form.heure_fin"
+                                format="H:i:s"
+                                timeOnly
+                                showIcon
+                                iconDisplay="input"
+                                fluid
+                            >
+                                <template #inputicon="slotProps">
+                                    <i
+                                        class="pi pi-clock"
+                                        @click="slotProps.clickCallback"
+                                    />
+                                </template>
+                            </DatePicker>
+                            <label for="fin">Heure de fin (facultatif) </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.heure_fin"
+                        />
+                    </div>
+                </div>
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <InputNumber
+                                v-model="form.places"
+                                id="places"
+                                :min="1"
+                                :step="10"
+                                :show-buttons="true"
+                                fluid
+                            />
+                            <label for="places" class="capitalize"
+                                >Nombre de places</label
+                            >
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.places"
+                        />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <IconField>
+                                <AutoComplete
+                                    v-model="form.presentateur"
+                                    fluid
+                                    id="presentateur"
+                                    :suggestions="managers"
+                                    @complete="search"
+                                />
+                                <InputIcon class="pi pi-user" />
+                            </IconField>
+                            <label for="presentateur">Présentateur</label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.presentateur"
+                        />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <IconField>
+                                <ImageInput
+                                    id="image"
+                                    :image-name="form.image?.name || form.image"
+                                    @selected="form.image = $event"
+                                />
+                                <InputIcon class="pi pi-image" />
+                            </IconField>
+                            <label for="image"
+                                >Image d'affiche (facultatif)</label
+                            >
+                        </FloatLabel>
+                        <InputError class="mt-1" :message="form.errors.image" />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <Textarea
+                                v-model="form.description"
+                                id="description"
+                                rows="3"
+                                fluid
+                            />
+                            <label for="description"
+                                >Description de la session (facultatif)</label
+                            >
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.description"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="flex justify-between gap-2 mt-4">
-        <Button
-            type="button"
-            label="Annuler"
-            severity="secondary"
-            @click="emits('canceled')"
-        ></Button>
-        <Button
-            type="button"
-            :label="item ? 'Mettre à jour' : 'Enregistrer'"
-            @click="submit"
-            :loading="form.processing"
-        ></Button>
-    </div>
+        <FormButtonGroup :form="form" @canceled="emits('canceled')" />
+    </form>
 </template>

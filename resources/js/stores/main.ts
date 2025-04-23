@@ -1,8 +1,10 @@
-import { useApi } from "@/composables/useApi";
 import axios from "axios";
 import { defineStore } from "pinia";
+import { usePage } from "@inertiajs/vue3";
+import { useAxios } from "@/composables/useAxios";
 
-const { api } = useApi();
+const page = usePage();
+const { fetchData } = useAxios();
 
 export const useMainStore = defineStore("main", {
     state: () => ({
@@ -10,19 +12,51 @@ export const useMainStore = defineStore("main", {
         showContent: false,
         mainSearch: "",
         menuItems: [
-            { label: "Accueil", route: "home", cache: "10s", description: "Retourner à la page d'accueil." },
-            { label: "A Propos", route: "about", description: "En savoir plus sur notre organisation." },
-            { label: "Contact", route: "contact", description: "Obtenez nos coordonnées pour nous joindre." },
-            { label: "Blog", route: "blog", description: "Lire nos articles et actualités." },
+            {
+                label: "Accueil",
+                route: "home",
+                cache: "10s",
+                description: "Retourner à la page d'accueil.",
+            },
+            {
+                label: "A Propos",
+                route: "about",
+                description: "En savoir plus sur notre organisation.",
+            },
+            {
+                label: "Contact",
+                route: "contact",
+                description: "Obtenez nos coordonnées pour nous joindre.",
+            },
+            {
+                label: "Blog",
+                route: "blog",
+                description: "Lire nos articles et actualités.",
+            },
         ],
         resourceItems: [
-            { label: "Foire Aux Questions", href: route("faqs"), description: "Consultez les réponses aux questions fréquentes." },
-            { label: "Formations", href: "#", description: "Découvrez les formations disponibles." },
-            { label: "Emplois et Jobs", href: "#", description: "Explorez les opportunités d'emploi et de carrière." },
+            {
+                label: "Foire Aux Questions",
+                href: route("faqs"),
+                description: "Consultez les réponses aux questions fréquentes.",
+            },
+            {
+                label: "Formations",
+                href: "#",
+                description: "Découvrez les formations disponibles.",
+            },
+            {
+                label: "Emplois et Jobs",
+                href: "#",
+                description:
+                    "Explorez les opportunités d'emploi et de carrière.",
+            },
         ],
         faqs: [],
         polls: [],
         agoraSessions: [],
+        trainings: [],
+        jobOffers: [],
         appFeatures: [],
         departements: [],
         communes: [],
@@ -39,61 +73,97 @@ export const useMainStore = defineStore("main", {
             this.isScrolled = target.scrollTop > 0;
         },
 
-        async fetchPolls() {
-            await axios
-                .get("/poll")
-                .then((response: any) => {
-                    this.polls = response.data;
-                })
-                .catch((error: any) => {
-                    console.log("Error while fetching polls", error);
-                });
+        async fetchPolls(url = "") {
+            const data = await fetchData(
+                url || route(page.props.routePrefix + "poll.index"),
+                {
+                    errorMessage: "Impossible de récupérer les sondages",
+                },
+            );
+
+            if (data) {
+                this.polls = data;
+            }
         },
 
-        async fetchFaqs() {
-            await axios
-                .get("/faq")
-                .then((response: any) => {
-                    this.faqs = response.data;
-                })
-                .catch((error: any) => {
-                    console.log("Error while fetching faqs", error);
-                });
+        async fetchFaqs(url = "") {
+            const data = await fetchData(
+                url || route(page.props.routePrefix + "faq.index"),
+                {
+                    errorMessage: "Impossible de récupérer les FAQ",
+                },
+            );
+
+            if (data) {
+                this.faqs = data;
+            }
         },
 
-        async fetchAgora() {
-            await axios
-                .get("/agora-session")
-                .then((response: any) => {
-                    this.agoraSessions = response.data;
-                })
-                .catch((error: any) => {
-                    console.log("Error while fetching agora sesssions", error);
-                });
+        async fetchAgora(url = "") {
+            const data = await fetchData(
+                url || route(page.props.routePrefix + "agora-session.index"),
+                {
+                    errorMessage:
+                        "Impossible de récupérer les sessions d'Agora",
+                },
+            );
+
+            if (data) {
+                this.agoraSessions = data;
+            }
+        },
+
+        async fetchTrainings(url = "") {
+            const data = await fetchData(
+                url || route(page.props.routePrefix + "training.index"),
+                {
+                    errorMessage: "Impossible de récupérer les formations",
+                },
+            );
+
+            if (data) {
+                this.trainings = data;
+            }
+        },
+
+        async fetchJobOffers(url = "") {
+            const data = await fetchData(
+                url || route(page.props.routePrefix + "job-offer.index"),
+                {
+                    errorMessage: "Impossible de récupérer les offres d'emploi",
+                },
+            );
+
+            if (data) {
+                this.jobOffers = data;
+            }
         },
 
         async fetchFeatures() {
-            await api
-                .get("/features")
-                .then((response: any) => {
-                    this.appFeatures = response.data.app_features;
-                })
-                .catch((error: any) => {
-                    console.log("Error while fetching features", error);
-                });
+            const data = await fetchData("/features", {
+                errorMessage: "Impossible de récupérer les fonctionnalités",
+                useApi: true,
+            });
+
+            if (data) {
+                this.appFeatures = (
+                    data as { app_features: any[] }
+                ).app_features;
+            }
         },
 
         async fetchDepartements() {
-            await api
-                .get("/departements")
-                .then((response: any) => {
-                    this.departements = response.data.departements || [];
-                    this.communes = response.data.communes || [];
-                    this.arrondissements = response.data.arrondissements || [];
-                })
-                .catch((error: any) => {
-                    console.log("Error while fetching departements", error);
-                });
+            const data = await fetchData("/departements", {
+                errorMessage:
+                    "Impossible de récupérer les données géographiques",
+                useApi: true,
+            });
+
+            if (data) {
+                this.departements = data.departements || [];
+                this.communes = data.communes || [];
+                this.arrondissements = data.arrondissements || [];
+            }
         },
     },
 });

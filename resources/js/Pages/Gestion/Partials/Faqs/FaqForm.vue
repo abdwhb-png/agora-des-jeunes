@@ -27,7 +27,7 @@
             <CustomEditor v-model="form.answer" editorStyle="height: 200px" />
             <InputError class="mt-1" :message="form.errors.answer" />
         </div>
-        <FormButtonGroup :form="form" @canceled="$emit('canceled')" />
+        <FormButtonGroup :form="form" @canceled="emits('canceled')" />
     </form>
 </template>
 

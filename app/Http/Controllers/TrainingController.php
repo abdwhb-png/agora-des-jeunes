@@ -2,20 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Base\BaseController;
-use App\Http\Requests\TrainingRequest;
 use App\Models\Training;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Enums\PermissionsEnum;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\TrainingRequest;
+use App\Http\Controllers\Base\BaseController;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class TrainingController extends BaseController
+class TrainingController extends BaseController implements HasMiddleware
 {
+    /**
+     * Define middleware for this controller
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                'can:' . PermissionsEnum::MANAGE_JOB_OFFERS->value,
+                only: ['store', 'update', 'destroy']
+            ),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        return response()->json(Training::paginate($this->perPage(50)));
+        $filterName = 'trainings';
+        $filters = self::getFilter($filterName);
+        $perPage = self::getFilter($filterName, 'per_page', 30);
+
+        return response()->json([
+            'filter_name' => $filterName,
+            'list' => Training::latest()
+                ->filter($filters)
+                ->paginate($perPage, pageName: $filterName)
+        ]);
     }
 
     /**

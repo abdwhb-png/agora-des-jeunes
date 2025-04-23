@@ -81,7 +81,7 @@ const submit = () => {
                         >
                             <input
                                 name="user_password"
-                                placeholder="Crée ton mot de passe"
+                                placeholder="Ecris ton mot de passe"
                                 type="password"
                                 v-model="form.password"
                             />
@@ -116,7 +116,7 @@ const submit = () => {
                         >
                             <input
                                 name="user_password"
-                                placeholder="Ecris à nouveau le mot de passe"
+                                placeholder="Confirme ton mot de passe"
                                 type="password"
                                 v-model="form.password_confirmation"
                             />

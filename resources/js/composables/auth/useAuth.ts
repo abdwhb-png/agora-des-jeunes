@@ -1,8 +1,8 @@
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useApi } from '../api/useApi';
-import { API_ENDPOINTS } from '@/config/constants';
-import type { User } from '@/types/models/user';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useApi } from "../useApi";
+import { API_ENDPOINTS } from "@/config/constants";
+import type { User } from "@/types/models/user";
 
 export function useAuth() {
     const router = useRouter();
@@ -11,17 +11,17 @@ export function useAuth() {
     const isAuthenticated = ref(false);
 
     const login = async (email: string, password: string) => {
-        const response = await postData(API_ENDPOINTS.AUTH + '/login', {
+        const response = await postData(API_ENDPOINTS.AUTH + "/login", {
             email,
             password,
         });
 
         if (response) {
             const { token, user: userData } = response as any;
-            localStorage.setItem('token', token);
+            localStorage.setItem("token", token);
             user.value = userData;
             isAuthenticated.value = true;
-            router.push('/dashboard');
+            router.push("/dashboard");
             return true;
         }
 
@@ -29,21 +29,21 @@ export function useAuth() {
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         user.value = null;
         isAuthenticated.value = false;
-        router.push('/login');
+        router.push("/login");
     };
 
     const checkAuth = async () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (!token) {
             isAuthenticated.value = false;
             return false;
         }
 
         try {
-            const response = await postData(API_ENDPOINTS.AUTH + '/me', {});
+            const response = await postData(API_ENDPOINTS.AUTH + "/me", {});
             if (response) {
                 user.value = response;
                 isAuthenticated.value = true;
@@ -65,4 +65,4 @@ export function useAuth() {
         logout,
         checkAuth,
     };
-} 
+}

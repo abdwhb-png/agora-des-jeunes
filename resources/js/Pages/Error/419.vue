@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import HomeBtn from "@/Components/HomeBtn.vue";
+</script>
+
 <template>
     <ErrorLayout>
         <div class="flex flex-col items-center">
@@ -13,7 +17,7 @@
                     src="/static/media/illustrations/expired.png"
                 />
             </div>
-            <span class="badge badge-primary badge-outline mb-3">
+            <span class="badge badge-info badge-outline mb-3">
                 Erreur 419
             </span>
             <h3 class="text-2.5xl font-semibold text-gray-900 text-center mb-2">
@@ -21,17 +25,11 @@
             </h3>
             <div class="text-md text-center text-gray-700 mb-10">
                 La page actuelle est expirée. Veuillez
-                <a
-                    class="text-primary font-medium hover:text-primary-active"
-                    href="#"
-                    onclick="refreshPage()"
-                >
-                    Réactualiser
-                </a>
+                <a class="link font-medium" href="#" onclick="refreshPage()">
+                    réactualiser la page </a
+                >.
             </div>
-            <a class="btn btn-primary flex justify-center" href="/">
-                Accueil
-            </a>
+            <HomeBtn />
         </div>
     </ErrorLayout>
 </template>

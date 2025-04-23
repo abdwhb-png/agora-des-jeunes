@@ -7,7 +7,8 @@ import { useSidebarStore } from "@/stores/sidebar";
         title="Utilisateurs"
         :component-props="{
             data: $page.props.users,
-            canShow: $page.props.can.viewUsers,
+            can: $page.props.can,
+            statuses: $page.props.user_statuses,
         }"
     >
     </PageLayout>

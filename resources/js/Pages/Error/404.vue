@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import HomeBtn from "@/Components/HomeBtn.vue";
+</script>
+
 <template>
     <ErrorLayout title="404 Error">
         <div class="flex flex-col items-center">
@@ -13,23 +17,23 @@
                     src="/static/media/illustrations/19-dark.svg"
                 />
             </div>
-            <span class="badge badge-primary badge-outline mb-3">
+            <span class="badge badge-secondary badge-outline mb-3">
                 Erreur 404
             </span>
             <h3 class="text-2.5xl font-semibold text-gray-900 text-center mb-2">
                 Page non trouvée
             </h3>
-            <div class="text-md text-center text-gray-700 mb-10">
+            <div class="text-md text-center text-gray-700 mb-5">
                 La page demandée est absente.
                 <br />
                 Veuillez vérifier l'URL ou
-                <a
-                    class="text-primary font-medium hover:text-primary-active"
-                    href="/"
-                >
+                <a class="link font-medium" href="/">
                     Retourner sur la page d'accueil
                 </a>
                 .
+            </div>
+            <div class="text-center mb-10">
+                <HomeBtn />
             </div>
             <div class="relative">
                 <form action="/">

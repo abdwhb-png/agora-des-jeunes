@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\AccountActivity;
 use App\Enums\AccountActivityEnum;
 
 class AccountActivityLogger
 {
-    public static function log(AccountActivityEnum $event, $user, array $metadata = [])
+    public static function log(AccountActivityEnum $event, User $user, array $metadata = [])
     {
         $request = request();
 

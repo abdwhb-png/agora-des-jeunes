@@ -4,14 +4,14 @@ import { useDarkModeStore } from "@/stores/darkMode";
 import { useLanguageStore } from "@/stores/language";
 import { dialogBreakpoints, getIcon } from "@/utils/helpers";
 
-import RolesPerms from "./RolesPerms.vue";
+import ShowRolesPerms from "./ShowRolesPerms.vue";
 import EditProfilePhoto from "@/Pages/Profile/Partials/EditProfilePhoto.vue";
 
 defineOptions({
     inheritAttrs: false,
 });
 
-defineProps({
+const props = defineProps({
     rounded: {
         type: Boolean,
         default: true,
@@ -26,7 +26,6 @@ const darkModeStore = useDarkModeStore();
 const languageStore = useLanguageStore();
 
 const editProfilePic = ref(false);
-const showRolesPerms = ref(false);
 </script>
 
 <template>
@@ -42,17 +41,6 @@ const showRolesPerms = ref(false);
             :user="$page.props.auth.user"
             @updated="editProfilePic = false"
         />
-    </Dialog>
-
-    <Dialog
-        v-model:visible="showRolesPerms"
-        modal
-        dismissable-mask=""
-        header="Roles & Permissions"
-        :style="{ width: '50rem' }"
-        :breakpoints="dialogBreakpoints"
-    >
-        <RolesPerms />
     </Dialog>
 
     <div class="menu" data-menu="true">
@@ -136,6 +124,18 @@ const showRolesPerms = ref(false);
                 <div class="menu-separator"></div>
                 <div class="flex flex-col">
                     <div class="menu-item">
+                        <a
+                            class="menu-link"
+                            href="javascript:void(0);"
+                            @click="editProfilePic = true"
+                        >
+                            <span class="menu-icon">
+                                <i :class="getIcon('profile_pic')"> </i>
+                            </span>
+                            <span class="menu-title"> Ma photo de profil </span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                         <Link class="menu-link" :href="route('profile.show')">
                             <span class="menu-icon">
                                 <i :class="getIcon('profile')"> </i>
@@ -153,19 +153,14 @@ const showRolesPerms = ref(false);
                             </span>
                         </Link>
                     </div>
-                    <div class="menu-item" v-if="$page.props.app.env = 'local'">
-                        <a
-                            class="menu-link"
-                            href="javascript:void(0);"
-                            @click="showRolesPerms = true"
-                        >
-                            <span class="menu-icon">
-                                <i :class="getIcon('role')"> </i>
-                            </span>
-                            <span class="menu-title">
-                                Roles & Permissions
-                            </span>
-                        </a>
+                    <div
+                        class="menu-item"
+                        v-if="
+                            $page.props.app.env =
+                                'local' && $page.props.auth.isRoot
+                        "
+                    >
+                        <ShowRolesPerms />
                     </div>
                     <div
                         class="menu-item menu-item-dropdown"

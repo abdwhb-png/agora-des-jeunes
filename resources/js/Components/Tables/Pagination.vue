@@ -3,92 +3,54 @@
         class="flex flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium"
         :class="[
             sizeClass,
-            itemsPerPageDropdownEnabled ? 'justify-between' : 'justify-center',
+            showItemsSelection ? 'justify-between' : 'justify-center',
         ]"
     >
-        <!-- Sélection du nombre de lignes par page -->
+        <!-- Items per page selection -->
         <div
             class="flex items-center gap-2 order-2 md:order-1"
-            v-if="itemsPerPageDropdownEnabled"
+            v-if="showItemsSelection"
         >
-            Lignes par page
-            <select
-                class="select select-sm w-16"
-                :disabled="loading || !paginated.total"
-                data-datatable-size="true"
-                name="per_page"
-                v-model="itemsCountInTable"
-            >
-                <option
-                    v-for="(perPage, index) in itemsPerPage"
-                    :key="index"
-                    :value="perPage"
-                >
-                    {{ perPage }}
-                </option>
-            </select>
+            Items par page
+            <Select
+                class="w-40"
+                size="small"
+                v-model="form.filters.per_page"
+                @change="updatePagination"
+                :options="itemsPerPage"
+                editable
+                :disabled="loading || !paginatedMeta?.total"
+            />
         </div>
 
         <!-- Boutons de pagination -->
-        <div class="flex justify-center items-center gap-4 order-1 md:order-2">
+        <div
+            class="flex flex-wrap justify-center items-center gap-4 order-1 md:order-2"
+        >
             <span data-datatable-info="true">{{ paginationInfo }}</span>
-            <div class="pagination">
-                <div class="pagination">
-                    <!-- Bouton Précédent -->
-                    <Link
-                        class="btn"
-                        :class="{ disabled: !paginated.prev_page_url }"
-                        :href="paginated.prev_page_url ?? ''"
-                        prefetch
-                        cache-for="1m"
-                    >
-                        <i
-                            class="ki-outline ki-black-left rtl:transform rtl:rotate-180"
-                        ></i>
-                    </Link>
-
-                    <!-- Affichage dynamique des pages -->
-                    <Link
-                        preserve-scroll
-                        v-for="link in visiblePageNumbers"
-                        prefetch
-                        cache-for="1m"
-                        :key="link.label"
-                        :href="link.url ?? ''"
-                        class="btn"
-                        :class="{
-                            'active disabled': link.active,
-                        }"
-                    >
-                        {{ link.label }}
-                    </Link>
-
-                    <!-- Bouton Suivant -->
-                    <Link
-                        class="btn"
-                        :class="{ disabled: !paginated.next_page_url }"
-                        prefetch
-                        cache-for="1m"
-                        :href="paginated.next_page_url ?? ''"
-                    >
-                        <i
-                            class="ki-outline ki-black-right rtl:transform rtl:rotate-180"
-                        ></i>
-                    </Link>
-                </div>
-            </div>
+            <!-- Use simple pagination buttons -->
+            <PaginationBtns
+                :meta="paginatedMeta"
+                :filtered-links="filteredLinks"
+                :http-request="httpRequest"
+                @page-change="emits('update:page', { url: $event })"
+            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type WritableComputedRef } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { useForm, router } from "@inertiajs/vue3";
+import { ref, computed, watch } from "vue";
 import { LaravelPagination } from "@/types";
-import { itemsPerPage } from "@/utils/dataTable";
-import { useToast } from "primevue";
+import { itemsPerPage } from "@/utils";
+import PaginationBtns from "./PaginationBtns.vue";
 
-const emits = defineEmits(["update:itemsPerPage"]);
+// Constants
+const PAGE_LINKS_OFFSET = 1; // Skip "prev" and "next" links
+const DEFAULT_PAGE = 1;
+
+const emits = defineEmits(["update:itemsPerPage", "update:page"]);
 
 const props = defineProps({
     paginated: {
@@ -101,105 +63,86 @@ const props = defineProps({
         required: false,
         default: null,
     },
-    itemsPerPageDropdownEnabled: {
+    dataFilters: Object,
+    showItemsSelection: {
         type: Boolean,
         default: true,
     },
-    maxVisiblePages: {
-        type: Number,
+    httpRequest: {
+        type: Boolean,
         required: false,
-        default: 5,
     },
     sizeClass: String,
 });
 
-const page = usePage();
-const toast = useToast();
 const loading = ref(false);
+const paginatedMeta = ref<Partial<LaravelPagination<any>>>({});
+const error = ref<string | null>(null);
 
-const perPage = ref(props.paginated.per_page);
+// Function to get current per_page with proper fallback
+function getCurrentPerPage() {
+    return (
+        props.dataFilters?.[props.filterName]?.per_page ||
+        props.paginated?.per_page ||
+        itemsPerPage[0]
+    ); // Default value
+}
 
-const itemsCountInTable: WritableComputedRef<number> = computed({
-    get(): number {
-        return (
-            page.props.filters[props.filterName]?.per_page ||
-            props.paginated.per_page
-        );
+// Make the form reactive to prop changes with a function
+const form = useForm(() => ({
+    type: props.filterName,
+    filters: {
+        per_page: getCurrentPerPage(),
     },
-    set(value: number): void {
-        if (props.filterName) {
-            onFilter({
-                per_page: value,
-            });
+}));
+
+// Rename for clarity - handles both page changes and items per page changes
+const updatePagination = (page?: number) => {
+    form.post(route("filter.store"), {
+        preserveScroll: true,
+        preserveState: true,
+        onStart: () => {
+            loading.value = true;
+            error.value = null;
+        },
+        onSuccess: () => {
+            loading.value = false;
+            emits("update:itemsPerPage", form.filters.per_page);
+        },
+        onError: (errors) => {
+            loading.value = false;
+            error.value = "Échec de la mise à jour de la pagination";
+        },
+        onFinish: () => {
+            loading.value = false;
+            if (props.paginated.current_page > props.paginated.last_page) {
+                const url = filteredLinks.value?.at(-1)?.url;
+                if (url) router.get(url);
+            }
+        },
+    });
+};
+
+watch(
+    () => props.paginated,
+    () => {
+        if (props.paginated) {
+            const { data, ...meta } = props.paginated;
+            paginatedMeta.value = meta;
+
+            // Update form when paginated data changes
+            form.filters.per_page = getCurrentPerPage();
         }
-
-        emits("update:itemsPerPage", value);
     },
-});
-
-const currentPage = computed(() => props.paginated.current_page);
+    { immediate: true },
+);
 
 // Calcul des indices de début et de fin des éléments affichés
-const from = computed(
-    () => (currentPage.value - 1) * props.paginated.per_page + 1,
-);
-const to = computed(() =>
-    Math.min(
-        currentPage.value * props.paginated.per_page,
-        props.paginated.total,
-    ),
-);
-const paginationInfo = computed(
-    () => `${from.value} à ${to.value} sur ${props.paginated.total}`,
-);
-
-// Filtrer les liens de pagination pour exclure "Précédent" et "Suivant"
-const filteredLinks = computed(() => props.paginated.links?.slice(1, -1));
-
-// Limiter à 5 pages visibles à la fois
-const visiblePageNumbers = computed(() => {
-    let start = Math.max(
-        currentPage.value - Math.floor(props.maxVisiblePages / 2),
-        0,
-    );
-    let end = start + props.maxVisiblePages;
-
-    return filteredLinks.value?.slice(start, end);
+const paginationInfo = computed(() => {
+    if (!paginatedMeta.value?.total) return "0 à 0 de 0";
+    return `${paginatedMeta.value.from} à ${paginatedMeta.value.to} de ${paginatedMeta.value.total}`;
 });
 
-const onFilter = async (filters: Object) => {
-    router.post(
-        route("filter.store"),
-        {
-            type: props.filterName,
-            filters: filters,
-        },
-        {
-            preserveScroll: true,
-            onBefore: () => {
-                loading.value = true;
-            },
-            onSuccess: (page: any) => {
-                if (filters["per_page"]) {
-                    perPage.value = filters["per_page"];
-                }
-
-                toast.add({
-                    severity: "success",
-                    life: 3000,
-                    detail:
-                        page.props.flash.success ||
-                        "Filtres mis à jour avec succès",
-                });
-            },
-            onFinish: () => {
-                loading.value = false;
-                if (props.paginated.current_page > props.paginated.last_page) {
-                    const url = filteredLinks.value?.at(-1)?.url;
-                    router.get(url);
-                }
-            },
-        },
-    );
-};
+// Filtrer les liens de pagination pour exclure "Précédent" et "Suivant"
+const filteredLinks = computed(() => paginatedMeta.value?.links?.slice(1, -1));
 </script>

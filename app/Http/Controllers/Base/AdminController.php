@@ -7,7 +7,9 @@ use App\Models\Poll;
 use App\Models\User;
 use App\Models\Commune;
 use App\Enums\RolesEnum;
+use App\Models\JobOffer;
 use App\Models\PollVote;
+use App\Models\Training;
 use App\Models\UserInfo;
 use App\Models\Invitation;
 use App\Models\Departement;
@@ -79,15 +81,17 @@ class AdminController extends BaseController
     {
         return
             [
-                'Membres' => ['value' => User::onlyUsers()->count()],
-                'Sessions d\'Agora' => ['value' => AgoraSession::count()],
-                'Sondages Total' => ['value' => Poll::count()],
-                'Sondages Actifs' => ['value' => Poll::notExpired()->count()],
-                'Votes Enregistrés' => ['value' => PollVote::count()],
-                'FAQs' => ['value' => FAQ::count()],
-                'Départements' => ['value' => Departement::count()],
-                'Communes' => ['value' => Commune::count()],
-                'Arrondissements' => ['value' => Arrondissement::count()],
+                'Membres Inscrits' => ['value' => User::onlyUsers()->count(), 'icon' => '👥'],
+                'Sessions d\'Agora' => ['value' => AgoraSession::count(), 'icon' => '🗣️'],
+                'Formations' => ['value' => Training::count(), 'icon' => '🎓'],
+                'Offres d\'emploi' => ['value' => JobOffer::count(), 'icon' => '💼'],
+                'Sondages Total' => ['value' => Poll::count(), 'icon' => '📊'],
+                'Sondages Actifs' => ['value' => Poll::notExpired()->count(), 'icon' => '📈'],
+                'Votes Enregistrés' => ['value' => PollVote::count(), 'icon' => '🗳️'],
+                'Question/Réponse' => ['value' => FAQ::count(), 'icon' => '❓'],
+                'Départements' => ['value' => Departement::count(), 'icon' => '🏢'],
+                'Communes' => ['value' => Commune::count(), 'icon' => '🏙️'],
+                'Arrondissements' => ['value' => Arrondissement::count(), 'icon' => '🏘️'],
             ];
     }
 

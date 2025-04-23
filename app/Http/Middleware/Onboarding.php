@@ -18,18 +18,20 @@ class Onboarding
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            $routeName = 'onboarding';
-            $noRedirect = Route::currentRouteName() === $routeName;
-            if (
-                !is_admin_domain() && is_on_app() && !$noRedirect &&
-                (!$request->user()->info->hasCompletedPersonalInfo() || !$request->user()->info->hasCompletedAddress())
-            ) {
-                return redirect()->route($routeName)
-                    ->with('status', 'Merci de compléter les informations suivantes pour continuer.');
-            }
-        }
+        $currentRoute = Route::currentRouteName();
+        $onBoardingRoute = 'onboarding';
+        $shouldRedirect = !is_admin_domain() && is_on_app() && !in_array($currentRoute, [
+            $onBoardingRoute,
+            'dashboard',
+        ]);
 
+        if (
+            $shouldRedirect &&
+            (!$request->user()->info?->hasCompletedPersonalInfo() || !$request->user()->info?->hasCompletedAddress())
+        ) {
+            return redirect()->route($onBoardingRoute)
+                ->with('status', 'Merci de compléter les informations suivantes pour continuer.');
+        }
         return $next($request);
     }
 }

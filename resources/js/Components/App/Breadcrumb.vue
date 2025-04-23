@@ -47,8 +47,8 @@ const onReload = () => {
         },
         onFinish: () => {
             content.classList.remove("animate-pulse");
-            toast("Rechargement terminé", {
-                description: "La page a été rechargée avec succès",
+            toast("Actualisation", {
+                description: "La page a été actualisée avec succès.",
                 action: {
                     label: "Fermer",
                     onClick: () => console.log("Fermer  "),

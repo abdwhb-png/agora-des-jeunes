@@ -2,25 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ConfigHelper;
-use App\Http\Controllers\Base\BaseController;
-use App\Http\Requests\AgoraSessionRequest;
-use App\Http\Resources\AgoraSessionCollection;
 use App\Models\AgoraSession;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Helpers\ConfigHelper;
+use App\Enums\PermissionsEnum;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\AgoraSessionRequest;
+use App\Http\Controllers\Base\BaseController;
+use App\Http\Resources\AgoraSessionCollection;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class AgoraSessionController extends BaseController
+class AgoraSessionController extends BaseController implements HasMiddleware
 {
+    /**
+     * Define middleware for this controller
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                'can:' . PermissionsEnum::MANAGE_AGORA_SESSIONS->value,
+                only: ['store', 'update', 'destroy']
+            ),
+        ];
+    }
 
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        $data = $this->paginatedAgoraSessions(50);
+        $filterName = 'agora_sessions';
+        $search = $this->getFilter($filterName, 'search');
+        $perPage = $this->getFilter($filterName, 'per_page', 10);
 
-        return response()->json($data);
+        $collection = new AgoraSessionCollection(
+            AgoraSession::latest()
+                ->where('theme', 'like', '%' . $search . '%')
+                ->paginate($perPage, pageName: $filterName)
+        );
+
+        return response()->json([
+            'filter_name' => $filterName,
+            'list' => $collection->toArray(request())
+        ]);
     }
 
     /**
@@ -81,8 +107,10 @@ class AgoraSessionController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(AgoraSession $agora_session)
     {
-        //
+        $agora_session->delete();
+
+        return back()->with('success', "La session d'Agora a été supprimée avec succès.");
     }
 }

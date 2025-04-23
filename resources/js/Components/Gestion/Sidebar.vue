@@ -22,36 +22,21 @@ const sidebarDrawer = ref<HTMLDivElement>();
 const headerRef = ref();
 const footerRef = ref();
 
-const scrollableHeight = ref(589);
+const scrollableHeight = ref(590);
 const { height: viewportHeight } = useViewport();
-
-const showMenu = (name: string) =>
-    computed(() => {
-        switch (name.toLowerCase()) {
-            case "roles":
-                return userStore.hasPermission("view_roles");
-            case "permissions":
-                return userStore.hasPermission("view_permissions");
-            case "configuration":
-                return userStore.hasPermission("manage_configuration");
-            case "config. api":
-                return userStore.hasPermission("access_internal_api");
-            default:
-                return true;
-        }
-    });
 
 onMounted(async () => {
     nextTick(() => {
-        if (mobileMode) {
+        if (mobileMode.value) {
             closeSidebarDrawer();
-        } else {
+        }
+        if (desktopMode.value) {
             updateScrollableHeight();
         }
     });
 
-    await userStore.fetchPermissions();
-    await userStore.fetchRoles();
+    userStore.fetchPermissions();
+    userStore.fetchRoles();
 });
 
 function updateScrollableHeight() {
@@ -103,7 +88,10 @@ function closeSidebarDrawer() {
 
         <div
             class="scrollable-y-hover grow gap-2.5 shrink-0 flex items-center pt-5 lg:pt-0 ps-3 pe-3 lg:pe-0 flex-col"
-            :style="{ height: scrollableHeight + 'px' }"
+            :style="{
+                height: scrollableHeight + 'px',
+                maxHeight: mobileMode ? scrollableHeight + 'px' : 'none',
+            }"
             data-scrollable="true"
             data-scrollable-dependencies="#sidebar_header,#sidebar_footer"
             data-scrollable-height="auto"
@@ -121,10 +109,7 @@ function closeSidebarDrawer() {
                     v-for="(menu, index) in sidebarStore.menus"
                     :key="index"
                 >
-                    <MenuElement
-                        v-if="showMenu(menu.title).value"
-                        :menu="menu"
-                    />
+                    <MenuElement :menu="menu" />
                 </template>
             </div>
             <!-- End of Sidebar Menu -->

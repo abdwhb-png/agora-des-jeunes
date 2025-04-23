@@ -78,7 +78,7 @@ onMounted(() => {
 
 async function getPerms() {
     loading.value = true;
-    const url = route(page.props.routePrefix + "permission.index");
+    const url = route(page.props.routePrefix + "permissions");
     await axios
         .get(url)
         .then((response: any) => {

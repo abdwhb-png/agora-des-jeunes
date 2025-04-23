@@ -1,47 +1,90 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { LaravelPagination } from "@/types";
+import { FILTER_NAMES } from "@/constants";
 import { FilterMatchMode } from "@primevue/core/api";
 
 import EditUser from "./EditUser.vue";
 import EditButton from "@/Components/Tables/EditButton.vue";
+import { DropdownMenuRadioItem } from "@/Components/ui/dropdown-menu";
+import StatusTag from "@/Components/Shared/StatusTag.vue";
 
 const props = defineProps({
     data: { type: Object as () => LaravelPagination<any>, default: null },
-    canShow: Boolean,
+    can: Object,
+    statuses: Array | Object,
 });
-
-const statuses = ref([
-    { label: "Actif", value: true },
-    { label: "Desactivé", value: false },
-]);
 
 const filters = ref({
-    "base.tel": { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
+
+const filtersKeys = [
+    {
+        key: "status",
+        label: "Statut du compte",
+    },
+];
 </script>
 
 <template>
-    <NotPermitted v-if="!canShow" />
+    <NotPermitted v-if="!can.viewUsers" />
     <div v-else>
         <CustomDataTable
             title="Liste des utilisateurs"
             :paginated="data"
             showGridlines
             :filters="filters"
-            filterName="users"
+            :filterName="FILTER_NAMES.users"
+            :data-filters="$page.props.filters"
             :show-creation-date="true"
         >
             <template>
-                <Column style="width: 1%">
+                <Column
+                    style="width: 1%"
+                    field="status"
+                    :show-filter-menu="false"
+                >
+                    <template #filter="{ filterModel, filterCallback }">
+                        <Select
+                            v-model="filterModel.value"
+                            @change="filterCallback()"
+                            :options="statuses"
+                            option-label="label"
+                            option-value="value"
+                            placeholder="Statut du compte"
+                            :showClear="true"
+                        >
+                            <template #option="slotProps">
+                                <StatusTag :status="slotProps.option" />
+                            </template>
+                        </Select>
+                    </template>
                     <template #body="{ data }">
-                        <EditButton
-                            dialog-header="Modifier un utilisateur"
-                            dialog-width="70rem"
-                            :edit-component="EditUser"
-                            :component-props="{ id: data.id }"
-                        />
+                        <div
+                            class="flex flex-col gap-2 justify-center items-center"
+                        >
+                            <EditButton
+                                dialog-header="Modifier un utilisateur"
+                                dialog-width="70rem"
+                                :edit-component="EditUser"
+                                :component-props="{
+                                    id: data.id,
+                                    viewRoles: can.viewRoles,
+                                    viewPerms: can.viewPerms,
+                                }"
+                            />
+                            <template
+                                v-for="status in statuses"
+                                :key="status.label"
+                            >
+                                <StatusTag
+                                    v-if="data.status == status.value"
+                                    :status="status"
+                                    :is-bagde="true"
+                                />
+                            </template>
+                        </div>
                     </template>
                 </Column>
                 <Column
@@ -61,68 +104,17 @@ const filters = ref({
                                 />
                             </div>
                             <div class="flex flex-col gap-0.5 max-w-[80%]">
-                                <a
-                                    class="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                                    href="#"
-                                >
-                                    <CopyBtn :text="data.full_name" />
-                                    {{ data.full_name }}
-                                </a>
-                                <span
-                                    class="text-xs text-gray-700 font-normal truncate"
-                                    v-tooltip.bottom="data.email"
-                                >
-                                    <CopyBtn :text="data.email" />
-                                    {{ data.email }}
-                                </span>
+                                <CopyBtn
+                                    :text="data.full_name || '--'"
+                                    class="leading-none font-medium text-sm text-gray-900"
+                                />
+                                <CopyBtn
+                                    :text="data.email"
+                                    class="text-xs text-gray-700 hover:text-blue-600 font-normal truncate dsy-tooltip"
+                                    :data-tip="data.email"
+                                />
                             </div>
                         </div>
-                        <div class="flex justify-end">
-                            <span
-                                v-if="data.status"
-                                class="badge badge-primary badge-outline rounded-[30px]"
-                            >
-                                <span
-                                    class="size-1.5 rounded-full bg-primary me-1.5"
-                                >
-                                </span>
-                                Actif
-                            </span>
-                            <span
-                                v-else
-                                class="badge badge-danger badge-outline rounded-[30px]"
-                            >
-                                <span
-                                    class="size-1.5 rounded-full bg-danger me-1.5"
-                                >
-                                </span>
-                                Compte Desactivé
-                            </span>
-                        </div>
-                    </template>
-
-                    <template #filter="{ filterModel, filterCallback }">
-                        <Select
-                            v-model="filterModel.value"
-                            @change="filterCallback()"
-                            :options="statuses"
-                            option-label="label"
-                            option-value="value"
-                            placeholder="Statut du compte"
-                            style="min-width: 12rem"
-                            :showClear="true"
-                        >
-                            <template #option="slotProps">
-                                <Tag
-                                    :value="slotProps.option.label"
-                                    :severity="
-                                        slotProps.option.value
-                                            ? 'info'
-                                            : 'danger'
-                                    "
-                                />
-                            </template>
-                        </Select>
                     </template>
                 </Column>
                 <Column
@@ -144,17 +136,13 @@ const filters = ref({
                             </span>
                         </div>
                     </template>
-                    <template #filter="{ filterModel, filterCallback }">
-                        <InputText
-                            v-model="filterModel.value"
-                            type="text"
-                            size="small"
-                            @input="filterCallback()"
-                            placeholder="Numéro de téléphone"
-                        />
-                    </template>
                 </Column>
-                <Column field="roles" header="Roles" style="width: 15%">
+                <Column
+                    v-if="can.viewRoles"
+                    field="roles"
+                    header="Roles"
+                    style="width: 15%"
+                >
                     <template #body="{ data, field }">
                         <div
                             class="flex flex-wrap items-center align-middle gap-2.5"

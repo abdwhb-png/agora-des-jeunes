@@ -6,7 +6,9 @@ use App\Http\Controllers\CvController;
 use App\Http\Controllers\ProjectController;
 
 $prefix = config('fortify.prefix');
-require __DIR__ . '/base.php';
+require_once __DIR__ . '/base.php';
+// Call the function to register shared routes
+registerSharedRoutes(Route::getFacadeRoot());
 
 Route::prefix($prefix)->middleware([
     'auth:sanctum',

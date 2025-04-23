@@ -6,7 +6,7 @@
         :loading="loading"
         @click="onClick"
     />
-    <ConfirmDialog></ConfirmDialog>
+    <ConfirmDialog :group="group"></ConfirmDialog>
 </template>
 
 <script setup>
@@ -15,24 +15,32 @@ import { useConfirm, useToast } from "primevue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
-const emits = defineEmits(["clicked"]);
+const emits = defineEmits(["clicked", "deleted"]);
 
 const props = defineProps({
     deleteUrl: {
         type: String,
         default: null,
     },
+    elementName: {
+        type: String,
+        default: "cet élément",
+    },
 });
-
-const loading = ref(false);
 
 const toast = useToast();
 const confirm = useConfirm();
 const { deleteConfirm } = useCustomConfirm(confirm);
+const loading = ref(false);
+const group = Math.random().toString();
 
 const onClick = () => {
     if (props.deleteUrl) {
-        deleteConfirm(() => deleteItem());
+        deleteConfirm({
+            group: group,
+            message: `Voulez-vous vraiment supprimer ${props.elementName} ?`,
+            accept: () => deleteItem(),
+        });
     }
 
     emits("clicked");
@@ -49,6 +57,7 @@ function deleteItem() {
                 summary: page.props.flash.success || "Element supprimé",
                 life: 5000,
             });
+            emits("deleted");
         },
         onFinish: () => {
             loading.value = false;

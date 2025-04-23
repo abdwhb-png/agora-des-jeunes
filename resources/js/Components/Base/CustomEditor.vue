@@ -10,7 +10,7 @@
 <script setup>
 import { ref } from "vue";
 import { useToast } from "@/Components/ui/toast/use-toast";
-import { useApi } from "@/composables/useApi";
+import { useAxios } from "@/composables/useAxios";
 
 defineProps({
     modelValue: String,
@@ -58,27 +58,9 @@ const handleImageUpload = () => {
 };
 
 async function upload(file) {
-    const { toast } = useToast();
-    try {
-        const formData = new FormData();
-        formData.append("image", file);
-
-        const { uploadImage } = useApi();
-        toast({
-            title: "Sauvegarde de l'image",
-            description: "Image sauvegardée avec succès.",
-        });
-
-        return uploadImage(formData, toast);
-    } catch (error) {
-        console.log("Error while uploading image", error);
-        toast({
-            title: "Echec de la sauvegarde de l'image",
-            description:
-                "Une erreur est survenue lors de l'enregistrement de l'image. Veuillez recommencer.",
-            variant: "destructive",
-        });
-        return null;
-    }
+    const formData = new FormData();
+    formData.append("image", file);
+    const { uploadImage } = useAxios();
+    return uploadImage(formData);
 }
 </script>

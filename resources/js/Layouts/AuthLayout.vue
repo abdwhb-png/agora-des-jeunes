@@ -23,7 +23,7 @@
     </div>
     <div
         v-else
-        class="grid lg:grid-cols-2 grow bg-orange-50"
+        class="md:grid lg:grid-cols-2 light:bg-gradient-to-br from-primary-50 to-white dark:bg-[--tw-page-bg-dark]"
         :style="{
             minHeight: viewportHeight + 'px',
         }"
@@ -50,16 +50,20 @@
         <div
             class="lg:rounded-xl lg:border lg:border-gray-200 lg:m-5 order-1 lg:order-2 bg-top xxl:bg-center xl:bg-cover bg-no-repeat branded-bg"
         >
-            <div class="flex flex-col pb-0 sm:pb-8 p-8 lg:p-16 gap-4">
-                <a href="/" class="text-center">
+            <div class="flex flex-col p-8 lg:p-16 gap-4">
+                <a href="/" class="mx-auto lg:mx-0">
                     <Logo class="h-20 max-w-[162px] relative left-[-10px]" />
                 </a>
                 <div class="flex flex-col gap-3">
                     <slot name="headerText">
-                        <h3 class="text-2xl font-semibold text-gray-900">
-                            {{ $page.props.config.seo.slogan }}
+                        <h3
+                            class="text-2xl font-semibold text-gray-900 text-center lg:text-left"
+                        >
+                            Le lieu où l'avenir prend forme.
                         </h3>
-                        <div class="text-base font-medium text-gray-600">
+                        <div
+                            class="text-base font-medium text-gray-600 hidden lg:block"
+                        >
                             Retrouve ici tous les outils nécessaires
                             <br />
                             pour ton développement personnel

@@ -87,177 +87,188 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 my-2">
-        <div class="grid md:grid-cols-2 gap-5 lg:gap-7.5 items-stretch">
-            <div class="md:col-span-1">
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <InputText v-model="form.title" id="title" fluid />
-                        <label for="title">Titre du sondage</label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.title" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <Select
-                            v-model="form.is_public"
-                            id="is_public"
-                            :options="[
-                                { label: 'Ouvert à tous', value: true },
-                                {
-                                    label: 'Uniquement aux membres',
-                                    value: false,
-                                },
-                            ]"
-                            option-label="label"
-                            option-value="value"
-                            fluid
-                        />
-                        <label for="is_public">Public </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.is_public" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <DatePicker
-                            id="debut"
-                            v-model="form.start_at"
-                            date-format="dd/mm/yy"
-                            dateOnly
-                            showIcon
-                            iconDisplay="input"
-                            fluid
-                        />
-                        <label for="debut">Date de début </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.start_at" />
-                </div>
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <DatePicker
-                            id="fin"
-                            v-model="form.end_at"
-                            date-format="dd/mm/yy"
-                            dateOnly
-                            showIcon
-                            iconDisplay="input"
-                            fluid
-                        />
-                        <label for="fin">Date de fin (facultatif) </label>
-                    </FloatLabel>
-                    <InputError class="mt-1" :message="form.errors.end_at" />
-                </div>
-
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <Textarea
-                            v-model="form.description"
-                            id="description"
-                            rows="3"
-                            fluid
-                        />
-                        <label for="description">Description du sondage </label>
-                    </FloatLabel>
-                    <InputError
-                        class="mt-1"
-                        :message="form.errors.description"
-                    />
-                </div>
-            </div>
-            <div class="md:col-span-1">
-                <div class="mb-4">
-                    <FloatLabel variant="on">
-                        <Select
-                            v-model="form.show_options"
-                            id="show_options"
-                            :options="[
-                                { label: 'Prédéfini', value: true },
-                                { label: 'Réponse Libre', value: false },
-                            ]"
-                            option-label="label"
-                            option-value="value"
-                            fluid
-                        />
-                        <label for="show_options">Option de réponse </label>
-                    </FloatLabel>
-                    <InputError
-                        class="mt-1"
-                        :message="form.errors.show_options"
-                    />
-                    <InputError class="mt-1" :message="form.errors.options" />
-                </div>
-                <Message severity="secondary" v-if="form.show_options === false"
-                    >Les gens pourront répondre ce qu'ils souhaitent</Message
-                >
-                <div v-if="form.show_options === true">
-                    <div class="mb-2 flex justify-end">
-                        <Button
-                            label="Ajouter une option"
-                            icon="pi pi-plus"
-                            class="btn btn-primary btn-outline btn-sm"
-                            unstyled
-                            @click="addOption"
+    <form @submit.prevent="submit">
+        <div class="flex flex-col gap-6 my-2">
+            <div class="grid md:grid-cols-2 gap-5 lg:gap-7.5 items-stretch">
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <InputText v-model="form.title" id="title" fluid />
+                            <label for="title">Titre du sondage</label>
+                        </FloatLabel>
+                        <InputError class="mt-1" :message="form.errors.title" />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <Select
+                                v-model="form.is_public"
+                                id="is_public"
+                                :options="[
+                                    { label: 'Ouvert à tous', value: true },
+                                    {
+                                        label: 'Uniquement aux membres',
+                                        value: false,
+                                    },
+                                ]"
+                                option-label="label"
+                                option-value="value"
+                                fluid
+                            />
+                            <label for="is_public">Public </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.is_public"
                         />
                     </div>
-                    <div v-if="form.options" class="card">
-                        <div class="card-header">
-                            Inscrivez au moins 2 options de réponse
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <DatePicker
+                                id="debut"
+                                v-model="form.start_at"
+                                date-format="dd/mm/yy"
+                                dateOnly
+                                showIcon
+                                iconDisplay="input"
+                                fluid
+                            />
+                            <label for="debut">Date de début </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.start_at"
+                        />
+                    </div>
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <DatePicker
+                                id="fin"
+                                v-model="form.end_at"
+                                date-format="dd/mm/yy"
+                                dateOnly
+                                showIcon
+                                iconDisplay="input"
+                                fluid
+                            />
+                            <label for="fin">Date de fin (facultatif) </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.end_at"
+                        />
+                    </div>
+
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <Textarea
+                                v-model="form.description"
+                                id="description"
+                                rows="3"
+                                fluid
+                            />
+                            <label for="description"
+                                >Description du sondage
+                            </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.description"
+                        />
+                    </div>
+                </div>
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <FloatLabel variant="on">
+                            <Select
+                                v-model="form.show_options"
+                                id="show_options"
+                                :options="[
+                                    { label: 'Prédéfini', value: true },
+                                    { label: 'Réponse Libre', value: false },
+                                ]"
+                                option-label="label"
+                                option-value="value"
+                                fluid
+                            />
+                            <label for="show_options">Option de réponse </label>
+                        </FloatLabel>
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.show_options"
+                        />
+                        <InputError
+                            class="mt-1"
+                            :message="form.errors.options"
+                        />
+                    </div>
+                    <Message
+                        severity="secondary"
+                        v-if="form.show_options === false"
+                        >Les gens pourront répondre ce qu'ils
+                        souhaitent</Message
+                    >
+                    <div v-if="form.show_options === true">
+                        <div class="mb-2 flex justify-end">
+                            <Button
+                                label="Ajouter une option"
+                                icon="pi pi-plus"
+                                class="btn btn-primary btn-outline btn-sm"
+                                unstyled
+                                @click="addOption"
+                            />
                         </div>
-                        <div class="card-body">
-                            <div
-                                v-for="(option, index) in form.options"
-                                :key="index"
-                                class="mb-4"
-                            >
-                                <div class="flex gap-1">
-                                    <FloatLabel variant="on">
-                                        <IconField>
-                                            <InputText
-                                                :id="'option_' + index"
-                                                fluid
-                                                v-model="option.option_text"
-                                            />
-                                            <InputIcon class="pi pi-bullseye" />
-                                        </IconField>
-                                        <label :for="'option_' + index"
-                                            >Réponse {{ index + 1 }}</label
-                                        >
-                                    </FloatLabel>
-                                    <Button
-                                        @click="form.options.splice(index, 1)"
-                                        icon="pi pi-times"
-                                        outlined
-                                        severity="danger"
-                                        size="small"
+                        <div v-if="form.options" class="card">
+                            <div class="card-header">
+                                Inscrivez au moins 2 options de réponse
+                            </div>
+                            <div class="card-body">
+                                <div
+                                    v-for="(option, index) in form.options"
+                                    :key="index"
+                                    class="mb-4"
+                                >
+                                    <div class="flex gap-1">
+                                        <FloatLabel variant="on">
+                                            <IconField>
+                                                <InputText
+                                                    :id="'option_' + index"
+                                                    fluid
+                                                    v-model="option.option_text"
+                                                />
+                                                <InputIcon
+                                                    class="pi pi-bullseye"
+                                                />
+                                            </IconField>
+                                            <label :for="'option_' + index"
+                                                >Réponse {{ index + 1 }}</label
+                                            >
+                                        </FloatLabel>
+                                        <Button
+                                            @click="
+                                                form.options.splice(index, 1)
+                                            "
+                                            icon="pi pi-times"
+                                            outlined
+                                            severity="danger"
+                                            size="small"
+                                        />
+                                    </div>
+                                    <InputError
+                                        class="mt-1"
+                                        :message="
+                                            form.errors[
+                                                `options.${index}.option_text`
+                                            ]
+                                        "
                                     />
                                 </div>
-                                <InputError
-                                    class="mt-1"
-                                    :message="
-                                        form.errors[
-                                            `options.${index}.option_text`
-                                        ]
-                                    "
-                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="flex justify-between gap-2 mt-4">
-        <Button
-            type="button"
-            label="Annuler"
-            severity="secondary"
-            @click="emits('canceled')"
-        ></Button>
-        <Button
-            type="button"
-            :label="item ? 'Mettre à jour' : 'Enregistrer'"
-            @click="submit"
-            :loading="form.processing"
-        ></Button>
-    </div>
+
+        <FormButtonGroup :form="form" @canceled="emits('canceled')" />
+    </form>
 </template>

@@ -7,6 +7,7 @@ use App\Traits\GetRecordsTrait;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -33,6 +34,16 @@ class BaseController extends Controller
         }
 
         return null;
+    }
+
+    protected function deleteImage($path)
+    {
+        try {
+            Storage::delete($path);
+        } catch (\Throwable $th) {
+            //throw $th;
+            report($th);
+        }
     }
 
     protected function validateCaptcha(Request $request): array

@@ -1,7 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { useApi } from "@/composables/useApi";
-
-const { api } = useApi();
+import { useAxios } from "@/composables/useAxios"; // Import useAxios
 
 export const useUsersStore = defineStore("usersStore", {
     state: () => ({
@@ -27,36 +25,27 @@ export const useUsersStore = defineStore("usersStore", {
         },
 
         async fetchUsers() {
-            await api
-                .get("/users")
-                .then((response) => {
-                    this.users = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            const { fetchData } = useAxios();
+            const usersData = await fetchData("/users");
+            if(usersData) {
+                this.users = usersData;
+            }
         },
 
         async fetchManagers() {
-            await api
-                .get("/managers")
-                .then((response) => {
-                    this.users = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            const { fetchData } = useAxios();
+            const managersData = await fetchData("/managers");
+            if(managersData) {
+                this.managers = managersData;
+            }
         },
 
         async fetchAdmins() {
-            await api
-                .get("/admins")
-                .then((response) => {
-                    this.admins = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            const { fetchData } = useAxios();
+            const adminsData = await fetchData("/admins");
+            if(adminsData) {
+                this.admins = adminsData;
+            }
         },
     },
 });

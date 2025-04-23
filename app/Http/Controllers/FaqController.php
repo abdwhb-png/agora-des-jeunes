@@ -5,64 +5,96 @@ namespace App\Http\Controllers;
 use App\Models\FAQ;
 use Illuminate\Http\Request;
 use App\Enums\PermissionsEnum;
-use App\Enums\RolesEnum;
 use App\Http\Controllers\Base\BaseController;
+use App\Http\Requests\FaqRequest;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
+/**
+ * Controller for managing FAQ items
+ */
 class FaqController extends BaseController implements HasMiddleware
 {
-    protected $validationRules;
-
+    /**
+     * Define middleware for this controller
+     */
     public static function middleware(): array
     {
-        $guard = [PermissionsEnum::MANAGE_FAQS->value, RolesEnum::SUPERADMIN->value, RolesEnum::ROOT->value];
-
         return [
             new Middleware(
-                'role_or_permission:' . implode('|', $guard),
-                except: ['index']
+                'can:' . PermissionsEnum::MANAGE_FAQS->value,
+                only: ['store', 'update', 'destroy']
             ),
         ];
     }
 
-    public function __construct(Request $request)
-    {
-        $required = $request->method() === 'POST' ? 'required' : 'sometimes';
-
-        $this->validationRules = [
-            'question' => $required . '|string|max:255',
-            'answer' => $required . '|string',
-            'category' => 'nullable|string',
-            'is_active' => 'sometimes|boolean'
-        ];
-    }
-
+    /**
+     * Display a listing of FAQs
+     * 
+     * @return \Illuminate\Http\Response JSON response with FAQ data
+     */
     public function index()
     {
-        $limit = request()->get('limit', 100);
-        $data = FAQ::limit($limit)->get();
-        return response()->json($data);
+        $filterName = 'faqs';
+        $filters = $this->getFilter($filterName);
+        $perPage = $this->getFilter($filterName, 'per_page', 10);
+
+        return response()->json([
+            'filter_name' => $filterName,
+            'list' => FAQ::orderBy('category')
+                ->filter($filters)
+                ->paginate($perPage, pageName: $filterName)
+        ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Display the specified FAQ
+     *
+     * @param  \App\Models\FAQ  $faq The FAQ model instance
+     * @return \Illuminate\Http\Response JSON response with FAQ data
+     */
+    public function show(FAQ $faq)
     {
-        $request->validate($this->validationRules);
+        return response()->json($faq);
+    }
 
-        FAQ::create($request->all());
+    /**
+     * Store a newly created FAQ
+     *
+     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @return \Illuminate\Http\RedirectResponse Redirect with success message
+     */
+    public function store(FaqRequest $request)
+    {
+        $validated = $request->validated();
+
+        FAQ::create($validated);
 
         return back(303)->with('success', 'FAQ ajoutée avec succès');
     }
 
-    public function update(Request $request, FAQ $faq)
+    /**
+     * Update the specified FAQ
+     *
+     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @param  \App\Models\FAQ  $faq The FAQ model instance
+     * @return \Illuminate\Http\RedirectResponse Redirect with success message
+     */
+    public function update(FaqRequest $request, FAQ $faq)
     {
-        $request->validate($this->validationRules);
+        $validated = $request->validated();
 
-        $faq->update($request->all());
+        $faq->update($validated);
 
         return back(303)->with('success', 'FAQ mise à jour avec succès');
     }
 
+    /**
+     * Remove the specified FAQ
+     *
+     * @param  \App\Models\FAQ  $faq The FAQ model instance
+     * @return \Illuminate\Http\RedirectResponse Redirect with success message
+     */
     public function destroy(FAQ $faq)
     {
         $faq->delete();

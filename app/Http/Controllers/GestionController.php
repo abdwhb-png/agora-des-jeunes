@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\UserInfo;
 use App\Models\SocialLink;
 use Illuminate\Http\Request;
+use App\Helpers\ConfigHelper;
 use App\Enums\PermissionsEnum;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -31,14 +32,12 @@ class GestionController extends AdminController
             'roles_stats' => request()->user()->can(PermissionsEnum::VIEW_ROLES->value) ? $this->rolesStats() : [],
             'neighbours_stats' => $neighboursStats,
 
-            'agora_sessions' => $this->paginatedAgoraSessions(),
-            'polls' =>  $this->paginatedPolls(),
-            'faqs' => $this->paginatedFaqs(),
-
             'can' => [
                 'managePolls' => request()->user()->can(PermissionsEnum::MANAGE_POLLS->value),
                 'manageAgoraSessions' => request()->user()->can(PermissionsEnum::MANAGE_AGORA_SESSIONS->value),
                 'manageFaqs' => request()->user()->can(PermissionsEnum::MANAGE_FAQS->value),
+                'manageTrainings' => request()->user()->can(PermissionsEnum::MANAGE_TRAININGS->value),
+                'manageJobOffers' => request()->user()->can(PermissionsEnum::MANAGE_JOB_OFFERS->value),
             ]
         ]);
     }
@@ -46,25 +45,27 @@ class GestionController extends AdminController
     public function users()
     {
         $filterName = 'users';
-        $search = $this->getFilter($filterName, 'search');
+        $filters = $this->getFilter($filterName);
         $users = new UsersCollection(
             User::list()
-                ->search($search)
-                ->latest()->paginate(
+                ->filter($filters)
+                ->latest()
+                ->paginate(
                     perPage: $this->getFilter($filterName, 'per_page', 20),
                     pageName: $filterName
                 )
         );
 
         return Inertia::render(page_dir() . 'Users', [
+            'user_statuses' => ConfigHelper::ACTIVE_STATUSES,
             'users' => $users->toArray(request()),
             'users_invitations' => $this->getInvitations(),
             'can' => [
                 'createUser' => request()->user()->can(PermissionsEnum::CREATE_USER->value),
                 'editUser' => request()->user()->can(PermissionsEnum::EDIT_USER->value),
                 'viewUsers' => request()->user()->can(PermissionsEnum::VIEW_USERS->value),
-                'seeRoles' => request()->user()->can(PermissionsEnum::VIEW_ROLES->value),
-                'seePerms' => request()->user()->can(PermissionsEnum::VIEW_PERMISSIONS->value),
+                'viewRoles' => request()->user()->can(PermissionsEnum::VIEW_ROLES->value),
+                'viewPerms' => request()->user()->can(PermissionsEnum::VIEW_PERMISSIONS->value),
             ]
         ]);
     }
@@ -76,13 +77,9 @@ class GestionController extends AdminController
         return Inertia::render(page_dir() . 'Configuration', [
             'site_settings' => $canManageConfig ?  settings()->toArray() : [],
             'social_links' => $canManageConfig ? social_links() : [],
-            'job_offers' => $this->paginatedJobOffers(),
-            'trainings' => $this->paginatedTrainings(),
             'departements' => Inertia::defer(fn() => $this->getDepartements()),
 
             'can' => [
-                'manageTrainings' => request()->user()->can(PermissionsEnum::MANAGE_TRAININGS->value),
-                'manageJobOffers' => request()->user()->can(PermissionsEnum::MANAGE_JOB_OFFERS->value),
                 'manageDepartements' => request()->user()->can(PermissionsEnum::MANAGE_DEPARTEMENTS->value),
                 'manageConfig' => $canManageConfig,
             ],

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
+import { toast } from "vue-sonner";
 import ActionMessage from "@/Components/ActionMessage.vue";
 import FormSection from "@/Components/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
@@ -28,11 +29,18 @@ const updateProfileInformation = () => {
     }
 
     form.post(route("user-profile-information.update"), {
-        errorBag: "updateProfileInformation",
         preserveScroll: true,
+        forceFormData: true,
+        headers: {
+            "Content-type": "multipart/form-data",
+        },
+        onBefore: () => {
+            form.clearErrors();
+        },
         onSuccess: () => {
             clearPhotoFileInput();
             emits("updated");
+            toast("Photo de profil mise à jour avec succès.");
         },
     });
 };
@@ -121,6 +129,13 @@ const clearPhotoFileInput = () => {
                 >
                     Nouvelle photo
                 </SecondaryButton>
+
+                <ProgressBar
+                    v-if="form.progress"
+                    :value="form.progress.percentage"
+                    style="height: 12px"
+                    class="mt-2"
+                />
 
                 <SecondaryButton
                     v-if="user.profile_photo_path"

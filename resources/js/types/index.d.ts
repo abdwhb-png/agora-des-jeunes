@@ -1,27 +1,8 @@
 import { DefineComponent, Raw } from "vue";
 
-export interface Role {
-    id: number;
-    name: string;
-    permissions?: Permission[];
-    loading?: boolean;
-}
-
-export interface Permission {
-    id: number;
-    name: string;
-    roles?: Role[];
-    loading?: boolean;
-}
-
-export interface User {
-    id: number;
-    email: string;
-    info: Object;
-    account: Object;
-    roles: Role[];
-    permissions: Permission[];
-}
+export { Role, Permission } from "./models/roles-perms";
+export { User, UserPreferences } from "./models/user";
+export * from "./sidebar";
 
 export interface LaravelPagination<T> {
     current_page: number;

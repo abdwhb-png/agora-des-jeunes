@@ -36,12 +36,14 @@
                 :style="{ width: '50rem' }"
                 :breakpoints="dialogBreakpoints"
             >
-                <component
-                    v-if="currentItem"
-                    :is="currentItem.component"
-                    :user="page.props.auth.user"
-                    v-bind="currentItem?.props || {}"
-                />
+                <div class="flex justify-center">
+                    <component
+                        v-if="currentItem"
+                        :is="currentItem.component"
+                        :user="page.props.auth.user"
+                        v-bind="currentItem?.props || {}"
+                    />
+                </div>
             </Dialog>
         </div>
     </MainLayout>

@@ -23,7 +23,7 @@ createInertiaApp({
     title: (title) => `${title ? title + " - " : ""}${appName}`,
 
     progress: {
-        color: "#4B5563",
+        color: "#0dbd1a",
     },
 
     resolve: (name) =>

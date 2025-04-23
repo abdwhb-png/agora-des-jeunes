@@ -61,18 +61,9 @@ const submit = () => {
                         <InputError class="mt-1" :message="form.errors.email" />
                     </div>
                     <div class="flex flex-col gap-1">
-                        <div class="flex items-center justify-between gap-1">
-                            <label class="form-label font-normal text-gray-900">
-                                Mot de Passe
-                            </label>
-                            <Link
-                                class="text-2sm link shrink-0"
-                                v-if="canResetPassword"
-                                :href="route('password.request')"
-                            >
-                                Mot de Passe oublié?
-                            </Link>
-                        </div>
+                        <label class="form-label font-normal text-gray-900">
+                            Mot de Passe
+                        </label>
                         <div
                             class="input"
                             data-toggle-password="true"
@@ -103,6 +94,16 @@ const submit = () => {
                             class="mt-1"
                             :message="form.errors.password"
                         />
+
+                        <div class="flex items-center justify-end gap-1">
+                            <Link
+                                class="text-2sm link shrink-0"
+                                v-if="canResetPassword"
+                                :href="route('password.request')"
+                            >
+                                Mot de Passe oublié?
+                            </Link>
+                        </div>
                     </div>
                     <label class="checkbox-group">
                         <input
@@ -112,7 +113,7 @@ const submit = () => {
                             v-model="form.remember"
                             y
                         />
-                        <span class="checkbox-label"> Se souvenir de moi </span>
+                        <span class="checkbox-label">Se souvenir de moi</span>
                     </label>
                     <Button
                         type="submit"

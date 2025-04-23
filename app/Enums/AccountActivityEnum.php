@@ -14,7 +14,7 @@ enum AccountActivityEnum: string
     case EMAIL_VERIFIED = 'Email verifié';
     case EMAIL_UPDATED = 'Email modifié';
     case ACCOUNT_DEACTIVATED = 'Compte désactivé';
-    case PROFILE_PIC_UPDATED = 'Mise à jour du profil';
+    case PROFILE_PIC_UPDATED = 'Mise à jour de la photo de profil';
     case PROFILE_UPDATED = 'Mise à jour des informations';
 
 

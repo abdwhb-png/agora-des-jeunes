@@ -1,10 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import { FILTER_NAMES } from "@/constants";
+import { useFilter } from "@/composables/useFilter";
+import { LaravelPagination } from "@/types";
 import CreateForm from "@/Components/Roles/RoleForm.vue";
 import Repeater from "@/Components/Roles/Repeater.vue";
 
+const props = defineProps({
+    roles: {
+        type: Object as () => LaravelPagination<any>,
+        default: () => ({}),
+    },
+    can: Object,
+    filters: Object,
+});
+
+const filterName = FILTER_NAMES.roles;
 const showForm = ref(false);
-const filterName = "roles";
+
+const { filters, loading, hasFilters, resetFilters } = useFilter({
+    filterName: filterName,
+    initialFilters: props.filters[filterName],
+});
 </script>
 
 <template>
@@ -41,21 +58,21 @@ const filterName = "roles";
             </div>
             <div class="card-body">
                 <SearchInput
-                    :filter-name="filterName"
-                    placeholder="Rechercher une permission"
+                    v-model="filters.search"
+                    :has-filters="hasFilters"
+                    :loading="loading"
+                    @reset="resetFilters()"
+                    placeholder="Rechercher un rôle"
                 />
                 <Repeater
-                    :data="$page.props.roles.data"
-                    :show-edit="$page.props.can.editRole"
+                    :data="roles.data"
+                    :show-edit="can.editRole"
                     :show-search="false"
                 />
             </div>
 
             <div class="card-footer justify-center md:justify-end">
-                <Pagination
-                    :paginated="$page.props.roles"
-                    :filter-name="filterName"
-                />
+                <Pagination :paginated="roles" :filter-name="filterName" />
             </div>
         </div>
     </MainLayout>

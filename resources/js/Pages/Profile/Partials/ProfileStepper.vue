@@ -12,8 +12,10 @@
             <TabsContent :value="item.key">
                 <Card>
                     <CardHeader>
-                        <CardTitle>{{ item.title }}</CardTitle>
-                        <CardDescription>{{
+                        <CardTitle class="text-center">{{
+                            item.title
+                        }}</CardTitle>
+                        <CardDescription class="text-center">{{
                             item.description
                         }}</CardDescription>
                         <CardContent class="my-2">
@@ -58,13 +60,13 @@ defineProps({
 const items = [
     {
         title: "Informations Personnelles",
-        description: "Met à jour tes informations personnelles.",
+        description: "Mise à jour des informations personnelles.",
         key: "personal",
         component: markRaw(EditPersonalInfo),
     },
     {
         title: "Adresse de résidence",
-        description: "Met à jour ton adresse de résidence.",
+        description: "Mise à jour de l'adresse de résidence.",
         key: "residence",
         component: markRaw(EditAddress),
     },

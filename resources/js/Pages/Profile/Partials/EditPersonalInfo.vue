@@ -48,7 +48,9 @@
             <div class="grow">
                 <Select
                     v-model="form.sexe"
-                    :options="['Homme', 'Femme']"
+                    :options="genders"
+                    option-label="label"
+                    option-value="value"
                     fluid
                     :placeholder="
                         'Choisis ' + (isAuthUser ? 'ton' : 'le') + ' sexe'
@@ -93,6 +95,13 @@ const props = defineProps({
 const page = usePage();
 const isAuthUser = computed(() => props.user.id == page.props.auth.user.id);
 
+const genders = [
+    { label: "Homme", value: "homme" },
+    { label: "Femme", value: "femme" },
+    // { label: "Autre", value: "autre" },
+    // { label: "Ne pas dire", value: null },
+];
+
 const form = useForm({
     nom: null,
     prenom: null,
@@ -105,7 +114,7 @@ const submit = () => {
     form.transform((data) => ({
         ...data,
         date_naissance: data.date_naissance
-            ? dayjs(data.date_naissance).format("DD/MM/YYYY")
+            ? dayjs(data.date_naissance).format("DD-MM-YYYY")
             : null,
     })).put(route("user.info.update", props.user.id), {
         preserveScroll: true,

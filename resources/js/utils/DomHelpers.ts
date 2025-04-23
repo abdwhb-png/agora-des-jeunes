@@ -1,17 +1,51 @@
 /*eslint no-empty: "off"*/
 
-function getCSS(el: HTMLElement, styleProp: string) {
-    const defaultView = (el.ownerDocument || document).defaultView;
+export function loadStyles(items, idPrefix, remove = false) {
+    console.log((remove ? "Removing " : "Loading ") + items.length + " styles");
+    var count = 0;
+    items.forEach((item, index) => {
+        const id = idPrefix + "_" + index;
+        const existent = document.getElementById(id);
 
-    if (!defaultView) {
-        return "";
-    }
+        if (remove && existent) {
+            document.head.removeChild(existent);
+            count++;
+        } else if (!existent) {
+            const s = document.createElement("link");
+            s.rel = "stylesheet";
+            s.id = id;
+            s.href = item;
+            document.head.appendChild(s);
+            count++;
+        }
+    });
+    console.log((remove ? "Removed" : "Loaded") + " styles count:", count);
+}
 
-    // sanitize property name to css notation
-    // (hyphen separated words eg. font-Size)
-    styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
-
-    return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+export function loadScripts(items, idPrefix, remove = false) {
+    console.log(
+        (remove ? "Removing " : "Loading ") + items.length + " scripts",
+    );
+    var count = 0;
+    items.forEach((item, index) => {
+        try {
+            const id = idPrefix + "_" + index;
+            const existent = document.getElementById(id);
+            if (remove && existent) {
+                document.body.removeChild(existent);
+                count++;
+            } else if (!existent) {
+                const s = document.createElement("script");
+                s.src = item;
+                s.id = id;
+                document.body.appendChild(s);
+                count++;
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+    });
+    console.log((remove ? "Removed" : "Loaded") + " scripts count:", count);
 }
 
 export function getCSSVariableValue(variableName: string) {

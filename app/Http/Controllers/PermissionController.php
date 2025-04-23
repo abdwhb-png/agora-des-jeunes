@@ -48,14 +48,21 @@ class PermissionController extends BaseController implements HasMiddleware
         // Cloner la requête pour éviter de l'altérer
         $allData = (clone $query)->get();
 
-        $resource = new PermissionCollection(
-            $query->where('name', 'like', '%' . $search . '%')
-                ->paginate($this->perPage($this->getFilter('permissions', 'per_page')), pageName: filter_name(Permission::class))
-        );
+        $paginated = $query->where('name', 'like', '%' . $search . '%')
+            ->paginate(
+                $this->perPage($this->getFilter('permissions', 'per_page')),
+                pageName: filter_name(Permission::class)
+            )->through(fn($item) => [
+                ...$item->toArray(),
+                'updated' => $item->updated_at->diffForHumans(),
+                'created' => $item->created_at->format('d/m/Y à H:i:s')
+            ]);
 
         return request()->wantsJson() ? $allData : Inertia::render('Gestion/Permissions', [
-            'permissions' => $resource->toArray(request()),
+            'permissions' => $paginated,
             'can' => [
+                'viewPermission' => request()->user()->can(PermissionsEnum::VIEW_PERMISSIONS->value),
+                'deletePermission' => request()->user()->can(PermissionsEnum::DELETE_PERMISSION->value),
                 'editPermission' => request()->user()->can(PermissionsEnum::EDIT_PERMISSION->value),
                 'createPermission' => request()->user()->can(PermissionsEnum::CREATE_PERMISSION->value),
             ]

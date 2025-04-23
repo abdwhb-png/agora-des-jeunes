@@ -1,11 +1,14 @@
+import { ConfirmationOptions } from "primevue/confirmationoptions";
+
 export function useCustomConfirm(confirm: any) {
     const deleteConfirm = (
-        accept: Function,
-        reject: Function | null = null,
+        options: ConfirmationOptions = {
+            message: "Voulez vous supprimer cet élément ?",
+            group: "deleteBtn",
+        },
     ) => {
         confirm.require({
-            message: "Voulez vous supprimer cet élément ?",
-            header: "Zone de danger",
+            header: "Confirmation de suppression",
             icon: "pi pi-info-circle",
             rejectProps: {
                 label: "Annuler",
@@ -16,12 +19,7 @@ export function useCustomConfirm(confirm: any) {
                 label: "Supprimer",
                 severity: "danger",
             },
-            accept: () => {
-                accept();
-            },
-            reject: () => {
-                if (reject) reject();
-            },
+            ...options,
         });
     };
 

@@ -4,8 +4,6 @@ namespace App\Actions\Fortify;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use App\Enums\AccountActivityEnum;
-use App\Services\AccountActivityLogger;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -26,7 +24,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);
-            AccountActivityLogger::log(AccountActivityEnum::PROFILE_PIC_UPDATED, ['email' => $user->email]);
         }
 
         if (!empty($input['email'])) {
@@ -40,8 +37,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                     'email' => $input['email'],
                 ])->save();
             }
-
-            AccountActivityLogger::log(AccountActivityEnum::EMAIL_UPDATED, $user, ['email' => $user->email]);
         }
     }
 

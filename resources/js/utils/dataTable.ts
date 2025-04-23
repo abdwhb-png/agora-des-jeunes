@@ -7,9 +7,9 @@ const baseFilters = {
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
 };
 
-export const scrollHeight = "550px";
+export const dtScrollHeight = "550px";
 
-export const pt = {
+export const dataTablePt = {
     table: { style: "min-width: 50rem" },
     column: {
         headerCell: (props) => ({

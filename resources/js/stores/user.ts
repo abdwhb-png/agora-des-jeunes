@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import axios from "axios";
 import { Role, Permission } from "@/types";
+import { useAxios } from "@/composables/useAxios"; // Import useAxios
 
 export const useUserStore = defineStore("userStore", {
     state: () => ({
@@ -27,7 +27,8 @@ export const useUserStore = defineStore("userStore", {
             (state) =>
             (name: string): boolean => {
                 const allPermissions = (state.permissions as any).all || [];
-                const viaRolesPermissions = (state.permissions as any).via_roles || [];
+                const viaRolesPermissions =
+                    (state.permissions as any).via_roles || [];
                 const direct = (state.permissions as any).direct || [];
 
                 return [
@@ -47,66 +48,69 @@ export const useUserStore = defineStore("userStore", {
 
     actions: {
         async fetchUser() {
-            axios
-                .get(route("user.me"))
-                .then((response) => {
-                    this.user = response.data;
-                })
-                .catch((error) => {
-                    console.log("Error while fetching user", error);
-                });
+            const { fetchData } = useAxios(); // Instantiate useAxios
+            const userData = await fetchData(route("user.me"), {
+                errorMessage: "Erreur lors de la récupération de l'utilisateur",
+            });
 
-            this.fetchPermissions();
-            this.fetchRoles();
+            if (userData) {
+                this.user = userData;
+                // Fetch related data only if user fetch was successful
+                this.fetchPermissions();
+                this.fetchRoles();
+            }
         },
 
         async fetchNotifications() {
-            await axios
-                .get(route("user.notifications"))
-                .then((response) => {
-                    const { unread_count, notifications } = response.data;
-                    this.notifications = notifications;
-                    this.unreadNotif = unread_count;
-                })
-                .catch((error) => {
-                    console.log(
-                        "Error while fetching user notifications",
-                        error,
-                    );
-                });
+            const { fetchData } = useAxios<{
+                unread_count: number;
+                notifications: any[];
+            }>();
+            const notificationData = await fetchData(
+                route("user.notifications"),
+                {
+                    errorMessage:
+                        "Erreur lors de la récupération des notifications",
+                },
+            );
+
+            if (notificationData) {
+                this.notifications = notificationData.notifications;
+                this.unreadNotif = notificationData.unread_count;
+            }
         },
 
         async fetchPermissions() {
-            await axios
-                .get(route("user.permissions"))
-                .then((response) => {
-                    this.permissions = response.data;
-                })
-                .catch((error) => {
-                    console.log("Error while fetching user permissions", error);
-                });
+            const { fetchData } = useAxios();
+            const permissionData = await fetchData(route("user.permissions"), {
+                errorMessage: "Erreur lors de la récupération des permissions",
+            });
+
+            if (permissionData) {
+                this.permissions = permissionData;
+            }
         },
 
         async fetchRoles() {
-            await axios
-                .get(route("user.roles"))
-                .then((response) => {
-                    this.roles = response.data;
-                })
-                .catch((error) => {
-                    console.log("Error while fetching user roles", error);
-                });
+            const { fetchData } = useAxios();
+            const roleData = await fetchData(route("user.roles"), {
+                errorMessage: "Erreur lors de la récupération des rôles",
+            });
+
+            if (roleData) {
+                this.roles = roleData;
+            }
         },
 
         async fetchSessions() {
-            await axios
-                .get(route("user.sessions"))
-                .then((response) => {
-                    this.sessions = response.data;
-                })
-                .catch((error) => {
-                    console.log("Error while fetching user sessions", error);
-                });
+            const { fetchData } = useAxios();
+            const sessionData = await fetchData(route("user.sessions"), {
+                errorMessage: "Erreur lors de la récupération des sessions",
+            });
+
+            if (sessionData) {
+                this.sessions = sessionData;
+            }
         },
     },
 });

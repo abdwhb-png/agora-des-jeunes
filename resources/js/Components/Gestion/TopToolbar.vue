@@ -2,7 +2,7 @@
 import { useMainStore } from "@/stores/main";
 import Breadcrumb from "./Breadcrumb.vue";
 import RapidLinks from "./RapidLinks.vue";
-import Rapports from "./Rapports.vue";
+import Monitoring from "./Monitoring.vue";
 import DropdownNotification from "@/Components/Base/DropdownNotification.vue";
 import { useResponsive } from "@/composables/useResponsive";
 import SearchTrigger from "../Shared/Search/SearchTrigger.vue";
@@ -46,7 +46,7 @@ const mainStore = useMainStore();
                 <SearchTrigger />
                 <DropdownNotification />
                 <RapidLinks />
-                <Rapports />
+                <Monitoring />
             </div>
         </div>
         <!-- End of Container -->

@@ -1,5 +1,4 @@
 <template>
-
     <Head :title="meta?.title || title" />
 
     <div class="page-wrapper">
@@ -28,8 +27,10 @@ import BottomCta from "@/Components/Home/BottomCta.vue";
 import Footer from "@/Components/Home/Footer.vue";
 import HeaderNav from "@/Components/Home/HeaderNav.vue";
 import Toaster from "@/Components/ui/toast/Toaster.vue";
-import { onMounted, nextTick, onUnmounted } from "vue";
+import { onMounted, nextTick, onUnmounted, ref } from "vue";
+import { usePage, router } from "@inertiajs/vue3";
 import { useDarkModeStore } from "@/stores/darkMode";
+import { loadStyles, loadScripts } from "@/utils/DomHelpers.ts";
 
 const props = defineProps({
     title: String,
@@ -43,7 +44,9 @@ const props = defineProps({
     },
 });
 
+const page = usePage();
 const { isDark, toggleDarkMode } = useDarkModeStore();
+const pathName = ref();
 
 const styles = [
     // "https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css",
@@ -56,13 +59,18 @@ const scripts = [
 
 onMounted(() => {
     loadMeta();
+    if (!page.url.includes(page.props.fortifyPrefix)) {
+        loadStyles(styles, "home-styles");
+        loadScripts(scripts, "home-scripts");
+    }
 
     if (isDark) {
         toggleDarkMode();
     }
 
-    loadStyles(styles, "home-styles");
-    loadScripts(scripts, "home-scripts");
+    router.on("start", (event) => {
+        pathName.value = event.detail.visit.url.pathname;
+    });
 
     nextTick(() => {
         document.querySelector("html").setAttribute("data-theme", "light");
@@ -73,20 +81,24 @@ onMounted(() => {
                 ([entry]) => {
                     if (entry.isIntersecting) {
                         el.classList.add("animate__animated");
-                        const animation =
-                            el.getAttribute("data-animation") ||
-                            "animate__bounceIn";
-                        const noRepeat =
-                            el.getAttribute("data-no-repeat") === "true"; // Comparaison explicite
+                        const animation = {
+                            name:
+                                el.getAttribute("data-animation") ||
+                                "animate__bounceIn",
+                            duration: el.getAttribute("data-duration") || 1000,
+                            delay: el.getAttribute("data-delay") || 0,
+                            noRepeat:
+                                el.getAttribute("data-no-repeat") === "true",
+                        };
 
-                        el.classList.add(animation); // Ajoute l'animation
+                        el.classList.add(animation.name); // Ajoute l'animation
 
-                        if (noRepeat) {
+                        if (animation.noRepeat) {
                             observer.unobserve(el); // Désactive l'observation après une seule exécution
                         } else {
                             setTimeout(() => {
-                                el.classList.remove(animation);
-                            }, 1000); // Durée ajustable selon l'animation
+                                el.classList.remove(animation.name); // Remove the animation class
+                            }, animation.duration); // Durée ajustable selon l'animation
                         }
                     }
                 },
@@ -100,7 +112,7 @@ onMounted(() => {
 
 onUnmounted(() => {
     loadStyles(styles, "home-styles", true);
-    // loadScripts(scripts, "home-scripts", true);
+    loadScripts(scripts, "home-scripts", true);
 });
 
 function loadMeta() {

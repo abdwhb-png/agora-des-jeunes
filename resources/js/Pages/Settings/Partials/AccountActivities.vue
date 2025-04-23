@@ -46,7 +46,6 @@ export default {
 </script>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
 import { LaravelPagination } from "@/types";
 
 const props = defineProps({

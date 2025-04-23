@@ -1,11 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import { FILTER_NAMES } from "@/constants";
+import { useFilter } from "@/composables/useFilter";
+import { LaravelPagination } from "@/types";
 import Repeater from "@/Components/Permissions/Repeater.vue";
 import CreateForm from "@/Components/Permissions/PermissionForm.vue";
-import Pagination from "@/Components/Tables/Pagination.vue";
 
-const filterName = "permissions";
+const props = defineProps({
+    permissions: {
+        type: Object as () => LaravelPagination<any>,
+        default: () => ({}),
+    },
+    can: Object,
+    filters: Object,
+});
+
+const filterName = FILTER_NAMES.permissions;
 const showForm = ref(false);
+
+const { filters, loading, hasFilters, resetFilters } = useFilter({
+    filterName: filterName,
+    initialFilters: props.filters[filterName],
+});
 </script>
 
 <template>
@@ -29,12 +45,12 @@ const showForm = ref(false);
                 <h3 class="card-title">
                     Liste des permissions
                     <span class="text-slate-500"
-                        >{{ $page.props.permissions.total }} au total</span
+                        >{{ permissions.total }} au total</span
                     >
                 </h3>
                 <div class="flex gap-5">
                     <button
-                        :disabled="!$page.props.can.createPermission"
+                        :disabled="!can.createPermission"
                         type="button"
                         class="btn btn-sm btn-primary shrink-0"
                         @click="showForm = true"
@@ -46,18 +62,21 @@ const showForm = ref(false);
             </div>
             <div class="card-body">
                 <SearchInput
-                    :filter-name="filterName"
+                    v-model="filters.search"
+                    :has-filters="hasFilters"
+                    :loading="loading"
+                    @reset="resetFilters()"
                     placeholder="Rechercher une permission"
                 />
                 <Repeater
-                    :data="$page.props.permissions.data"
+                    :data="permissions.data"
                     :show-delete="true"
                     :show-search="false"
                 />
             </div>
             <div class="card-footer">
                 <Pagination
-                    :paginated="$page.props.permissions"
+                    :paginated="permissions"
                     :filter-name="filterName"
                 />
             </div>

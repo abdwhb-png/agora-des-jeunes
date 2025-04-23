@@ -1,8 +1,15 @@
 <script setup>
-import { ref } from "vue";
+import { useMainStore } from "@/stores/main";
+import { onMounted } from "vue";
 import CreatePanel from "@/Components/Gestion/CreatePanel.vue";
-import AgoraList from "./AgoraSessions/AgoraList.vue";
-import AgoraForm from "./AgoraSessions/AgoraForm.vue";
+import AgoraList from "./AgoraList.vue";
+import AgoraForm from "./AgoraForm.vue";
+
+const mainStore = useMainStore();
+
+onMounted(async () => {
+    await mainStore.fetchAgora();
+});
 </script>
 
 <template>
@@ -16,8 +23,8 @@ import AgoraForm from "./AgoraSessions/AgoraForm.vue";
         />
         <Divider />
         <AgoraList
-            :data="$page.props.agora_sessions.list"
-            :filter-name="$page.props.agora_sessions.filter_name"
+            :data="mainStore.agoraSessions.list"
+            :filter-name="mainStore.agoraSessions.filter_name"
         />
     </div>
 </template>

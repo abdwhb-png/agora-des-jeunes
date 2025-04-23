@@ -3,8 +3,7 @@ import { useToast } from "primevue";
 import { onMounted, ref } from "vue";
 
 import ProfileStepper from "@/Pages/Profile/Partials/ProfileStepper.vue";
-import EditRoles from "./EditRoles.vue";
-import EditPermissions from "./EditPermissions.vue";
+import RolesStepper from "./RolesStepper.vue";
 
 const props = defineProps({
     id: {
@@ -36,7 +35,7 @@ async function getUser(id) {
                 severity: "error",
                 summary: "Erreur",
                 detail: "Une erreur s'est produite lors du chargement de l'utilisateur.",
-                life: 1000 * 30,
+                life: 1000 * 10,
             });
         })
         .finally(() => {
@@ -53,22 +52,9 @@ async function getUser(id) {
                 {{ user.info.full_name || user.email }}
             </template>
             <template #content>
-                <div class="grid md:grid-cols-2 gap-2">
+                <div class="grid md:grid-cols-2 justify-center gap-2">
                     <ProfileStepper :user="user" />
-                    <Stepper>
-                        <StepItem value="3">
-                            <Step>Roles</Step>
-                            <StepPanel>
-                                <EditRoles :user="user" />
-                            </StepPanel>
-                        </StepItem>
-                        <StepItem value="4">
-                            <Step>Permissions Directes</Step>
-                            <StepPanel>
-                                <EditPermissions :user="user" />
-                            </StepPanel>
-                        </StepItem>
-                    </Stepper>
+                    <RolesStepper :user="user" />
                 </div>
             </template>
         </Card>

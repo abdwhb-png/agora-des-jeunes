@@ -2,20 +2,11 @@ import { Menu, RapidLink } from "@/types/sidebar";
 import { useStorage } from "@vueuse/core";
 import { markRaw } from "vue";
 
-import AgoraSessions from "@/Pages/Gestion/Partials/AgoraSessions.vue";
-import Polls from "@/Pages/Gestion/Partials/Polls.vue";
 import UsersList from "@/Pages/Gestion/Partials/Users/UsersList.vue";
 import AddUser from "@/Pages/Gestion/Partials/Users/AddUser.vue";
-import Overview from "@/Pages/Gestion/Partials/Overview.vue";
-import Faqs from "@/Pages/Gestion/Partials/Faqs.vue";
 import { getIcon } from "@/utils/helpers";
-import Settings from "@/Pages/Gestion/Partials/Configuration/SiteSettings/Settings.vue";
-import SocialLinks from "@/Pages/Gestion/Partials/Configuration/SiteSettings/SocialLinks.vue";
-import Departements from "@/Pages/Gestion/Partials/Configuration/Departements.vue";
-import Trainings from "@/Pages/Gestion/Partials/Configuration/Trainings.vue";
-import Jobs from "@/Pages/Gestion/Partials/Configuration/Jobs.vue";
 
-import { appUrl, apiManagerUrl, cvBuilderUrl } from "./appInit";
+import { appUrl, cvBuilderUrl } from "./appInit";
 
 export const rapidLinks: RapidLink[] = [
     {
@@ -24,29 +15,14 @@ export const rapidLinks: RapidLink[] = [
         icon: "ki-filled ki-home",
     },
     {
-        label: "Mon Compte",
-        route: "account",
-        icon: getIcon("account"),
+        label: "Tableau de Bord",
+        route: "dashboard",
+        icon: getIcon("dashboard"),
     },
     {
         label: "Constructeur de CV",
         url: cvBuilderUrl,
         icon: getIcon("cv"),
-    },
-    {
-        label: "API Manger",
-        url: apiManagerUrl || route("api-tokens.index"),
-        icon: "ki-filled ki-code",
-    },
-    {
-        label: "Pulse",
-        url: "/pulse",
-        icon: "ki-filled ki-pulse",
-    },
-    {
-        label: "Telescope",
-        url: "/telescope",
-        icon: "ki-filled ki-chart-line-star",
     },
 ];
 
@@ -61,7 +37,7 @@ const base = [
     {
         title: "Paramètres",
         description: "Configurer les paramètres de l'application.",
-        icon:  getIcon("settings"),
+        icon: getIcon("settings"),
         route: "settings",
         selected: useStorage("settings_active", 0),
     },
@@ -70,32 +46,11 @@ const base = [
 export function menus(routePrefix: string): Menu[] {
     const gestion = [
         {
-            title: "Dashboard",
-            icon: "ki-home-1",
+            title: "Panel",
+            icon: getIcon("dashboard"),
             route: routePrefix + "dashboard",
             selected: useStorage("dashboard_active", 0),
-            description: "Vue d'ensemble des activités et statistiques.",
-            items: [
-                {
-                    name: "Vue d'ensemble",
-                    component: markRaw(Overview),
-                },
-                {
-                    name: "Sessions Agora",
-                    description: "Gérer les sessions Agora.",
-                    component: markRaw(AgoraSessions),
-                },
-                {
-                    name: "Sondages",
-                    description: "Gérer les sondages.",
-                    component: markRaw(Polls),
-                },
-                {
-                    name: "Foire Aux Questions",
-                    description: "Gérer les questions fréquentes.",
-                    component: markRaw(Faqs),
-                },
-            ],
+            description: "Accéder au tableau de bord d'administration.",
         },
         {
             title: "Utilisateurs",
@@ -122,45 +77,18 @@ export function menus(routePrefix: string): Menu[] {
             route: routePrefix + "configuration",
             selected: useStorage("configuration_active", 0),
             description: "Gérer les paramètres et configurations du site.",
-            items: [
-                {
-                    name: "Formations",
-                    description: "Gérer les formations disponibles.",
-                    component: markRaw(Trainings),
-                },
-                {
-                    name: "Jobs",
-                    description: "Gérer les offres d'emploi.",
-                    component: markRaw(Jobs),
-                },
-                {
-                    name: "Départements",
-                    description: "Gérer les départements et leurs informations.",
-                    component: markRaw(Departements),
-                },
-                {
-                    name: "Réseaux Sociaux",
-                    description: "Configurer les liens vers les réseaux sociaux.",
-                    component: markRaw(SocialLinks),
-                },
-                {
-                    name: "Réglages du site",
-                    description: "Configurer les paramètres généraux du site.",
-                    component: markRaw(Settings),
-                },
-            ],
         },
         {
             title: "Roles",
             icon: getIcon("role"),
-            route: routePrefix + "role.index",
+            route: routePrefix + "roles",
             selected: useStorage("roles_active", 0),
             description: "Gérer les rôles et leurs permissions.",
         },
         {
             title: "Permissions",
             icon: getIcon("permission"),
-            route: routePrefix + "permission.index",
+            route: routePrefix + "permissions",
             selected: useStorage("permissions_active", 0),
             description: "Configurer les permissions pour les utilisateurs.",
         },

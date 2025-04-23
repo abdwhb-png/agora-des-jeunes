@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,7 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $baseArray = parent::toArray($request);
+        return Arr::except($baseArray, ['roles', 'permissions']);
     }
 }

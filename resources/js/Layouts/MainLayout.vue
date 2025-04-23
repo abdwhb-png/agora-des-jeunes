@@ -4,15 +4,12 @@
     </Head>
 
     <div class="flex grow">
-        <GestionLayout
-            :title="title"
-            v-if="$page.props.routePrefix === 'gestion.'"
-        >
+        <GestionLayout :title="title" v-if="$page.props.config.is_gestion">
             <Loader v-if="!mainStore.showContent && false" />
             <slot v-else></slot>
         </GestionLayout>
 
-        <AppLayout :title="title" v-else>
+        <AppLayout v-else :title="title">
             <slot></slot>
         </AppLayout>
     </div>
@@ -37,7 +34,7 @@ import AppLayout from "./AppLayout.vue";
 import GestionLayout from "./GestionLayout.vue";
 import SearchModal from "@/Components/Shared/Search/SearchModal.vue";
 import Toaster from "@/Components/ui/toast/Toaster.vue";
-import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { Toaster as SonnerToaster } from "@/Components/ui/sonner";
 import { usePage } from "@inertiajs/vue3";
 import { useBodyClasses } from "@/composables/useBodyClasses";
 

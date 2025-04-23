@@ -1,7 +1,7 @@
 import { ZiggyVue } from "../../../vendor/tightenco/ziggy";
 import { createPinia } from "pinia";
 import * as Sentry from "@sentry/vue";
-import { pt as DataTablePt } from "@/utils/dataTable";
+import { dataTablePt } from "@/utils";
 
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
@@ -24,11 +24,12 @@ export const apiManagerUrl = import.meta.env.VITE_API_BASE_URL + "/dashboard";
 
 export function appDefault(app) {
     app.config.globalProperties.$route = route;
+    app.config.globalProperties.$cvBuilderUrl = cvBuilderUrl;
+    app.config.globalProperties.$apiManagerUrl = apiManagerUrl;
     app.use(ZiggyVue);
 }
 
 export function initPinia(app) {
-    app.config.globalProperties.$route = route;
     const pinia = createPinia();
     app.use(pinia);
 }
@@ -68,7 +69,7 @@ export function initPrime(app) {
         locale: primeLocale(),
         ripple: true,
         pt: {
-            dataTable: DataTablePt,
+            dataTable: dataTablePt,
             editor: {
                 codeBlock: (props) => ({
                     style: "display: none",

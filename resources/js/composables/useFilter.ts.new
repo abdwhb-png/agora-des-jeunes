@@ -1,0 +1,224 @@
+import { ref, reactive, computed, watch } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
+import type { Page } from "@inertiajs/core"; 
+import { toast } from "vue-sonner";
+import throttle from "lodash/throttle";
+import pickBy from "lodash/pickBy";
+import mapValues from "lodash/mapValues";
+
+// For TypeScript support with Inertia/Ziggy
+declare const route: any;
+
+interface UseFilterOptions {
+    initialFilters?: Record<string, any>;
+    filterName?: string | null;
+    filterKeys?: string[];
+    throttleWait?: number;
+    filterUrl?: string | null;
+    sortOptions?: {
+        defaultSortField?: string;
+        defaultSortDirection?: 'asc' | 'desc';
+    };
+}
+
+export function useFilter(options: UseFilterOptions = {}) {
+    const {
+        initialFilters = {},
+        filterName = null,
+        filterKeys = [],
+        throttleWait = 250,
+        filterUrl = null,
+        sortOptions = {
+            defaultSortField: '',
+            defaultSortDirection: 'asc'
+        }
+    } = options;
+
+    const page = usePage();
+    const loading = ref(false);
+
+    // Add sort state
+    const sortState = reactive({
+        field: sortOptions.defaultSortField || '',
+        direction: sortOptions.defaultSortDirection || 'asc'
+    });
+
+    // Initialize form state
+    const form = reactive({
+        type: filterName,
+        filters: { ...initialFilters },
+    });
+
+    // Ensure all defined filterKeys exist in form.filters
+    filterKeys.forEach((key) => {
+        if (!(key in form.filters)) {
+            form.filters[key] = null;
+        }
+    });
+    
+    // Initialize search if not present
+    if (!("search" in form.filters)) {
+        form.filters.search = null;
+    }
+
+    // Computed property to check if any filters are active
+    const hasFilters = computed(() => {
+        // Exclude 'type' from the check, only consider 'filters'
+        return Object.values(form.filters).some(
+            (value) => value !== null && value !== "",
+        );
+    });
+
+    // Submit function using Inertia router
+    const submit = (
+        url: string,
+        method: string,
+        data: Record<string, any>,
+        onSuccess?: (page: Page) => void,
+        onError?: (errors: Record<string, string>) => void,
+    ) => {
+        router.visit(url, {
+            method: method as "get" | "post" | "put" | "patch" | "delete",
+            data: pickBy(data, (value) => value !== null && value !== ""),
+            preserveState: true,
+            preserveScroll: true,
+            onStart: () => (loading.value = true),
+            onSuccess: (page) => {
+                if (onSuccess) onSuccess(page);
+            },
+            onError: (errors) => {
+                console.error("Filter submission failed:", errors);
+                toast("Erreur de filtrage", {
+                    description: "Impossible d'appliquer les filtres.",
+                });
+                if (onError) onError(errors);
+            },
+            onFinish: () => {
+                loading.value = false;
+            },
+        });
+    };
+
+    // Watch for changes in the form and submit throttled
+    const stopWatch = watch(
+        () => form.filters,
+        throttle((newFilters) => {
+            // Determine URL based on available options
+            let url;
+            if (filterUrl) {
+                url = filterUrl;
+            } else if (filterName) {
+                url = route("filter.store");
+            } else if (typeof route === 'function') {
+                url = route(route().current());
+            } else {
+                url = window.location.href;
+            }
+            
+            const method = filterName ? "post" : "get";
+            const dataToSend = filterName
+                ? { ...form }
+                : { filters: form.filters };
+                
+            submit(url, method, dataToSend);
+        }, throttleWait),
+        { deep: true },
+    );
+
+    /**
+     * Updates the sort parameters and triggers a data reload
+     * @param sortField - The field to sort by
+     * @param sortOrder - The sort direction (1 for ascending, -1 for descending)
+     */
+    const updateSort = (sortField: string, sortOrder: number): void => {
+        // Update internal sort state
+        sortState.field = sortField;
+        sortState.direction = sortOrder === 1 ? 'asc' : 'desc';
+        
+        // Get the current URL
+        let currentUrl: string;
+        if (typeof window !== 'undefined') {
+            currentUrl = filterUrl || window.location.href;
+        } else {
+            currentUrl = filterUrl || '';
+            if (!currentUrl) return; // Can't sort without a URL
+        }
+
+        try {
+            const url = new URL(currentUrl);
+            
+            // Update or add sort parameters
+            url.searchParams.set('sort', sortField);
+            url.searchParams.set('direction', sortOrder === 1 ? 'asc' : 'desc');
+            
+            // Use router to navigate with the new sort parameters
+            router.visit(url.toString(), {
+                preserveScroll: true,
+                preserveState: true,
+                replace: true,
+                only: ['paginated'],
+                onStart: () => {
+                    loading.value = true;
+                },
+                onFinish: () => {
+                    loading.value = false;
+                }
+            });
+        } catch (error) {
+            console.error('Error updating sort parameters:', error);
+        }
+    };
+
+    // Reset function
+    const reset = (
+        resetTo: Record<string, any> | null = null,
+        onSuccess?: (page: Page) => void,
+    ) => {
+        // Reset filters using provided values or null
+        if (resetTo && typeof resetTo === "object") {
+            Object.keys(form.filters).forEach((key) => {
+                form.filters[key] = resetTo.hasOwnProperty(key)
+                    ? resetTo[key]
+                    : null;
+            });
+        } else {
+            form.filters = mapValues(form.filters, () => null);
+        }
+
+        // Determine URL based on available options
+        let url;
+        if (filterName) {
+            url = route("filter.reset");
+        } else if (filterUrl) {
+            url = filterUrl;
+        } else if (typeof route === 'function') {
+            url = route(route().current());
+        } else {
+            url = window.location.href;
+        }
+        
+        const method = filterName ? "patch" : "get";
+        const dataToSend = filterName
+            ? { type: filterName }
+            : { filters: form.filters };
+
+        submit(url, method, dataToSend, (page) => {
+            toast("Filtres réinitialisés", {
+                description: "Les filtres ont été réinitialisés avec succès.",
+            });
+            if (onSuccess) onSuccess(page);
+        });
+    };
+
+    // Return reactive state and methods
+    return {
+        form,
+        loading,
+        hasFilters,
+        sortState,
+        submitFilters: submit,
+        resetFilters: reset,
+        updateSort,
+        stopWatchFilters: stopWatch,
+    };
+}

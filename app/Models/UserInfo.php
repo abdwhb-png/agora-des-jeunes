@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Enums\GenderEnum;
+use App\Enums\AccountActivityEnum;
+use App\Services\AccountActivityLogger;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -17,12 +20,20 @@ class UserInfo extends Model
         'date_naissance',
         'profession',
         'ville',
+        'departement',
         'quartier',
         'arrondissement',
         'maison',
     ];
 
     protected $appends = ['full_name', 'full_address'];
+
+    static function booted()
+    {
+        static::updated(function ($info) {
+            AccountActivityLogger::log(AccountActivityEnum::PROFILE_UPDATED, $info->user);
+        });
+    }
 
     protected function fullName(): Attribute
     {
@@ -39,6 +50,29 @@ class UserInfo extends Model
         return Attribute::make(
             get: fn() => "{$start}, {$middle}, {$end}",
         );
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeSearch(Builder $query, $search)
+    {
+        $query->where('nom', 'like', '%' . $search . '%')
+            ->orWhere('prenom', 'like', '%' . $search . '%')
+            ->orWhere('sexe', 'like', '%' . $search . '%')
+            ->orWhere('date_naissance', 'like', '%' . $search . '%')
+            ->orWhere('profession', 'like', '%' . $search . '%')
+            ->orWhere('pays', 'like', '%' . $search . '%')
+            ->orWhere('departement', 'like', '%' . $search . '%')
+            ->orWhere('ville', 'like', '%' . $search . '%')
+            ->orWhere('quartier', 'like', '%' . $search . '%')
+            ->orWhere('arrondissement', 'like', '%' . $search . '%')
+            ->orWhere('maison', 'like', '%' . $search . '%')
+            // Search for full name by combining first and last name
+            ->orWhereRaw("CONCAT(nom, ' ', prenom) LIKE ?", ['%' . $search . '%'])
+            ->orWhereRaw("CONCAT(prenom, ' ', nom) LIKE ?", ['%' . $search . '%']);
     }
 
     public function hasCompletedPersonalInfo(): bool
@@ -61,10 +95,5 @@ class UserInfo extends Model
             default:
                 return asset('images/avatars/default.png');
         }
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

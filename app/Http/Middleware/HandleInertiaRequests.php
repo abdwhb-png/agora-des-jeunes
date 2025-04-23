@@ -39,6 +39,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
         return array_merge(parent::share($request), [
             'app' => Arr::only(config('app'), ['cv_builder_url', 'env', 'frontend_url', 'name', 'url']),
             'config' => ConfigHelper::getConfig(),
@@ -51,11 +53,12 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'auth' => [
-                'user' => fn() => $request->user()
-                    ? new UserResource($request->user())
-                    : null,
-                'unreadNotifications' => fn() => $request->user() ? $request->user()->unreadNotifications : null,
+                'user' => new UserResource($user),
                 'auth_token' => session()->get('auth_token'),
+                'unreadNotifications' => fn() => $user?->unreadNotifications ?? 0,
+                'isRoot' => $user?->isRoot() ?? null,
+                'roles' => fn() => $user?->roles ?? null,
+                'perms' => fn() => $user?->getDirectPermissions() ?? null,
             ],
 
             'filters' => fn() => $request->session()->get('filters', []),

@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { useMainStore } from "@/stores/main";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { FilterMatchMode } from "@primevue/core/api";
 
 const props = defineProps({
     departements: { type: Object, default: null },
 });
-
-const mainStore = useMainStore();
 
 const expandedRows = ref({});
 
@@ -29,15 +26,10 @@ const expandAll = () => {
 const collapseAll = () => {
     expandedRows.value = null;
 };
-
-onMounted(() => {
-    mainStore.fetchDepartements();
-});
 </script>
 
 <template>
-    <NotPermitted v-if="!$page.props.can.manageDepartements" />
-    <Card v-else>
+    <Card>
         <template #title>Départements, Communes & Arrondissements</template>
         <template #content>
             <DataTable

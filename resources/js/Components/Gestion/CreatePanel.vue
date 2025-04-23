@@ -39,6 +39,7 @@ const create = ref(false);
                 </div>
                 <div class="flex justify-center">
                     <button class="btn btn-primary" @click="create = true">
+                        <i class="ki-filled ki-plus-squared"></i>
                         {{ btnText }}
                     </button>
 

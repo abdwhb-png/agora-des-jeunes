@@ -22,13 +22,9 @@ const userStore = useUserStore();
                     class="flex items-center justify-between flex-wrap gap-2"
                 >
                     <div class="flex items-center gap-1.5">
-                        <i
-                            v-if="stat.icon"
-                            :class="
-                                'text-base text-gray-500 ki-filled' + stat.icon
-                            "
-                        >
-                        </i>
+                        <span v-if="stat.icon">
+                            {{ stat.icon }}
+                        </span>
                         <span class="text-sm font-normal text-gray-900">
                             {{ index }}
                         </span>

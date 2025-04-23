@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Enums\PermissionsEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Builder;
 
 trait UserTrait
 {
@@ -38,14 +39,25 @@ trait UserTrait
         return $this->hasRole([RolesEnum::ROOT->value]);
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeSearch(Builder $query, $search)
     {
         return $query->where('email', 'like', '%' . $search . '%')
             ->orWhere('phone', 'like', '%' . $search . '%')
-            ->orWhereHas('info', function ($query) use ($search) {
-                $query->where('nom', 'like', '%' . $search . '%')
-                    ->orWhere('prenom', 'like', '%' . $search . '%');
-            });
+            ->orWhereHas('info', fn($q) => $q->search($search));
+    }
+
+    public function scopeFilter(Builder $query, array $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->search($search);
+        })->when(array_key_exists('status', $filters), function ($query) use ($filters) {
+            $query->where('status', (bool) $filters['status']);
+        })->when($filters['sort'] ?? null, function ($query, $sort) {
+            $query->orderBy($sort['field'], $sort['order']);
+        });
+        \Log::info('SQL Query: ' . $query->toSql());
+        \Log::info('Bindings: ' . json_encode($query->getBindings()));
+        return $query;
     }
 
     public function scopeList($query)

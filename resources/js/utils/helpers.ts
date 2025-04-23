@@ -1,7 +1,14 @@
 // utils/helpers.ts
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/fr"; // Import French locale
+// Extend dayjs with the relativeTime plugin to enable fromNow() functionality
+dayjs.extend(relativeTime);
 
 export const dialogBreakpoints: Record<string, string> = {
     "1199px": "75vw",
+    "991px": "80vw",
+    "767px": "90vw",
     "575px": "90vw",
 };
 
@@ -9,13 +16,10 @@ export function getHeight(element: HTMLElement): number {
     return element ? element.getBoundingClientRect().height : 0;
 }
 
-export function sleep(ms: number = 1000): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export function getIcon(key: string, filled: boolean = true): string {
     const icons = {
         role: "ki-share",
+        dashboard: "ki-category",
         permission: "ki-key-square",
         profile: "ki-badge",
         profil: "ki-user-tick",
@@ -32,6 +36,24 @@ export function getIcon(key: string, filled: boolean = true): string {
     const prefix = filled ? "ki-filled " : "ki-outline ";
 
     return prefix + (icons[key] || "ki-abstract-27");
+}
+
+/**
+ * Parse date to formatted string
+ * @param date - The date string to parse
+ * @param format - The format to use (default or frReadable)
+ * @returns Formatted date string or placeholder
+ */
+export function parseDate(
+    date: string | null | undefined,
+    format = "default",
+): string | null {
+    if (!date) return null;
+    if (format === "frReadable") {
+        return dayjs(date).locale("fr").fromNow();
+        // return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+    }
+    return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 }
 
 export function neighbourColor(index: number): string {
@@ -67,6 +89,10 @@ export function formatJsonToPrint(json, showKeys = false) {
 export function copyToClipboard(text: string) {
     navigator.clipboard.writeText(text);
     alert("Texte copié dans le presse-papier");
+}
+
+export function sleep(ms: number = 1000): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const throttle = (func: (...args: any[]) => void, limit: number) => {

@@ -14,7 +14,7 @@
                 editMode="row"
                 dataKey="id"
                 @row-edit-save="onRowEditSave"
-                :pt
+                :pt="dataTablePt"
             >
                 <Column
                     :rowEditor="true"
@@ -42,7 +42,7 @@
 import { ref } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
-import { pt } from "@/utils/dataTable";
+import { dataTablePt } from "@/utils";
 
 defineProps({
     social_links: Object,

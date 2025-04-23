@@ -15,7 +15,7 @@ class FilterController extends BaseController
     {
         $this->validationRules = [
             'type' => ['required', 'string'],
-            'filters' => ['array'],
+            'filters' => ['sometimes', 'array'],
         ];
     }
 
@@ -42,16 +42,27 @@ class FilterController extends BaseController
 
     public function reset(Request $request)
     {
+        // Adjust validation: 'filters' is not always required for reset
         $validated = $request->validate($this->validationRules);
 
-        $newFilters = Arr::except(session()->get("filters.{$validated['type']}", []), array_keys($validated['filters']));
+        $sessionKey = "filters.{$validated['type']}";
 
-        if (empty($newFilters)) {
-            session()->forget("filters.{$validated['type']}");
+        // If specific filters are provided in the request (for partial reset, though unlikely with current frontend)
+        if (!empty($validated['filters'])) {
+            $existingFilters = session()->get($sessionKey, []);
+            $keysToRemove = array_keys($validated['filters']);
+            $newFilters = Arr::except($existingFilters, $keysToRemove);
+
+            if (empty($newFilters)) {
+                session()->forget($sessionKey);
+            } else {
+                session()->put($sessionKey, $newFilters);
+            }
         } else {
-            session()->put("filters.{$validated['type']}", $newFilters);
+            // No 'filters' key in request, assume full reset for the type
+            session()->forget($sessionKey);
         }
 
-        return back()->with('success', 'Filtres supprimés pour ' . htmlspecialchars($validated['type']));
+        return back()->with('success', 'Filtres réinitialisés pour ' . htmlspecialchars($validated['type']));
     }
 }

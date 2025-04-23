@@ -4,15 +4,7 @@
         class="flex justify-between items-center"
         v-if="showSearch && data.length"
     >
-        <div class="input input-sm max-w-56">
-            <i class="ki-filled ki-magnifier"> </i>
-            <input
-                placeholder="Rechercher une permission"
-                type="text"
-                v-model="searchInput"
-                @input="search"
-            />
-        </div>
+        <SimpleSearch v-model="searchInput" @reset="searchInput = ''" />
         <span class="font-bold"> {{ items.length }} résultats </span>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 py-2">
@@ -145,15 +137,16 @@ export default {
 <script setup lang="ts">
 import { router, usePage, useForm } from "@inertiajs/vue3";
 import { watch, ref } from "vue";
+import { getIcon } from "@/utils";
+import { useUserStore } from "@/stores/user";
 import { useToast } from "primevue/usetoast";
 import { useCustomConfirm } from "@/composables/useCustomConfirm";
 import { useConfirm } from "primevue/useconfirm";
 import { Role, Permission } from "@/types";
 
+import SimpleSearch from "@/Components/Shared/Search/SimpleSearch.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
 import ToastError from "@/Components/Base/Toast/ValidationError.vue";
-import { getIcon } from "@/utils/helpers";
-import { useUserStore } from "@/stores/user";
 
 const emits = defineEmits(["statusChanged"]);
 
@@ -172,7 +165,7 @@ const confirm = useConfirm();
 const { deleteConfirm } = useCustomConfirm(confirm);
 
 const items = ref([]);
-const searchInput = ref(null);
+const searchInput = ref("");
 
 const form = useForm({
     permission: null,
@@ -184,7 +177,9 @@ const hasRole = (item: Permission) => {
 
 const search = () => {
     items.value = props.data?.filter((item: Permission) =>
-        item.name.toLowerCase().includes(searchInput.value.toLowerCase()),
+        item.name
+            .toLowerCase()
+            .includes(searchInput.value?.toLowerCase() || ""),
     );
 };
 
@@ -235,6 +230,10 @@ const deleteItem = (item: Permission) => {
     );
 };
 
+watch(searchInput, () => {
+    search();
+});
+
 watch(
     () => props.data,
     (newData) => {
@@ -242,10 +241,6 @@ watch(
             ...item,
             loading: false, // Assure la réactivité
         }));
-
-        if (searchInput.value) {
-            search();
-        }
     },
     { immediate: true, deep: true },
 );

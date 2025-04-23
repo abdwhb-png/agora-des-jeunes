@@ -10,6 +10,7 @@ import PageLayout from "@/Layouts/PageLayout.vue";
 
 // Base Components
 import GlobalSearch from "@/Components/Shared/Search/GlobalSearch.vue";
+import SearchFilter from "@/Components/Shared/Search/SearchFilter.vue";
 import FormButtonGroup from "@/Components/Base/FormButtonGroup.vue";
 import Loader from "@/Components/Base/Loader.vue";
 import Notice from "@/Components/Base/Notice.vue";
@@ -51,6 +52,7 @@ export default function registerComponents(app) {
 
     // Base Components
     app.component("GlobalSearch", GlobalSearch);
+    app.component("SearchFilter", SearchFilter);
     app.component("FormButtonGroup", FormButtonGroup);
     app.component("Loader", Loader);
     app.component("Notice", Notice);

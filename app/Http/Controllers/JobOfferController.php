@@ -4,17 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
+use App\Enums\PermissionsEnum;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\JobOfferRequest;
 use App\Http\Controllers\Base\BaseController;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class JobOfferController extends BaseController
+class JobOfferController extends BaseController implements HasMiddleware
 {
+    /**
+     * Define middleware for this controller
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                'can:' . PermissionsEnum::MANAGE_TRAININGS->value,
+                only: ['store', 'update', 'destroy']
+            ),
+        ];
+    }
+
     // Afficher toutes les offres d'emploi
     public function index(): JsonResponse
     {
-        $jobs = JobOffer::paginate($this->perPage(50));
-        return response()->json($jobs);
+        $filterName = 'job_offers';
+        $filters = self::getFilter($filterName);
+        $perPage = self::getFilter($filterName, 'per_page', 30);
+
+        return response()->json([
+            'filter_name' => $filterName,
+            'list' => JobOffer::latest()
+                ->filter($filters)
+                ->paginate($perPage, pageName: $filterName)
+        ]);
     }
 
     // Afficher une offre d'emploi spécifique
@@ -62,9 +86,9 @@ class JobOfferController extends BaseController
     }
 
     // Supprimer une offre d'emploi
-    public function destroy(JobOffer $job)
+    public function destroy(JobOffer $job_offer)
     {
-        $job->delete();
+        $job_offer->delete();
         return back(303)->with('success', 'Offre d\'emploi supprimée avec succès.');
     }
 }

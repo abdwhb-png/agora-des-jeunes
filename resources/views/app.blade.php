@@ -22,11 +22,11 @@
     <!-- End of Fonts -->
 
     <!-- Styles -->
-    @vite(['resources/css/app.css', 'resources/scss/app.scss'])
+    @vite(['resources/scss/app.scss', 'resources/css/app.css'])
     <!-- End of Styles -->
 
     <!-- Scripts -->
-    <script type="text/javascript">
+    <script>
         ! function(o, c) {
             var n = c.documentElement,
                 t = " w-mod-";
@@ -73,9 +73,8 @@
 
     <!-- Main Scripts -->
     <script
-        src="{{ asset('/d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c887ab.js?site=67590e9b756ef477159ae9e4') }}"
-        type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
-    </script>
+        src="{{ asset('d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c887ab.js?site=67590e9b756ef477159ae9e4') }}"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
     <script>
         function refreshPage() {
@@ -88,39 +87,6 @@
             } else {
                 window.history.back();
             }
-        }
-
-        function loadStyles(items, idPrefix, remove = false) {
-            items.forEach((item, index) => {
-                const id = idPrefix + "_" + index;
-                const existent = document.getElementById(id);
-
-                if (remove && existent) {
-                    document.head.removeChild(existent);
-                } else if (!existent) {
-                    const s = document.createElement("link");
-                    s.rel = "stylesheet";
-                    s.id = id;
-                    s.type = "text/css";
-                    s.href = item;
-                    document.head.appendChild(s);
-                }
-            });
-        }
-
-        function loadScripts(items, idPrefix, remove = false) {
-            items.forEach((item, index) => {
-                const id = idPrefix + "_" + index;
-                const existent = document.getElementById(id);
-                if (remove && existent) {
-                    document.body.removeChild(existent);
-                } else if (!existent) {
-                    const s = document.createElement("script");
-                    s.src = item;
-                    s.id = id;
-                    document.body.appendChild(s);
-                }
-            });
         }
     </script>
     <!-- End of Main Scripts -->
