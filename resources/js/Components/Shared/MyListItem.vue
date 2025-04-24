@@ -170,7 +170,7 @@ const descriptionContainerStyle = computed(() => {
                 <!-- Gradient fade effect overlay -->
                 <div
                     v-if="shouldApplyFadeEffect"
-                    class="absolute bottom-0 left-0 right-0 h-12 from-gray-100 bg-gradient-to-t dark:from-gray-100 to-transparent pointer-events-none"
+                    class="absolute bottom-0 left-0 right-0 h-12 pointer-events-none"
                 ></div>
             </div>
 

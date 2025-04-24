@@ -128,6 +128,16 @@ class AdminController extends BaseController
         return $roles;
     }
 
+    public function agoraSessionsStats(): array
+    {
+        return [
+            // 'total' => ['value' => AgoraSession::count(), 'label' => 'Sessions d\'Agora totales', 'icon' => '🗣️'],
+            'upcoming' => ['value' => AgoraSession::where('date', '>', now())->count(), 'label' => 'Sessions à venir', 'icon' => '📅'],
+            'past' => ['value' => AgoraSession::where('date', '<', now())->count(), 'label' => 'Sessions passées', 'icon' => '⏱️'],
+            'actual_total_participants' => ['value' => AgoraSession::sum('total_participants'), 'label' => 'Participations totales', 'icon' => '👥'],
+        ];
+    }
+
     public function topNeighbours()
     {
         $total = UserInfo::count();

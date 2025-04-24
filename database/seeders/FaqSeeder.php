@@ -132,17 +132,17 @@ class FaqSeeder extends Seeder
             [
                 'question' => 'Quels sont les premiers pas pour créer une entreprise au Bénin ?',
                 'answer' => 'Nous avons un guide détaillé expliquant les étapes essentielles pour lancer ton entreprise.',
-                'category' => FeatureType::ENTREPRENEUR_GUIDE->value,
+                'category' => FeatureType::ENTREPRENEURSHIP->value,
             ],
             [
                 'question' => 'Quels sont les financements disponibles pour les jeunes entrepreneurs ?',
                 'answer' => 'Nous recensons les opportunités de financement et d’accompagnement pour les jeunes entrepreneurs béninois.',
-                'category' => FeatureType::ENTREPRENEUR_GUIDE->value,
+                'category' => FeatureType::ENTREPRENEURSHIP->value,
             ],
             [
                 'question' => 'Quels sont les organismes qui aident les entrepreneurs au Bénin ?',
                 'answer' => 'Nous te fournissons une liste d’incubateurs, d’organismes de financement et d’accompagnement pour t’aider à concrétiser ton projet.',
-                'category' => FeatureType::ENTREPRENEUR_GUIDE->value,
+                'category' => FeatureType::ENTREPRENEURSHIP->value,
             ],
 
             // Recherche d’appels d’offres

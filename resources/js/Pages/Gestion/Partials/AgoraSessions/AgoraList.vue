@@ -45,7 +45,7 @@ const baseList = ref(null);
             <Column
                 field="published"
                 sortable
-                header="Publié"
+                header="Statut"
                 style="width: 10%"
             >
                 <template #body="{ data, field }">

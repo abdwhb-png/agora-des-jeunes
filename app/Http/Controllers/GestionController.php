@@ -31,6 +31,7 @@ class GestionController extends AdminController
             'users_stats' => request()->user()->isAdmin() ? $this->userStats() : [],
             'roles_stats' => request()->user()->can(PermissionsEnum::VIEW_ROLES->value) ? $this->rolesStats() : [],
             'neighbours_stats' => $neighboursStats,
+            'agora_sessions_stats' => $this->agoraSessionsStats(),
 
             'can' => [
                 'managePolls' => request()->user()->can(PermissionsEnum::MANAGE_POLLS->value),
@@ -135,5 +136,39 @@ class GestionController extends AdminController
         DB::table('sessions')->truncate();
 
         return back(303)->with('success', 'Toutes les sessions sont maintenant supprimées.');
+    }
+
+    public function stats()
+    {
+        return Inertia::render(page_dir() . 'Stats', [
+            'can' => [
+                'viewUsers' => request()->user()->can(PermissionsEnum::VIEW_USERS->value),
+                'viewRoles' => request()->user()->can(PermissionsEnum::VIEW_ROLES->value),
+                'manageJobOffers' => request()->user()->can(PermissionsEnum::MANAGE_JOB_OFFERS->value),
+                'manageTrainings' => request()->user()->can(PermissionsEnum::MANAGE_TRAININGS->value),
+            ],
+            'initialStats' => [
+                'userStats' => [
+                    'totalUsers' => [
+                        'value' => User::count(),
+                        'label' => 'Total Users',
+                        'change' => 0,
+                        'trend' => 'neutral'
+                    ],
+                    'activeUsers' => [
+                        'value' => User::where('status', true)->count(),
+                        'label' => 'Active Users',
+                        'change' => 0,
+                        'trend' => 'neutral'
+                    ],
+                    'newUsers' => [
+                        'value' => User::where('created_at', '>=', now()->subDays(30))->count(),
+                        'label' => 'New Users (30d)',
+                        'change' => 0,
+                        'trend' => 'neutral'
+                    ]
+                ]
+            ]
+        ]);
     }
 }

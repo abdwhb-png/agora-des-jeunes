@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\GenderEnum;
 use App\Helpers\ConfigHelper;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('nom')->nullable();
             $table->string('prenom')->nullable();
-            $table->enum('sexe', ConfigHelper::getGenders())->nullable();
+            $table->enum('sexe', array_map(fn($case) => $case->value, GenderEnum::cases()))->nullable();
             $table->string('date_naissance')->nullable();
             $table->string('profession')->nullable();
             $table->string('pays')->default('Bénin');

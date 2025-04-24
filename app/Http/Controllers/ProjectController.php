@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WriteProjectContent;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +21,7 @@ class ProjectController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'nullable|string|max:255',
             'description' => 'sometimes|string',
+            'markdown_content' => 'nullable|string',
         ]);
 
         $project = Project::create([
@@ -27,7 +29,12 @@ class ProjectController extends Controller
             'title' => $request->title,
             'type' => $request->type,
             'description' => $request->description,
+            'markdown_content' => $request->markdown_content,
         ]);
+
+        if (!$project->markdown_content) {
+            event(new WriteProjectContent($project));
+        }
 
         return back(303)->with('success', 'Projet créé avec succès.');
     }

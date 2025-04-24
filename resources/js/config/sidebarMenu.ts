@@ -104,10 +104,17 @@ export function menus(routePrefix: string): Menu[] {
             description: "Accéder à votre tableau de bord personnel.",
         },
         {
+            title: "Mes Projets",
+            icon: getIcon("projet"),
+            route: routePrefix + "projets",
+            selected: useStorage("project_active", 0),
+            description: "Accéder à votre tableau de bord personnel.",
+        },
+        {
             title: "Entreprendre",
             icon: getIcon("entreprendre"),
             route: routePrefix + "entreprendre",
-            selected: useStorage("entreprenariat_active", 0),
+            selected: useStorage("entrepreneurship_active", 0),
             description: "Explorer les ressources pour entreprendre.",
         },
         {

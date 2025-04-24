@@ -45,6 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'avatar_url',
         'status',
+        'active',
         'email_verified_at',
         'last_login_at',
         'last_login_ip',
@@ -90,6 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'last_login_at' => 'datetime',
             'password' => 'hashed',
             'status' => 'boolean',
+            'active' => 'boolean',
         ];
     }
 

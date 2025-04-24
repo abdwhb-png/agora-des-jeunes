@@ -3,12 +3,9 @@
 use Inertia\Inertia;
 use App\Enums\PermissionsEnum;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\PollController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\AgoraSessionController;
 
 $prefix = config('fortify.prefix');
 require_once __DIR__ . '/base.php';
@@ -21,6 +18,7 @@ Route::prefix($prefix)->middleware(['auth', 'verified'])->group(function () {
     Route::controller(GestionController::class)->group(function () {
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/users', 'users')->name('users');
+        Route::get('/stats', 'stats')->name('stats');
         Route::middleware(['can:' . PermissionsEnum::MANAGE_CONFIGURATION->value])->group(function () {
             Route::get('/configuration', 'configuration')->name('configuration');
             Route::put('/site-settings/{setting}', 'updateSetting')->name('site-settings.update');

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('theme', 300);
             $table->string('lieu');
             $table->text('description')->nullable();
-            $table->integer('places');
+            $table->integer('places')->nullable();
+            $table->integer('total_participants')->nullable();
             $table->date('date');
             $table->time('heure_debut');
             $table->time('heure_fin')->nullable();

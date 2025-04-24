@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { dialogBreakpoints } from "@/utils/helpers";
+import { useGroq } from "@/composables/ai/useGroq";
 import FormButtonGroup from "@/Components/Base/FormButtonGroup.vue";
 import prompts from "@/config/prompts.json";
 import AiButton from "@/Components/Base/AiButton.vue";
@@ -14,10 +15,13 @@ const needDescForIa = ref(15);
 const aiButton = ref(null);
 const userInput = ref("");
 
+const { mainChat } = useGroq();
+
 const form = useForm({
     title: null,
     type: null,
     description: "",
+    markdown_content: null,
 });
 
 const restDescForIa = computed(
@@ -36,10 +40,20 @@ const completeDescription = (event) => {
     Type de projet: ${form.type}\n
     Description: ${form.description}`;
 
-    aiButton.value?.generate();
+    aiButton.value.generate();
 };
 
-const store = () => {
+const submit = async () => {
+    form.processing = true;
+    await mainChat(
+        prompts.project_content.user,
+        prompts.project_content.system,
+    ).then((response) => {
+        if (response.success) {
+            form.markdown_content = response.output;
+        }
+    });
+
     form.post(route(page.props.routePrefix + "projet.store"), {
         preserveScroll: true,
         onSuccess: () => {
@@ -69,12 +83,13 @@ const store = () => {
 
     <Dialog
         v-model:visible="create"
+        position="bottom"
         modal
         @hide="form.clearErrors()"
         :breakpoints="dialogBreakpoints"
         header="Nouveau projet"
     >
-        <form @submit.prevent="store">
+        <form @submit.prevent="submit">
             <div class="grid md:grid-cols-2 mt-1.5 space-x-4">
                 <div class="">
                     <InputError class="mb-2" :message="form.errors.title" />

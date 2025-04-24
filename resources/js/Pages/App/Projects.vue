@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import MyListItem from "@/Components/Shared/MyListItem.vue";
-import NewProject from "./Partials/NewProject.vue";
-import { getIcon } from "@/utils/helpers";
+import { ref } from "vue";
+import { getIcon } from "@/utils";
 import { LaravelPagination } from "@/types";
+import MyListItem from "@/Components/Shared/MyListItem.vue";
+import NewProject from "../../Components/Projects/NewProject.vue";
+import ProjectPreview from "../../Components/Projects/ProjectPreview.vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({
     projects: {
@@ -10,10 +13,50 @@ defineProps({
         default: [],
     },
 });
+
+const visible = ref(false);
+const currentItem = ref(null);
+
+const showProjectDetails = (project) => {
+    currentItem.value = project;
+    visible.value = true;
+};
 </script>
 
 <template>
     <MainLayout title="Projets">
+        <Dialog
+            v-model:visible="visible"
+            modal
+            :dismissable-mask="true"
+            :style="{ width: '70rem' }"
+            :breakpoints="{ '575px': '98%' }"
+        >
+            <ProjectPreview
+                v-if="currentItem"
+                :title="currentItem.title"
+                :description="currentItem.description"
+                :markdown_content="currentItem.markdown_content"
+                :html_content="currentItem.html_content"
+                :created_at="currentItem.created_at"
+                :owner="currentItem.user"
+            >
+                <template #actions>
+                    <Link
+                        :href="`/projects/${currentItem.id}/edit`"
+                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                    >
+                        Éditer
+                    </Link>
+                    <Link
+                        :href="`/projects/${currentItem.id}`"
+                        class="ml-3 inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-700 focus:bg-primary-700 active:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                    >
+                        Voir plus
+                    </Link>
+                </template>
+            </ProjectPreview>
+        </Dialog>
         <div class="flex flex-col max-w-3xl mx-auto md:px-4 md:py-8 gap-4">
             <NewProject />
             <template
@@ -23,8 +66,9 @@ defineProps({
                 <MyListItem
                     :title="project.title"
                     :description="project.description"
-                    url="/projects"
                     variant="card"
+                    @click="showProjectDetails(project)"
+                    class="cursor-pointer hover:bg-gray-50 transition-colors"
                 >
                     <template #icon>
                         <div class="relative size-[45px] shrink-0">
@@ -61,12 +105,16 @@ defineProps({
                     </template>
                 </MyListItem>
             </template>
-            <div v-if="projects.total > projects.data.length">
-                <p>
-                    Page {{ projects.current_page }} of
-                    {{ projects.last_page }}
-                </p>
-                <Link href="">Load More</Link>
+            <div
+                v-if="projects.total > projects.data.length"
+                class="flex justify-center mt-4"
+            >
+                <Link
+                    :href="projects.next_page_url"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                >
+                    Charger plus
+                </Link>
             </div>
         </div>
     </MainLayout>

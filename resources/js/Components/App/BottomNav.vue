@@ -5,12 +5,16 @@
         <div
             class="flex items-center justify-around max-h-20 px-2 pt-3 max-w-lg mx-auto"
         >
-            <Link
+            <component
+                :is="nav.route ? Link : 'a'"
                 v-for="nav in navs"
                 :key="nav.name"
                 :href="
-                    nav.route ? route($page.props.routePrefix + nav.route) : '#'
+                    nav.route
+                        ? route($page.props.routePrefix + nav.route)
+                        : 'javascript:void(0)'
                 "
+                @click="nav.action ? nav.action() : ''"
                 class="nav-item"
                 :class="{ active: nav.route && route().current(nav.route) }"
             >
@@ -18,21 +22,33 @@
                     <component :is="nav.icon" class="w-6 h-6" />
                     <span class="text-xs font-medium">{{ nav.name }}</span>
                 </div>
-            </Link>
+            </component>
         </div>
     </nav>
+    <Dialog
+        v-model:visible="visible"
+        modal
+        :breakpoints="{ '960px': '75vw' }"
+        :style="{ width: '50rem' }"
+    >
+        <AiChat @close="visible = false" />
+    </Dialog>
 </template>
 
 <script setup>
-import { markRaw } from "vue";
+import { ref, markRaw } from "vue";
+import { Link } from "@inertiajs/vue3";
 import {
-    Home,
+    Bot,
     Bookmark,
     Ticket,
     Wallet,
     User,
     LayoutGrid,
 } from "lucide-vue-next";
+import AiChat from "@/Components/Examples/AiChat.vue";
+
+const visible = ref(false);
 
 const navs = [
     {
@@ -46,9 +62,9 @@ const navs = [
         route: "",
     },
     {
-        name: "Tickets",
-        icon: markRaw(Ticket),
-        route: "",
+        name: "IA",
+        icon: markRaw(Bot),
+        action: () => (visible.value = true),
     },
     {
         name: "Wallet",

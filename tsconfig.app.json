@@ -1,10 +1,28 @@
 {
+    // "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "include": [
+        "env.d.ts",
+        "resources/**/*",
+        "resources/**/*.vue",
+        "resources/**/*.ts"
+    ],
+    "exclude": ["resources/**/__tests__/*"],
     "compilerOptions": {
-        // ...
+        "composite": true,
         "baseUrl": ".",
         "paths": {
             "@/*": ["./resources/js/*"]
-        }
-        // ...
+        },
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "target": "es2020",
+        "lib": [
+            "es2020",
+            "dom",
+            "dom.iterable",
+            "esnext",
+            "esnext.asynciterable"
+        ],
+        "types": ["vite/client"]
     }
 }

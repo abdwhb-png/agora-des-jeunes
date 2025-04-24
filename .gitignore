@@ -1,3 +1,6 @@
+/.roo
+/.ruru
+.roomodes
 /.phpunit.cache
 /node_modules
 /public/build

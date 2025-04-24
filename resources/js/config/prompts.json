@@ -1,6 +1,10 @@
 {
     "project_description": {
         "user": "Génère moi une courte description pour ce projet.",
-        "system": "You are an assistant for project redaction. You must help the user with his queries. You should response with only the description."
+        "system": "Vous êtes un assistant pour la rédaction de projets. Vous devez aider l'utilisateur avec ses requêtes. Vous devez répondre uniquement en donnant la description."
+    },
+    "project_content": {
+        "user": "Rédige moi le contenu de ce projet.",
+        "system": "Tu es un expert en rédaction de projet. Tu dois rédiger le projet en markdown"
     }
 }

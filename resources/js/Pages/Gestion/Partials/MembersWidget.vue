@@ -16,8 +16,8 @@ const lastAvatarValue = ref(
         <div class="card-body" v-if="data">
             <div class="flex flex-col justify-center gap-4">
                 <h2 class="text-1.5xl font-semibold text-gray-900">
+                    Membres uniques:
                     <span class="link">{{ data.members_count }}</span>
-                    membres uniques
                 </h2>
                 <Message severity="secondary">
                     Inscrits aujourd'hui: {{ data.today_count }}

@@ -1,7 +1,7 @@
 // useGroq.ts
 import Groq from "groq-sdk";
-import { useExternalApi } from "./useExternalApi";
-import { useApi } from "./useApi";
+import { useExternalApi } from "../useExternalApi";
+import { useApi } from "../useApi";
 
 // Types
 interface AiUsageData {
@@ -22,14 +22,17 @@ interface ChatResponse {
 const CONFIG = {
     API_KEY: import.meta.env.VITE_GROQ_API_KEY,
     TIMEOUT: Number(import.meta.env.VITE_GROQ_TIMEOUT) || 20 * 1000,
-    MODEL: 'llama3-8b-8192' as const,
+    MODEL: "llama3-8b-8192" as const,
 } as const;
 
 // Error handling
 class GroqError extends Error {
-    constructor(message: string, public originalError?: unknown) {
+    constructor(
+        message: string,
+        public originalError?: unknown,
+    ) {
         super(message);
-        this.name = 'GroqError';
+        this.name = "GroqError";
     }
 }
 
@@ -54,7 +57,10 @@ async function fallBack(
         return {
             success: false,
             output: "Erreur lors de la requête vers l'IA.",
-            error: fallbackError instanceof Error ? fallbackError.message : "Unknown error",
+            error:
+                fallbackError instanceof Error
+                    ? fallbackError.message
+                    : "Unknown error",
         };
     }
 }
@@ -92,7 +98,10 @@ export function useGroq() {
             };
 
             if (systemPrompt) {
-                params.messages.unshift({ role: "system", content: systemPrompt });
+                params.messages.unshift({
+                    role: "system",
+                    content: systemPrompt,
+                });
             }
 
             const chatCompletion = await client.chat.completions.create(params);
@@ -124,6 +133,8 @@ export function useGroq() {
 
 // Logger utility (à implémenter selon vos besoins)
 const logger = {
-    debug: (message: string, ...args: unknown[]) => console.debug(message, ...args),
-    error: (message: string, ...args: unknown[]) => console.error(message, ...args),
+    debug: (message: string, ...args: unknown[]) =>
+        console.debug(message, ...args),
+    error: (message: string, ...args: unknown[]) =>
+        console.error(message, ...args),
 };

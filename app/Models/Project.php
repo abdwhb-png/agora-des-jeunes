@@ -9,7 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'type', 'description', 'status'];
+    protected $fillable = ['user_id', 'title', 'type', 'description', 'markdown_content', 'html_content', 'status'];
 
     public function user()
     {

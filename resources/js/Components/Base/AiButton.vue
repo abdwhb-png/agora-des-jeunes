@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { useGroq } from "@/composables/useGroq";
+import { useGroq } from "@/composables/ai/useGroq";
 import { useToast } from "primevue";
 import { ref } from "vue";
 import { Brain, Loader2 } from "lucide-vue-next";

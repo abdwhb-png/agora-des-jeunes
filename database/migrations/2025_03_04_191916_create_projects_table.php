@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('title');
             $table->string('type')->nullable(); // ex: 'entrepreneuriat', 'association', 'innovation sociale'
             $table->text('description')->nullable();
+            $table->text('markdown')->nullable();
+            $table->text('content')->nullable();
+            $table->enum('status', array_map(fn($case) => $case->value, ProjectStatus::cases()))->default(ProjectStatus::ONGOING->value);
             $table->string('duration')->nullable();
             $table->string('location')->nullable();
             $table->string('team_count')->nullable();
-            $table->enum('status', array_map(fn($case) => $case->value, ProjectStatus::cases()))->default(ProjectStatus::ONGOING->value);
             $table->timestamps();
         });
     }
